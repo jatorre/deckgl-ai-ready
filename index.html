@@ -328,18 +328,18 @@
 <section data-q="4" data-background-color="#0b1f6b">
   <span class="kicker">Q4 · Does the website and documentation work for AI?</span>
   <h2>How does deck.gl compare with similar projects?</h2>
-  <table>
+  <table style="font-size:.58em">
     <tr><th>Site</th><th>llms.txt</th><th>Agent skills</th><th>MCP server</th></tr>
-    <tr><td>luma.gl <span class="xs">same TSC</span></td><td class="ok">yes, 97 KB + page Markdown</td><td class="ok">official <code>lumagl</code> skill in the repo, plus a "Working with AI" guide</td><td class="muted">—</td></tr>
+    <tr><td>luma.gl <span class="xs">same TSC</span></td><td class="ok">yes, plus page Markdown</td><td class="ok">official <code>lumagl</code> skill in the repo, plus an AI guide</td><td class="muted">—</td></tr>
     <tr><td>maplibre.org</td><td class="ok">yes</td><td class="ok">official repo, 9 skills, "to inform the LLMs"</td><td class="muted">community</td></tr>
     <tr><td>docs.mapbox.com</td><td class="ok">yes</td><td class="muted">—</td><td class="ok">two official, one for coding agents</td></tr>
     <tr><td><b>deck.gl</b></td><td class="bad">404</td><td class="bad">none</td><td class="bad">none</td></tr>
   </table>
-  <div class="two" style="margin-top:.7em">
+  <div class="two" style="margin-top:.5em;font-size:.92em">
     <p class="small"><b class="muted">Measured consequence.</b> Every frontier model stops at deck.gl 9.0 or 9.1. Most generated maps load a v8 bundle. Six of seven explain a module rename that already happened.</p>
-    <div class="card teal"><h3>Suggestions: copy luma.gl, one repo over. Draft PRs are open.</h3><ul class="small"><li>The same llms.txt plugin and page-level Markdown, luma.gl's config is 30 lines: <a href="https://github.com/visgl/deck.gl/pull/10677" target="_blank" rel="noopener">#10677</a>, verified: 185 pages indexed, works on the /next/ deploy</li><li>A <code>skills/deckgl</code> skill in the repo plus a "Working with AI" page, written from the mistakes on the previous slides: <a href="https://github.com/visgl/deck.gl/pull/10678" target="_blank" rel="noopener">#10678</a></li><li>A machine-readable what's-new</li></ul></div>
+    <div class="card teal" style="padding:12px 18px"><h3 style="margin-bottom:.2em">Suggestion: copy luma.gl. PRs are open.</h3><ul class="small" style="margin-top:0;font-size:.66em"><li>llms.txt and page Markdown, same plugin: <a href="https://github.com/visgl/deck.gl/pull/10677" target="_blank" rel="noopener">#10677</a>, 185 pages, verified on the /next/ deploy</li><li><code>skills/deckgl</code> plus a "Working with AI" page, built from the mistakes on the previous slides: <a href="https://github.com/visgl/deck.gl/pull/10678" target="_blank" rel="noopener">#10678</a></li></ul></div>
   </div>
-  <aside class="notes">MapLibre launched skills in February "to inform the LLMs" and stop "bad or wrong MapLibre integrations". And luma.gl, in this same TSC, already ships the whole kit: the llms.txt plugin, a progressive skill installable with npx skills add, and a developer-guide page on working with AI agents. deck.gl only has to copy its sibling. Cheapest fix in the talk, and I have a draft PR.</aside>
+  <aside class="notes">MapLibre launched skills in February "to inform the LLMs" and stop "bad or wrong MapLibre integrations". And luma.gl, in this same TSC, already ships the whole kit: the llms.txt plugin, a progressive skill installable with npx skills add, and a developer-guide page on working with AI agents. deck.gl only has to copy its sibling, and add a machine-readable what's-new while at it. Both PRs are open for review, each fact-checked independently first.</aside>
 </section>
 
 <!-- ===== Q5 ===== -->
