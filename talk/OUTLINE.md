@@ -38,7 +38,7 @@ Live deck.gl map behind (`talk/title-map.html`: MapLibre restyled in CARTO blue 
 - visgl/deck.gl #10677 — website: publish llms.txt and per-page Markdown (mirrors luma.gl's plugin config; local build verified).
 - visgl/deck.gl #10678 — docs: `skills/deckgl` agent skill + "Working with AI Coding Agents" guide.
 - `@deck.gl/json` v2 proposal: posted as a comment on the v2 tracker (deck.gl-community #596), https://github.com/visgl/deck.gl-community/issues/596#issuecomment-5583845859; full RFC text kept at https://github.com/jatorre/deck.gl/blob/json-v2-rfc/dev-docs/RFCs/proposals/json-v2-agent-interface-rfc.md. The deck.gl PR #10679 was closed in favour of the tracker after review.
-- visgl/tsc #20 — developer-process: adopt the OpenJS AI coding assistants policy for vis.gl (eight practices from Node.js, MapLibre, LLVM, kernel). Companion visgl/deck.gl #10680: CONTRIBUTING section, PR-template checkbox, AGENTS.md pointer.
+- visgl/tsc #20 — developer-process: apply the OpenJS AI coding assistants policy in vis.gl (the policy quoted + ten practices from Node.js, MapLibre, LLVM, kernel). Companion visgl/deck.gl #10680 (draft, depends on #20): CONTRIBUTING section, one PR-template checkbox, AGENTS.md pointer. Both revised after an independent review pass.
 Each commit carries an `Assisted-by:` trailer and the PR bodies disclose it; all three were revised after an independent review pass.
 
 ## Close
