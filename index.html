@@ -213,14 +213,14 @@
 
 <section data-q="2" data-background-color="#0b6b8a">
   <span class="kicker">Q2 · How well do frontier models write deck.gl?</span>
-  <h2>Working maps, written like it's 2024</h2>
+  <h2>We have to update the examples</h2>
   <ul class="check" style="font-size:.8em">
     <li><b>The code is a generation behind.</b> Most files load a deck.gl 8.9 bundle or use v8 patterns; only GPT-5.6 Sol used the current overlay integration; none used 9.2 or later.</li>
     <li><b>They copy the showcase examples.</b> The hexagon and trips tasks pulled every model toward the official example's stack, palette and defaults, v8 included.</li>
     <li><b>Same cartographic choices, same blind spots.</b> Every choropleth is YlOrRd quantiles; skewed data goes unhandled; legends vanish when not demanded. Good, never excellent.</li>
     <li><b>The open-weight model knows the words, not the rules.</b> GLM 5.3 mutated layer props instead of replacing layers and shadowed the library global.</li>
   </ul>
-  <div class="card teal" style="margin-top:.7em;padding:14px 20px"><p class="small" style="margin:0"><b style="color:var(--lime)">Conclusion.</b> Our examples are the training data, and they are years old. The open brief shows what models can build now. <b>Update the examples with AI</b>, and the next generation of models learns deck.gl from those.</p></div>
+  <div class="card teal" style="margin-top:.7em;padding:14px 20px"><p class="small" style="margin:0"><b style="color:var(--lime)">Why.</b> Our examples are the training data, and they are years old: working maps, written like it's 2024. The open brief shows what models can build now. <b>Update the examples with AI</b>, and the next generation of models learns deck.gl from those.</p></div>
   <aside class="notes">Speed is not quality: Gemini 3.8 Flash produced the most code per second and the nicest panels and scored lowest on API currency. The gap is not capability; it is freshness and unwritten rules, and the cheapest lever we own is the examples. The hexagon and trips examples are what every model reproduced, stack and palette included. If those examples were current, ambitious and correct, the models would be too. Rules like "layers are immutable, replace them" are what a schema or a skill would carry. That is questions three and four.</aside>
 </section>
 
