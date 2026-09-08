@@ -37,8 +37,8 @@ Live deck.gl map behind (`talk/title-map.html`: MapLibre restyled in CARTO blue 
 ## Proposal PRs (opened 8 Sept, drafts from jatorre/deck.gl)
 - visgl/deck.gl #10677 — website: publish llms.txt and per-page Markdown (mirrors luma.gl's plugin config; local build verified).
 - visgl/deck.gl #10678 — docs: `skills/deckgl` agent skill + "Working with AI Coding Agents" guide.
-- visgl/deck.gl #10679 — RFC: `@deck.gl/json` v2 as the agent-native interface (dev-docs/RFCs/v10.0).
-Each commit carries an `Assisted-by: Claude (Claude Code)` trailer and the PR bodies disclose it.
+- `@deck.gl/json` v2 proposal: posted as a comment on the v2 tracker (deck.gl-community #596), https://github.com/visgl/deck.gl-community/issues/596#issuecomment-5583845859; full RFC text kept at https://github.com/jatorre/deck.gl/blob/json-v2-rfc/dev-docs/RFCs/proposals/json-v2-agent-interface-rfc.md. The deck.gl PR #10679 was closed in favour of the tracker after review.
+Each commit carries an `Assisted-by: Claude (Claude Code)` trailer and the PR bodies disclose it; all three were revised after an independent review pass.
 
 ## Close
 Four asks for Thursday (JSON v2; llms.txt + skills; improve docs and examples now with AI; AI contribution policy). "Agents are deck.gl's newest users. They already like it. Let's make it easy for them to be right."
