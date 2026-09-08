@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Making deck.gl AI-Ready · OpenVis Summit 2026</title>
+<meta name="description" content="Declarative specs as an agent-native interface for maps. Javier de la Torre, CARTO. Open Visualization Collaborator Summit, Zürich, 9 Sept 2026.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reset.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/theme/black.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0f14; --bg2:#121922; --line:#1f2a36; --fg:#e8eef4; --muted:#9aa7b4;
+  --teal:#37e0c8; --amber:#ffb454; --red:#ff6b6b; --blue:#7cc4ff;
+  --r-background-color:var(--bg); --r-main-font:Inter,system-ui,sans-serif; --r-heading-font:Inter,system-ui,sans-serif;
+  --r-main-color:var(--fg); --r-heading-color:var(--fg); --r-link-color:var(--teal); --r-link-color-hover:#8ff0e2;
+  --r-main-font-size:30px; --r-heading-text-transform:none; --r-heading-letter-spacing:-0.01em; --r-heading-font-weight:700;
+  --r-block-margin:16px;
+}
+.reveal{font-family:var(--r-main-font)}
+.reveal .slides section{text-align:left;padding:0 10px}
+.reveal h1{font-size:2.4em;line-height:1.05;margin-bottom:.3em;letter-spacing:-0.02em}
+.reveal h2{font-size:1.55em;line-height:1.15;margin-bottom:.45em}
+.reveal h3{font-size:1.05em;color:var(--muted);font-weight:600;margin-bottom:.4em}
+.reveal p,.reveal li{line-height:1.35}
+.reveal ul{margin-left:0.9em}
+.reveal li{margin:.28em 0}
+.reveal .kicker{display:inline-block;font-size:.55em;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:.9em;border:1px solid rgba(55,224,200,.35);padding:.25em .7em;border-radius:999px}
+.reveal .kicker.amber{color:var(--amber);border-color:rgba(255,180,84,.4)}
+.reveal .lead{font-size:1.15em;color:var(--fg);max-width:26ch;line-height:1.25}
+.reveal .muted{color:var(--muted)}
+.reveal .small{font-size:.66em}
+.reveal .xs{font-size:.55em;color:var(--muted)}
+.reveal .big{font-size:3.2em;font-weight:800;letter-spacing:-0.03em;line-height:1;color:var(--teal)}
+.reveal .stat{display:inline-block;margin:.2em 1.2em .2em 0;vertical-align:top}
+.reveal .stat .n{font-size:2.6em;font-weight:800;letter-spacing:-0.03em;line-height:1;color:var(--teal)}
+.reveal .stat .n.amber{color:var(--amber)} .reveal .stat .n.red{color:var(--red)}
+.reveal .stat .l{font-size:.6em;color:var(--muted);margin-top:.35em;max-width:14ch;line-height:1.25}
+.reveal table{font-size:.58em;border-collapse:collapse;margin:0;width:100%}
+.reveal table th{color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.85em;border-bottom:1px solid var(--line);padding:.45em .6em;text-align:left}
+.reveal table td{border-bottom:1px solid var(--line);padding:.45em .6em;vertical-align:top}
+.reveal table tr:last-child td{border-bottom:none}
+.reveal table td.ok{color:var(--teal)} .reveal table td.warn{color:var(--amber)} .reveal table td.bad{color:var(--red)}
+.reveal .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.reveal .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;align-items:start}
+.reveal .card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+.reveal .card h3{margin-top:0;color:var(--fg)}
+.reveal .card.teal{border-color:rgba(55,224,200,.45)} .reveal .card.amber{border-color:rgba(255,180,84,.45)}
+.reveal blockquote{background:var(--bg2);border-left:4px solid var(--teal);box-shadow:none;margin:.4em 0;padding:.6em 1em;font-style:normal;width:100%;font-size:.9em;line-height:1.35}
+.reveal blockquote cite{display:block;font-size:.6em;color:var(--muted);margin-top:.6em;font-style:normal}
+.reveal code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.82em;background:var(--bg2);padding:.08em .35em;border-radius:5px;color:var(--blue)}
+.reveal pre{width:100%;box-shadow:none;font-size:.5em;margin:.3em 0}
+.reveal pre code{padding:.9em 1em;background:var(--bg2);border:1px solid var(--line);border-radius:12px;line-height:1.4;max-height:none;color:var(--fg)}
+.reveal .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px 10px;align-items:start}
+.reveal .grid5 img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:6px;border:1px solid var(--line);margin:0;display:block}
+.reveal .grid5 .h{font-size:.5em;color:var(--muted);text-align:center;font-weight:600;padding-bottom:2px}
+.reveal .grid5 .t{font-size:.46em;color:var(--muted);text-align:right;padding-right:6px;line-height:1.2;align-self:center}
+.reveal .grid5 .sc{font-size:.46em;color:var(--fg);text-align:center;margin-top:-2px}
+.reveal .grid5 .sc b{color:var(--teal)}
+.reveal .foot{position:absolute;left:12px;bottom:-14px;font-size:.5em;color:var(--muted)}
+.reveal .overlay{position:absolute;left:24px;bottom:28px;background:rgba(11,15,20,.82);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-size:.62em;max-width:44ch;backdrop-filter:blur(6px)}
+.reveal .overlay b{color:var(--teal)}
+.reveal .asks{counter-reset:ask;list-style:none;margin:0;padding:0}
+.reveal .asks li{counter-increment:ask;position:relative;padding-left:2.3em;margin:.55em 0;font-size:1.05em}
+.reveal .asks li::before{content:counter(ask);position:absolute;left:0;top:-.05em;width:1.6em;height:1.6em;border-radius:50%;background:var(--teal);color:#062b27;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.85em}
+.reveal .progress{color:var(--teal)}
+.reveal .slide-number{background:transparent;color:var(--muted);font-size:14px}
+.reveal .title-url{font-family:'JetBrains Mono',monospace;color:var(--teal);font-size:.62em}
+.reveal .hairline{height:1px;background:var(--line);margin:.6em 0 .8em}
+.reveal .tag{display:inline-block;font-size:.5em;padding:.15em .55em;border-radius:6px;background:var(--bg2);border:1px solid var(--line);color:var(--muted);margin-right:.3em;vertical-align:middle}
+.reveal .check li::marker{color:var(--teal)}
+.reveal .warnlist li::marker{color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- 0 · Title -->
+<section data-background-color="#0b0f14">
+  <span class="kicker">Open Visualization Collaborator Summit · Zürich · 9 Sept 2026</span>
+  <h1>Making deck.gl<br>AI-Ready</h1>
+  <p class="lead">Declarative specs as an agent-native interface for maps</p>
+  <div class="hairline"></div>
+  <p class="small">Javier de la Torre · CARTO<br><span class="title-url">jatorre.github.io/deckgl-ai-ready</span> <span class="xs">· slides, experiments, raw model outputs, harnesses</span></p>
+  <aside class="notes">Everything in this talk is in that repo: the experiments, the raw model outputs, the harnesses. It was researched and built in the two days before the talk with a coding agent, which is itself part of the argument.</aside>
+</section>
+
+<!-- 1 · Opening -->
+<section>
+  <span class="kicker">Premise</span>
+  <h2>Everyone in this room builds with agents now.<br><span class="muted">So do deck.gl's users.</span></h2>
+  <p class="small muted">Treat agents as deck.gl's newest user group and audit how ready we are for them. Five questions, each with evidence and a suggestion.</p>
+  <ol class="small" style="margin-top:.4em">
+    <li>What do models <b>recommend</b> when someone asks for a map?</li>
+    <li>How well do frontier models <b>write deck.gl</b>?</li>
+    <li>How can agents <b>drive deck.gl interactively</b>? <span class="tag">the thesis</span></li>
+    <li>Does our <b>website and documentation</b> work for AI?</li>
+    <li>How do we handle <b>AI contributions</b>?</li>
+  </ol>
+  <aside class="notes">I won't spend time on "AI is changing software development". You know. What I want to do is an audit. For each question I either ran an experiment or read the sources, and for each I have a suggestion. Some are cheap. One is a proposal I'd like the TSC to pick up on Thursday.</aside>
+</section>
+
+<!-- ===== Q1 ===== -->
+<section>
+  <span class="kicker">Q1 · What do models recommend?</span>
+  <h2>10 models, 8 neutral prompts, no tools, no docs</h2>
+  <table>
+    <tr><th style="width:44%">Ask</th><th>What models picked</th></tr>
+    <tr><td>2 million GPS points, colored by speed</td><td><b>deck.gl 7/10</b> · GPT-5.2 and GPT-5-mini solved it with MapLibre vector tiles</td></tr>
+    <tr><td>Simple airports GeoJSON with a tooltip</td><td><b>Leaflet 7/10</b> · both newest frontier models chose MapLibre</td></tr>
+    <tr><td>H3 hexagons colored by count</td><td><b>deck.gl 7/10</b></td></tr>
+    <tr><td>Best open-source map library for React in 2026</td><td><b>MapLibre 8/10</b> · deck.gl never primary, named as runner-up</td></tr>
+    <tr><td>Single HTML file with five city markers</td><td><b>Leaflet 10/10</b></td></tr>
+    <tr><td>"A light basemap"</td><td><b>CARTO Positron 9/10</b>, unprompted</td></tr>
+  </table>
+  <p class="xs" style="margin-top:.6em">Claude Haiku 4.5 · Sonnet 5 · Opus 5 · Fable 5.1 · GPT-4o · GPT-5-mini · GPT-5.2 · GPT-5.6-sol · Gemini 3.7 Flash · Gemini 3.1 Pro. One sample each; directional. Full tables in the repo.</p>
+  <aside class="notes">Claude models through the CLI with tools off, GPT and Gemini through a proxy as raw chat completions, GPT-5.6-sol through Codex in an empty sandbox. One sample per cell, so treat the counts as directional. The pattern is very stable though: deck.gl lives in every model's head as the answer to "millions" or "H3", never as the default map. Leaflet is retreating to the single-file page. MapLibre is where developers, and agents, start.</aside>
+</section>
+
+<section>
+  <span class="kicker">Q1 · What do models recommend?</span>
+  <h2>How current is what they know?</h2>
+  <div class="two">
+    <div>
+      <div class="stat"><div class="n amber">3/10</div><div class="l">write deck.gl <b>v8</b> when asked for the latest</div></div>
+      <div class="stat"><div class="n red">0/10</div><div class="l">know 9.2, 9.3 or 9.4 <span class="xs">(latest: 9.4.0, 5 Sept)</span></div></div>
+      <p class="small" style="margin-top:.6em">Asked to add deck.gl on MapLibre:</p>
+      <ul class="small">
+        <li><b>6/10</b> correct pre-9.4 answer, every one pausing to say "despite the name"</li>
+        <li><b>1/10</b> knew the three-day-old <code>@deck.gl/maplibre</code> module</li>
+        <li><b>3/10</b> wrong attach call or an invented class</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <h3>The rename tells the story</h3>
+      <p class="small">Models needed a paragraph to explain why a module named <code>mapbox</code> works with MapLibre. Two of them guessed the package name developers expected. Last Friday deck.gl 9.4 shipped exactly that package. The confusion was real enough to rename the module; every model's training data still says the old name.</p>
+    </div>
+  </div>
+  <div class="hairline"></div>
+  <p class="small"><b class="muted">Suggestion.</b> deck.gl is the "when the data is big" library in model priors. That matches its identity; own it. Keep the on-ramp from MapLibre short, because that is where agents begin. And accept that without documentation an agent can read at run time, it will write deck.gl one to two years old.</p>
+  <aside class="notes">Version drift is not a frontier problem that goes away with better models; the frontier pair also targets 9.1. It is a documentation problem, which is question four.</aside>
+</section>
+
+<!-- ===== Q2 ===== -->
+<section>
+  <span class="kicker">Q2 · How well do frontier models write deck.gl?</span>
+  <h2>Four maps, one shot, no tools, rendered and scored</h2>
+  <div class="two">
+    <div>
+      <ul class="small">
+        <li><b>T1</b> World airports as typed points, tooltip, legend, over MapLibre</li>
+        <li><b>T2</b> Skew-aware choropleth of 4,627 Vancouver blocks with a classed legend</li>
+        <li><b>T3</b> Extruded hexagons of 140k UK accident points with a radius slider</li>
+        <li><b>T4</b> Animated taxi trips with play/pause and a time readout</li>
+      </ul>
+      <p class="xs">Self-contained HTML, CDN only, real data from deck.gl-data, fixed viewports. Models: Claude Fable 5.1, GPT-5.6-sol, Gemini 3.8 Flash, Gemini 3.1 Pro, GLM 5.3.</p>
+    </div>
+    <div class="card">
+      <h3>Harness</h3>
+      <p class="small">Headless Chromium with WebGL. Page errors, failed requests and CDN versions captured; screenshots at 3, 8 and 14 s.</p>
+      <p class="small">17-point rubric applied by Claude Fable 5.1 as judge over code, render report and screenshots: renders 2 · spec compliance 5 · cartography 5 · interactivity 3 · API currency 2.</p>
+    </div>
+  </div>
+  <aside class="notes">The judge is a Claude model, so it could favor Claude; its notes are quoted in the report and the version and API facts are verified mechanically from the files, not from the judge.</aside>
+</section>
+
+<section>
+  <span class="kicker">Q2 · How well do frontier models write deck.gl?</span>
+  <div class="grid5" style="margin-top:-6px">
+    <div></div>
+    <div class="h">Fable 5.1</div><div class="h">GPT-5.6-sol</div><div class="h">Gemini 3.8 Flash</div><div class="h">Gemini 3.1 Pro</div>
+    <div class="t">airports</div>
+    <img src="research/experiments/mapbench/render/claude-fable-5.1/T1_airports_points.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gpt-5.6-sol/T1_airports_points.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gemini-3.8-flash/T1_airports_points.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gemini-3.1-pro/T1_airports_points.t8.w560.jpg" alt="">
+    <div class="t">choropleth</div>
+    <img src="research/experiments/mapbench/render/claude-fable-5.1/T2_vancouver_choropleth.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gpt-5.6-sol/T2_vancouver_choropleth.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gemini-3.8-flash/T2_vancouver_choropleth.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gemini-3.1-pro/T2_vancouver_choropleth.t8.w560.jpg" alt="">
+    <div class="t">hexagons</div>
+    <img src="research/experiments/mapbench/render/claude-fable-5.1/T3_uk_accidents_hexagons.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gpt-5.6-sol/T3_uk_accidents_hexagons.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gemini-3.8-flash/T3_uk_accidents_hexagons.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gemini-3.1-pro/T3_uk_accidents_hexagons.t8.w560.jpg" alt="">
+    <div class="t">trips</div>
+    <img src="research/experiments/mapbench/render/claude-fable-5.1/T4_trips_animation.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gpt-5.6-sol/T4_trips_animation.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gemini-3.8-flash/T4_trips_animation.t8.w560.jpg" alt="">
+    <img src="research/experiments/mapbench/render/gemini-3.1-pro/T4_trips_animation.t8.w560.jpg" alt="">
+    <div></div>
+    <div class="sc"><b>60</b>/68</div><div class="sc"><b>61</b>/68</div><div class="sc"><b>57</b>/68</div><div class="sc"><b>58</b>/68</div>
+  </div>
+  <p class="xs" style="margin-top:.5em">16 of 16 maps rendered the intended data. Zero page errors, zero console errors, zero HTTP errors. Every explicit requirement met in 14 of 16. Live maps and judge notes: <a href="research/experiments/mapbench/report.html">the report</a>.</p>
+  <aside class="notes">Pause here. These are one-shot outputs from a single prompt. Hover, legends, sliders, animation, all wired. If you had shown me this two years ago I would not have believed it. The next slide is a live one.</aside>
+</section>
+
+<section data-background-iframe="research/experiments/mapbench/out/claude-fable-5.1/T4_trips_animation.html" data-background-interactive>
+  <div class="overlay"><b>Live.</b> Claude Fable 5.1, task 4, exactly as generated: TripsLayer over MapLibre, trail length 180 s, 60-second loop, play/pause, time readout. 32 seconds to generate.</div>
+  <aside class="notes">This is the generated file, unedited, served from the repo. One prompt, one shot.</aside>
+</section>
+
+<section>
+  <span class="kicker">Q2 · How well do frontier models write deck.gl?</span>
+  <h2>The catch is in the code, not the picture</h2>
+  <table>
+    <tr><th>Model</th><th>Total</th><th>Renders</th><th>API currency</th><th>deck.gl pinned from the CDN</th><th>Basemap integration</th></tr>
+    <tr><td>GPT-5.6-sol</td><td>61/68</td><td class="ok">4/4</td><td class="ok">7/8</td><td>9.1.x ×3, 8.9.36</td><td class="ok">MapboxOverlay + addControl, every task</td></tr>
+    <tr><td>Claude Fable 5.1</td><td>60/68</td><td class="ok">4/4</td><td class="warn">6/8</td><td>9.0.x ×2, 8.9.35 ×2</td><td class="warn">v8 standalone DeckGL + mapStyle</td></tr>
+    <tr><td>Gemini 3.1 Pro</td><td>58/68</td><td class="ok">4/4</td><td class="warn">4/8</td><td>8.9.x ×4</td><td class="warn">v8 standalone + <code>window.mapboxgl = maplibregl</code></td></tr>
+    <tr><td>Gemini 3.8 Flash</td><td>57/68</td><td class="ok">4/4</td><td class="warn">4/8</td><td>8.9.35 ×4</td><td class="warn">v8 standalone DeckGL + mapStyle</td></tr>
+    <tr><td>GLM 5.3 <span class="xs">open weights</span></td><td>32/68</td><td class="bad">1/4</td><td class="warn">4/8</td><td>8.9.x ×4</td><td class="bad">shadowed the <code>deck</code> global; mutated layer props</td></tr>
+  </table>
+  <div class="two" style="margin-top:.5em">
+    <ul class="small warnlist">
+      <li><b>15 of 20</b> files pin a deck.gl <b>8.9.x</b> bundle. None use 9.2+. None use the new MapLibre module.</li>
+      <li>The hexagon and trips tasks pulled models to v8 hardest: they are the canonical showcase examples, and the model copies the example's stack with its idea.</li>
+    </ul>
+    <ul class="small warnlist">
+      <li>Cartography 3 to 4 of 5 everywhere, never 5: YlOrRd quantiles every time, long-tail skew unhandled, tiny points, missing legends.</li>
+      <li>GLM knows the vocabulary but not the contract: layers are immutable and replaced, not mutated.</li>
+    </ul>
+  </div>
+  <aside class="notes">Speed is not quality: Gemini 3.8 Flash produced the most code per second and the nicest control panels, and scored lowest on API currency. GPT-5.6-sol took twice as long and scored highest. And GLM through OpenRouter needed a reasoning cap to emit any HTML at all; with default settings it spent the whole budget thinking for six to ten minutes per task. Suggestion for this section: the gap is not capability. It is freshness and unwritten rules, both fixed by docs an agent can read at run time and by making the rules checkable. That is questions four and three.</aside>
+</section>
+
+<!-- ===== Q3 ===== -->
+<section>
+  <span class="kicker">Q3 · How can agents drive deck.gl interactively?</span>
+  <h2>This was designed in 2018</h2>
+  <blockquote>"Especially in the infovis space, there is a growing need to be able to generate powerful visualizations directly from the backend. Being able to describe a visualization in abstract terms and send it to the front-end for display without having knowledge about how to code front-end applications can be valuable."<cite>RFC: JSON Layers · Ib Green · July 2018</cite></blockquote>
+  <div class="two" style="margin-top:.5em">
+    <div class="card teal"><h3>April 2026</h3><p class="small"><code>@deck.gl/json</code> v2 tracker. Goal #1: "enable LLMs to generate deck.gl visualizations." Zod schemas, JSON Schema, LLM-friendly docs, SQL sources.</p></div>
+    <div class="card amber"><h3>In the module today</h3><p class="small"><code>console.error('Back-channel not implemented for this transport')</code><br><span class="xs">The return path was designed in 2018 and never built.</span></p></div>
+  </div>
+  <aside class="notes">Replace "backend" with "agent" and this is my abstract. So I am not proposing a new direction. I am asking us to finish one Ib started eight years ago, for a consumer that now actually exists.</aside>
+</section>
+
+<section>
+  <span class="kicker">Q3 · How can agents drive deck.gl interactively?</span>
+  <h2>Three ways an agent holds a map <span class="muted">(we run all three)</span></h2>
+  <table>
+    <tr><th></th><th>State behind verbs</th><th>A document the agent writes</th><th>A picture it receives</th></tr>
+    <tr><td class="muted">Where</td><td>In-app map assistant</td><td>MCP tool rendering a <code>@deck.gl/json</code> spec inside the chat (MCP Apps)</td><td>CLI screenshot</td></tr>
+    <tr><td class="muted">Agent writes</td><td>One tool call per turn, ~27 verbs, ordering rules in prose</td><td>The whole spec, stateless, portable</td><td>Nothing; it names a saved map</td></tr>
+    <tr><td class="muted">Agent reads</td><td>A lossy summary of the map</td><td>Nothing. Errors only, passively</td><td>Pixels</td></tr>
+    <tr><td class="muted">Validity contract</td><td>Prose: "always add layer right after source", "one tool call per turn"</td><td>A closed registry of layers + prose + counting layers before and after conversion</td><td>fetch succeeds</td></tr>
+  </table>
+  <p class="small" style="margin-top:.7em"><b class="muted">Lesson.</b> Verbs are stateful but every rule lives in prose and gets written twice. A document is portable, and a stateless spec inside an MCP App means the map itself becomes an artifact that travels from chat into apps. Neither gives the agent eyes.</p>
+  <aside class="notes">The document path is stock @deck.gl/json 9.3 with a closed registry: seven CARTO tile layers, thirteen source builders wrapped to inject credentials so the agent never holds a token, three color helpers. The whitelist is the schema, because there is no schema. The in-app assistant is the opposite: about twenty-seven imperative tools against live application state, gated by what the map contains.</aside>
+</section>
+
+<section>
+  <span class="kicker">Q3 · How can agents drive deck.gl interactively?</span>
+  <h2>What it costs to make a model write valid deck.gl JSON today</h2>
+  <div class="three">
+    <div class="card"><div class="stat" style="margin:0"><div class="n amber">36 KB</div><div class="l">the tool description an agent must read, about 9,000 tokens</div></div><p class="xs" style="margin-top:.6em">Half of it is a catalogue of <b>silent</b> failures: unregistered layer → empty map, no error. Wrong layer/source pairing → empty. Missing aggregation → empty. Deep ternary → blank tile.</p></div>
+    <div class="card"><h3>Charts vs maps, same service</h3><p class="small">Vega-Lite charts: validated with Ajv against the official 1.9 MB JSON Schema, errors formatted for the model.<br>deck.gl specs: count the layers before and after conversion.</p><p class="xs">Charts get a type system. Maps get prose.</p></div>
+    <div class="card"><h3>Upstream today</h3><p class="small">Unknown <code>@@type</code> → <code>log.warn</code>, returns <code>null</code>, map renders empty.</p><blockquote class="small" style="margin:.3em 0">"Error detection is currently limited and error messages may not be very helpful."<cite>deck.gl docs, @deck.gl/json overview</cite></blockquote></div>
+  </div>
+  <div class="hairline"></div>
+  <ul class="small check">
+    <li><b>Errors only, passive.</b> Actively messaging the model about a failure over an optimistic tool result made it oscillate and retry the same arguments. Silence equals success.</li>
+    <li><b>Error text is a prompt.</b> Name the legal alternatives, forbid blind retry.</li>
+    <li><b>The loop is write-only.</b> No viewport, feature counts or clicks come back. The agent cannot look at its own map.</li>
+  </ul>
+  <aside class="notes">An agent can recover from any error it can see. It cannot recover from an empty map. Everything on this slide is a workaround for that one upstream behaviour.</aside>
+</section>
+
+<section>
+  <span class="kicker">Q3 · How can agents drive deck.gl interactively?</span>
+  <h2>Can models write the spec? <span class="muted">Choropleth by population, 10 models</span></h2>
+  <div class="two">
+    <table>
+      <tr><th>Outcome</th><th>Models</th></tr>
+      <tr><td class="ok">Valid data-driven accessor (<code>@@=</code> ternary)</td><td>4/10</td></tr>
+      <tr><td class="warn">CARTO's <code>colorContinuous</code> helper in a stock spec</td><td>2/10</td></tr>
+      <tr><td class="bad">Mapbox style-spec expressions or invented classes</td><td>4/10</td></tr>
+      <tr><td class="bad">Would fail loudly in today's converter</td><td>0/10</td></tr>
+    </table>
+    <div>
+      <p class="small"><code>@@type</code> syntax was fine in 7 of 10. The failure is semantic: <b>data-driven styling</b>. Models reach for the Mapbox expression grammar, the declarative map styling language the training data is full of.</p>
+      <pre><code>"getFillColor": ["interpolate", ["linear"],
+   ["get", "population"], 0, [255,255,204], ...]</code></pre>
+      <p class="xs">GPT-5.2, GPT-5-mini and GPT-4o, in a deck.gl spec.</p>
+    </div>
+  </div>
+  <aside class="notes">Two of ten, Sonnet 5 and GPT-5.6-sol, wrote CARTO's helper vocabulary into a stock spec. Our docs are the strongest single influence on how models style deck.gl JSON. That is flattering and also a sign that the ecosystem has no shared vocabulary for something as basic as a color scale.</aside>
+</section>
+
+<section>
+  <span class="kicker">Q3 · How can agents drive deck.gl interactively?</span>
+  <h2>Everyone is rebuilding the same thing</h2>
+  <div class="three">
+    <div class="card"><h3>CARTO</h3><p class="small">Stock <code>@deck.gl/json</code>, closed registry, credential injection, a coercer for host quirks, a 36 KB contract, an errors-only back-channel.</p></div>
+    <div class="card"><h3>SQLRooms</h3><p class="small">Keeps <code>@deck.gl/json</code> canonical, adds a dataset-binding block, GeoArrow layers, and ~60 KB of AI normalizer, validator and instructions whose rules mirror ours line for line.</p></div>
+    <div class="card"><h3>And</h3><p class="small">pydeck · kepler.gl config · noodles.gl's portable project JSON · three vocabularies for "a color scale over an attribute" · models default to a fourth.</p></div>
+  </div>
+  <p class="small" style="margin-top:.8em">Meanwhile step 1 of the v2 tracker, Zod schemas for GeoJSON, has been an open pull request since <b>17 April</b>. The tracker's comments already ask for the right things: layers passed separately from data, a schema catalog, a split between the visualization spec and data-source declarations.</p>
+  <aside class="notes">Ilya is in the room and will show SQLRooms. His planning issue for the deck integration says it was written with the help of a model. Two teams, two coercers, one upstream that could own it.</aside>
+</section>
+
+<section>
+  <span class="kicker">Q3 · Proposal</span>
+  <h2>Make <code>@deck.gl/json</code> v2 the agent interface</h2>
+  <div class="two">
+    <ol class="small">
+      <li><b>JSON Schema from Zod</b>, including the compatibility rules: layer↔source, required props, expression grammar. Validation, structured outputs, editors.</li>
+      <li><b>Loud failure.</b> A conversion report (ok · partial · error, dropped items with reasons) instead of warn-and-drop.</li>
+      <li><b>State read-back.</b> Viewport, layers with ids and counts, picked object, optional screenshot. Finish the 2018 back-channel. Ship a reference MCP App.</li>
+      <li><b>Patch semantics</b> for multi-turn editing: JSON Patch, or deep-merge by layer id.</li>
+      <li><b>A data-source concept</b> for SQL, tiles, Arrow and COG, so vendors stop wrapping their own.</li>
+      <li><b>Registry profiles.</b> Core plus vendor registries, published with their schemas.</li>
+    </ol>
+    <div>
+      <div class="card amber"><h3>Two provocations</h3><ul class="small"><li>Accept Mapbox-style expression arrays as an accessor syntax. Models and humans already speak it.</li><li>Standardize one scale-helper vocabulary in core.</li></ul></div>
+      <div class="card" style="margin-top:14px"><h3>A tension to name</h3><p class="small">The 2018 RFC's "One API" principle vs an agent profile that is smaller and stricter. We broke One API on purpose with a closed registry. Make that a supported pattern.</p></div>
+    </div>
+  </div>
+  <aside class="notes">deck.gl does not need to speak natural language. It needs to be checkable, so that a model's fluency in JSON is enough. That reframing keeps us inside the One API principle while admitting we already broke it.</aside>
+</section>
+
+<!-- ===== Q4 ===== -->
+<section>
+  <span class="kicker">Q4 · Does our website and documentation work for AI?</span>
+  <h2>Where our neighbours are</h2>
+  <table>
+    <tr><th>Site</th><th>llms.txt</th><th>Agent skills</th><th>MCP server</th></tr>
+    <tr><td>luma.gl <span class="xs">same TSC</span></td><td class="ok">yes, 97 KB</td><td class="muted">—</td><td class="muted">—</td></tr>
+    <tr><td>maplibre.org</td><td class="ok">yes</td><td class="ok">official <code>maplibre-agent-skills</code>, 9 skills, "to inform the LLMs"</td><td class="muted">community</td></tr>
+    <tr><td>docs.mapbox.com</td><td class="ok">yes</td><td class="muted">—</td><td class="ok">two official: location, and a DevKit for coding agents</td></tr>
+    <tr><td><b>deck.gl</b></td><td class="bad">404</td><td class="bad">none</td><td class="bad">none</td></tr>
+  </table>
+  <div class="two" style="margin-top:.7em">
+    <div><p class="small"><b class="muted">Measured consequence.</b> 15 of 20 generated maps on v8. 0 of 10 models know a release from the last sixteen months. 6 of 10 explain a module rename that already happened.</p></div>
+    <div class="card teal"><h3>Suggestions</h3><ul class="small"><li>llms.txt and page-level Markdown; luma.gl already has the pipeline</li><li>An official <code>deck.gl-agent-skills</code>: MapLibre on 9.4, v8→v9 migration, binary attributes at scale, the JSON spec, the aggregation layers' unwritten rules</li><li>A machine-readable what's-new</li></ul></div>
+  </div>
+  <aside class="notes">MapLibre's newsletter says they launched skills "to inform the LLMs" and stop "bad or wrong MapLibre integrations". That is the whole of question two in one sentence, and they did it in February. This is the cheapest fix in the talk, and I would like to show the first PR rather than describe it.</aside>
+</section>
+
+<!-- ===== Q5 ===== -->
+<section>
+  <span class="kicker">Q5 · How do we handle AI contributions?</span>
+  <h2>The contributions are already here. The policy is not.</h2>
+  <div class="two">
+    <div>
+      <ul class="small">
+        <li>deck.gl's contributing guide, PR template, and every TSC document (charter, governance, developer process): <b>zero</b> mentions of AI or assisted contributions.</li>
+        <li>The landscape: bans (Zig, Gentoo, QEMU, Bevy, GIMP) · disclosure (curl, Linux <code>Assisted-by:</code>, Apache <code>Generated-by:</code>, LLVM, Kubernetes, NumPy) · conditional (CPython, PyTorch).</li>
+        <li>OpenJS Foundation, after the 19,000-line Node.js PR built with a coding agent: legal counsel says the DCO covers AI-assisted code.</li>
+        <li>Already in our ecosystem: a deck integration planned "with the help of gpt-5.4"; three AI-forward RFCs in deck.gl-community on one day; this talk.</li>
+      </ul>
+    </div>
+    <div class="card teal"><h3>Suggestions</h3><ul class="small"><li>Disclosure: an <code>Assisted-by:</code> trailer; the contributor understands and has tested the code</li><li>No AI on good-first-issues, LLVM's rule, to protect newcomers</li><li>A PR template checkbox</li><li>An <code>AGENTS.md</code> so contributors' agents follow the developer process and test guidelines. Those docs are now the agent's instructions</li></ul></div>
+  </div>
+  <aside class="notes">The maintainers' fear is slop and review burden, and it is legitimate. Disclosure plus "you understand and tested it" plus protecting good-first-issues is where most mature projects landed. We do not need to invent anything; we need to write it down.</aside>
+</section>
+
+<!-- ===== Close ===== -->
+<section>
+  <span class="kicker">For Thursday's "Future of Vis.gl"</span>
+  <h2>Three asks</h2>
+  <ol class="asks">
+    <li>Adopt <code>@deck.gl/json</code> v2 as a TSC priority, with a schema and a conversion report. CARTO brings its production evidence and helps drive it.</li>
+    <li>Ship llms.txt and an official agent-skills repo this quarter.</li>
+    <li>Adopt a disclosure-based AI contribution policy.</li>
+  </ol>
+  <div class="hairline"></div>
+  <p class="lead" style="max-width:34ch">Agents are deck.gl's newest users. They already like it. Let's make it easy for them to be right.</p>
+  <p class="small"><span class="title-url">jatorre.github.io/deckgl-ai-ready</span> <span class="xs">· everything in this talk, reproducible</span></p>
+  <aside class="notes">Thank you. Questions.</aside>
+</section>
+
+<!-- ===== Backup ===== -->
+<section>
+  <span class="kicker amber">Backup · References</span>
+  <h2>Sources</h2>
+  <ul class="small">
+    <li>JSON Layers RFC (2018): github.com/visgl/deck.gl/blob/master/dev-docs/RFCs/v6.1/json-layers-rfc.md</li>
+    <li><code>@deck.gl/json</code> v2 tracker: deck.gl-community #596 · step 1 PR #597 · AI-forward RFCs #594, #595</li>
+    <li>deck.gl 9.4 release notes, <code>@deck.gl/maplibre</code>: deck.gl/docs/whats-new</li>
+    <li>MapLibre agent skills: github.com/maplibre/maplibre-agent-skills · Mapbox MCP servers: docs.mapbox.com/api/guides/mcp-server</li>
+    <li>MCP Apps specification (SEP-1865): github.com/modelcontextprotocol/ext-apps</li>
+    <li>SQLRooms deck package: sqlrooms.org/api/deck · CARTO agentic deck.gl: github.com/CartoDB/carto-agentic-deckgl</li>
+    <li>Open-source AI contribution policies: github.com/melissawm/open-source-ai-contribution-policies · RedMonk survey of 86 orgs (Feb 2026)</li>
+    <li>Experiments, raw outputs and harnesses: github.com/jatorre/deckgl-ai-ready</li>
+  </ul>
+</section>
+
+<section>
+  <span class="kicker amber">Backup · Q1 detail</span>
+  <h2>deck.gl on MapLibre, per model</h2>
+  <table>
+    <tr><th>Models</th><th>Package</th><th>Class</th><th>Attach</th><th>Verdict</th></tr>
+    <tr><td>Sonnet 5 · Opus 5 · Fable 5.1 · GPT-5.2 · Gemini 3.7 · Gemini 3.1</td><td><code>@deck.gl/mapbox</code></td><td>MapboxOverlay</td><td>addControl</td><td class="ok">correct for 9.3 and earlier</td></tr>
+    <tr><td>GPT-5.6-sol</td><td><code>@deck.gl/maplibre</code></td><td>MapLibreOverlay</td><td>addControl</td><td class="ok">correct for 9.4, three days old</td></tr>
+    <tr><td>Haiku 4.5</td><td><code>@deck.gl/mapbox</code></td><td>MapboxOverlay</td><td>map.addLayer</td><td class="warn">wrong attach call</td></tr>
+    <tr><td>GPT-4o · GPT-5-mini</td><td><code>@deck.gl/maplibre</code></td><td>MaplibreLayer</td><td>map.addLayer</td><td class="bad">package now exists, class and API do not</td></tr>
+  </table>
+</section>
+
+<section>
+  <span class="kicker amber">Backup · Q2 detail</span>
+  <h2>GLM 5.3, the open-weight model</h2>
+  <ul class="small">
+    <li>Endpoint makes reasoning mandatory. Default: 24,000 tokens of thinking, no HTML, ~400 s per task. Low effort: 40,000 tokens on 3 of 4 tasks, ~600 s. One finished map pinned <code>deck.gl@8.10.1</code>, which does not exist. Only an explicit 8,000-token reasoning cap produced four files, in 10 to 33 s.</li>
+    <li>Airports: correct, 13/17, proper MapboxOverlay integration.</li>
+    <li>Choropleth: <code>const deck = new deck.Deck(...)</code> shadows the library global; loads Mapbox GL JS, which demands a token. Blank page.</li>
+    <li>Hexagons: hand-rolled TileLayer basemap reading <code>props.bbox</code> instead of <code>props.tile.bbox</code>; hexagons on black.</li>
+    <li>Trips: mutates <code>layer.props.currentTime</code> and calls internal <code>setState</code> instead of recreating the layer; animation dies on frame one.</li>
+  </ul>
+  <p class="small muted">Knows what a deck.gl map contains. Does not know that layers are immutable. Exactly the unwritten rule a schema or a skill would carry.</p>
+</section>
+
+<section>
+  <span class="kicker amber">Backup · Today's programme</span>
+  <h2>Adjacent talks</h2>
+  <ul class="small">
+    <li>14:15 · Krebs & Gervang · noodles.gl, a visual programming language for deck.gl (portable JSON projects)</li>
+    <li>14:45 · Elsinga · MLT in the deck.gl ecosystem (MapLibre)</li>
+    <li>16:00 · Koschinsky & Li · Skill-based design for AI spatial analysis tools</li>
+    <li>Day 2 · kepler.gl update · SQLRooms · Future of Vis.gl discussion 15:30</li>
+  </ul>
+</section>
+
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.2.1/plugin/notes/notes.min.js"></script>
+<script>
+Reveal.initialize({
+  width: 1280, height: 720, margin: 0.04, minScale: 0.2, maxScale: 2.0,
+  hash: true, slideNumber: 'c/t', progress: true, controls: false, transition: 'fade', transitionSpeed: 'fast',
+  center: false, preloadIframes: false, plugins: [ RevealNotes ]
+});
+</script>
+</body>
+</html>
