@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.33",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All explicit requirements met: ScatterplotLayer colored/sized by type, getTooltip with name+abbrev, legend, exact initial view, Positron token-free basemap; data clearly renders in screenshots.",
+  "Heavy overplotting of 8px-radius major airports over Europe/eastern US at zoom 1.5, while 3px small (green) points are nearly invisible \u2014 visual hierarchy skewed toward red.",
+  "Dated v8 pattern: deck.gl@8.9.33 with `window.mapboxgl = maplibregl` shim and standalone DeckGL mapStyle; caused a blocked request for api.tiles.mapbox.com/mapbox-gl.css (non-fatal)."
+ ],
+ "total": 14,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

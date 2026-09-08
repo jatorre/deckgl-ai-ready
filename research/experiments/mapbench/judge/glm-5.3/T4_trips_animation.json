@@ -1,0 +1,16 @@
+{
+ "renders": 1,
+ "spec_compliance": 2,
+ "cartography": 2,
+ "interactivity": 1,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "Animation loop is dead: `tripsLayer.setState({ currentTime })` on an uninitialized layer throws 'Cannot convert undefined or null to object' on the first rAF frame, so the loop never continues; all three screenshots show 'time: 6.0s' and no trails (only a single tiny red dot near lower Manhattan).",
+  "Wrong update pattern for deck.gl: mutating `tripsLayer.props.currentTime` and calling internal `setState` instead of calling `overlay.setProps({layers:[new TripsLayer({...currentTime})]})`; layers are meant to be immutable and recreated each frame.",
+  "Basemap (CARTO dark-matter, no token), initial view, vendor colors/legend, trailLength 180 and 60 s loop math are all correct in code, but the core animated-trails requirement is not delivered; deck.gl 8.9.35 is a dated version though MapboxOverlay+addControl usage is fine."
+ ],
+ "total": 7,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

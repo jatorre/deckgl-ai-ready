@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.32",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Choropleth renders correctly: 6 quantile classes with YlOrRd sequential scheme, white 1px outlines, HTML legend showing breaks, Positron light basemap, exact initial view.",
+  "Dated stack: deck.gl@8.9.32 dist.min.js with `window.mapboxgl = maplibregl` alias hack instead of v9 MapboxOverlay/MapLibreOverlay; triggers a blocked request for mapbox-gl.css (harmless).",
+  "Minor legend nit: adjacent class ranges share boundary values (e.g. '0 \u2013 1,337' then '1,337 \u2013 3,522'); tooltip via getTooltip shows valuePerSqm and growth as required."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

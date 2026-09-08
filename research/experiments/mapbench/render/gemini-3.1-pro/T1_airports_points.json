@@ -1,0 +1,54 @@
+{
+ "slug": "gemini-3.1-pro",
+ "task": "T1_airports_points",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.33/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gemini-3.1-pro/T1_airports_points.t3.png",
+  "t8": "render/gemini-3.1-pro/T1_airports_points.t8.png",
+  "t14": "render/gemini-3.1-pro/T1_airports_points.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.33/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": true,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nAirport Type\nMajor\nMid\nSmall",
+  "buttons": [],
+  "sliders": 0,
+  "title": "Airports Map"
+ },
+ "deckgl_cdn_version": "8.9.33",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 14.1
+}

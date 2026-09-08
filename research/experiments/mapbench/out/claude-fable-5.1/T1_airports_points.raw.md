@@ -1,0 +1,149 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>World Airports — deck.gl + MapLibre</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/deck.gl@9.0.34/dist.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    #map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #legend {
+      position: absolute;
+      bottom: 24px;
+      left: 12px;
+      z-index: 10;
+      background: rgba(20, 20, 30, 0.85);
+      color: #f0f0f0;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.6;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      pointer-events: none;
+    }
+    #legend h4 {
+      margin: 0 0 6px 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      display: inline-block;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    #status {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 10;
+      background: rgba(20, 20, 30, 0.85);
+      color: #f0f0f0;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="status">Loading airports…</div>
+  <div id="legend">
+    <h4>Airport type</h4>
+    <div class="legend-row"><span class="dot" style="width:14px;height:14px;background:rgb(255,80,80)"></span> Major</div>
+    <div class="legend-row"><span class="dot" style="width:10px;height:10px;background:rgb(255,200,40)"></span> Mid</div>
+    <div class="legend-row"><span class="dot" style="width:7px;height:7px;background:rgb(80,200,255)"></span> Small</div>
+  </div>
+
+  <script>
+    const DATA_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/line/airports.json';
+
+    const COLORS = {
+      major: [255, 80, 80],
+      mid:   [255, 200, 40],
+      small: [80, 200, 255]
+    };
+    const RADII = { major: 7, mid: 5, small: 3 };
+
+    const INITIAL_VIEW_STATE = {
+      longitude: 10,
+      latitude: 20,
+      zoom: 1.5,
+      pitch: 0,
+      bearing: 0
+    };
+
+    const deckgl = new deck.DeckGL({
+      container: 'map',
+      mapLib: maplibregl,
+      mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+      initialViewState: INITIAL_VIEW_STATE,
+      controller: true,
+      layers: [],
+      getTooltip: ({ object }) =>
+        object && {
+          html: `<div style="font-weight:600">${object.name}</div>
+                 <div>${object.abbrev || '—'} &middot; ${object.type}</div>`,
+          style: {
+            background: 'rgba(20,20,30,0.9)',
+            color: '#fff',
+            fontSize: '12px',
+            padding: '6px 8px',
+            borderRadius: '4px'
+          }
+        }
+    });
+
+    fetch(DATA_URL)
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('status').textContent = `${data.length} airports`;
+        deckgl.setProps({
+          layers: [
+            new deck.ScatterplotLayer({
+              id: 'airports',
+              data,
+              pickable: true,
+              opacity: 0.9,
+              stroked: true,
+              filled: true,
+              radiusUnits: 'pixels',
+              lineWidthUnits: 'pixels',
+              getPosition: d => d.coordinates,
+              getRadius: d => RADII[d.type] || 3,
+              getFillColor: d => COLORS[d.type] || [200, 200, 200],
+              getLineColor: [255, 255, 255, 120],
+              getLineWidth: 1
+            })
+          ]
+        });
+      })
+      .catch(err => {
+        document.getElementById('status').textContent = 'Failed to load data: ' + err;
+      });
+  </script>
+</body>
+</html>
+```

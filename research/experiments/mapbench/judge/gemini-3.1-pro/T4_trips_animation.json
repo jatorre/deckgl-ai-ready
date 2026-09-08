@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.0",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Trips animate correctly with two vendor colors on CARTO dark-matter basemap; timing matches spec (t3=148s, t8=335s, t14=577s \u2248 41 data-s per real second \u2192 ~60 s per loop) and play/pause + readout are wired.",
+  "Dated v8 pattern: deck.gl@8.9.0 dist.min.js with `window.mapboxgl = maplibregl` alias hack and standalone DeckGL mapStyle instead of v9 MapboxOverlay/MapLibreOverlay; also triggers a blocked mapbox-gl.css request from api.tiles.mapbox.com.",
+  "No legend explaining which color is which vendor (not required by task but weakens cartographic completeness)."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

@@ -1,0 +1,56 @@
+{
+ "slug": "claude-fable-5.1",
+ "task": "T1_airports_points",
+ "console_errors": [],
+ "console_warnings": [
+  "[.WebGL-0x124004c7e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "[.WebGL-0x124004c7e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "[.WebGL-0x124004c7e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "[.WebGL-0x124004c7e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+ ],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@9.0.34/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/claude-fable-5.1/T1_airports_points.t3.png",
+  "t8": "render/claude-fable-5.1/T1_airports_points.t8.png",
+  "t14": "render/claude-fable-5.1/T1_airports_points.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@9.0.34/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "MapLibre | © CARTO, © OpenStreetMap contributors\n891 airports\nAirport type\nMajor\nMid\nSmall",
+  "buttons": [],
+  "sliders": 0,
+  "title": "World Airports — deck.gl + MapLibre"
+ },
+ "deckgl_cdn_version": "9.0.34",
+ "maplibre_cdn_version": "4.7.1",
+ "total_seconds": 14.1
+}

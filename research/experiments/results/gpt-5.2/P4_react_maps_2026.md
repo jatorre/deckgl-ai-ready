@@ -1,0 +1,5 @@
+<!-- model: ac_7xhfwyml::openai::gpt-5.2 | prompt: P4_react_maps_2026 | seconds: 3 | backend: litellm-proxy | usage: {"completion_tokens": 120, "prompt_tokens": 52, "total_tokens": 172, "completion_tokens_details": {"accepted_prediction_tokens": 0, "audio_tokens": 0, "reasoning_tokens": 0, "rejected_prediction_tokens": 0}, "prompt_tokens_details": {"audio_tokens": 0, "cached_tokens": 0}} -->
+**Recommendation: MapLibre GL JS (via `react-map-gl`’s MapLibre mode).**  
+In 2026, MapLibre GL JS is the strongest open-source choice for interactive React maps because it’s actively maintained, performant with WebGL for smooth vector-tile rendering, and has a mature ecosystem for styling, controls, and data overlays. Pairing it with `react-map-gl` gives a well-supported React-friendly API (hooks/components) without locking you into proprietary Mapbox GL licensing.
+
+**Runner-up: Leaflet (via `react-leaflet`).**

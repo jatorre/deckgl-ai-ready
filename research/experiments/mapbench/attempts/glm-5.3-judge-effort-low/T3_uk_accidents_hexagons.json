@@ -1,0 +1,16 @@
+{
+ "renders": 0,
+ "spec_compliance": 0,
+ "cartography": 0,
+ "interactivity": 0,
+ "api_currency": 0,
+ "deckgl_version": "unpinned",
+ "basemap_integration": "none",
+ "notes": [
+  "Generated HTML is empty (0 chars); render report shows no canvases, no deck/maplibre globals, no sliders, empty bodyText.",
+  "All three screenshots are blank white pages \u2014 nothing rendered.",
+  "No code exists to evaluate for layers, tooltip, slider, lighting, or API usage."
+ ],
+ "total": 0,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

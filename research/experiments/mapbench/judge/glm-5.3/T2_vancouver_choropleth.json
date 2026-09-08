@@ -1,0 +1,16 @@
+{
+ "renders": 0,
+ "spec_compliance": 1,
+ "cartography": 1,
+ "interactivity": 0,
+ "api_currency": 1,
+ "deckgl_version": "8.9.30",
+ "basemap_integration": "mapbox-gl",
+ "notes": [
+  "Fatal: `const deck = new deck.Deck(...)` shadows the global `deck` \u2014 page error \"Cannot access 'deck' before initialization\" means no deck.gl layer is ever created; all screenshots show a blank white page with only the legend.",
+  "Uses Mapbox GL JS v2.15.0 which requires an access token (console error \"A valid Mapbox access token is required\"), violating the no-token requirement; basemap never renders even with the MapLibre demo style.",
+  "Also references a non-existent canvas id 'deck-canvas' and pins dated deck.gl 8.9.30; only the quantile-break HTML legend (7 classes, YlGnBu) works as intended."
+ ],
+ "total": 3,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

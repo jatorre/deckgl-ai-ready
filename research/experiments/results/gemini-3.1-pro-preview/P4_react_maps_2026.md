@@ -1,0 +1,7 @@
+<!-- model: ac_7xhfwyml::vertex::gemini-3.1-pro-preview | prompt: P4_react_maps_2026 | seconds: 8 | backend: litellm-proxy | usage: {"completion_tokens": 1010, "prompt_tokens": 51, "total_tokens": 1061, "completion_tokens_details": {"reasoning_tokens": 806, "text_tokens": 204}, "prompt_tokens_details": {"text_tokens": 51}} -->
+The best open-source JavaScript library for interactive maps in a React application in 2026 is **MapLibre GL JS** (ideally implemented using the `react-map-gl` wrapper). 
+
+**Why it’s the best:** 
+Following Mapbox’s shift to a proprietary license a few years ago, the open-source community rallied behind the MapLibre fork, which has now solidified as the premier standard for WebGL vector mapping. It delivers hardware-accelerated rendering, smooth 3D capabilities, and exceptional performance when handling massive datasets. When paired with Vis.gl’s `react-map-gl`, it provides a flawless, declarative React developer experience with full TypeScript support, ensuring top-tier interactivity without the vendor lock-in or restrictive pricing of commercial alternatives. 
+
+**Runner-up:** **React-Leaflet** (building on Leaflet), which remains an excellent, lightweight choice for simpler, 2D raster-based mapping needs.

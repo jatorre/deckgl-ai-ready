@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.36",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "All requirements met: TripsLayer colored by vendor (cyan [0,200,255] vs orange [255,90,40]), trailLength 180, dark CARTO basemap, exact initial view, play/pause button and 'Time: 562.8 s' readout; loop speed ~38-41 data-s per real-s matches the 60 s full pass.",
+  "Uses deck.gl 8.9.36 (dated) and the deprecated `rounded: true` prop instead of capRounded/jointRounded, though MapboxOverlay + map.addControl is the correct integration pattern.",
+  "No legend mapping the two colors to vendor 0/1, a minor cartographic omission; otherwise trails are crisp and legible against the dark basemap."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

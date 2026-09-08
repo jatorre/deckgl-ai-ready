@@ -1,0 +1,58 @@
+{
+ "slug": "gemini-3.8-flash",
+ "task": "T4_trips_animation",
+ "console_errors": [],
+ "console_warnings": [
+  "deck: `trips-layer: rounded` is deprecated and will be removed in a later version. Use `jointRounded/capRounded` instead"
+ ],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.35/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gemini-3.8-flash/T4_trips_animation.t3.png",
+  "t8": "render/gemini-3.8-flash/T4_trips_animation.t8.png",
+  "t14": "render/gemini-3.8-flash/T4_trips_animation.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.35/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nNYC Taxi Trips\nTime Elapsed:\n670 s\n❚❚\nPause\nVendor 0\nVendor 1",
+  "buttons": [
+   "❚❚\nPause"
+  ],
+  "sliders": 0,
+  "title": "deck.gl Trips Layer - NYC"
+ },
+ "deckgl_cdn_version": "8.9.35",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 16.5
+}

@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 2,
+ "deckgl_version": "9.1.0",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "All requirements met: ScatterplotLayer colored/sized by type, legend in top-right, getTooltip with name+abbrev, exact initial view [10,20] zoom 1.5 on token-free CARTO Positron via MapboxOverlay + addControl.",
+  "Heavy overplotting at world zoom: radii of 9/6 px (18/12 px diameter) with dark strokes turn Europe, eastern US and East Asia into solid red blobs, hiding density and mid/small points beneath.",
+  "Clean, current API usage (deck.gl 9.1.0 dist.min.js, radiusUnits:'pixels', getCursor); legend dots mirror the point sizes, which is a nice touch."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

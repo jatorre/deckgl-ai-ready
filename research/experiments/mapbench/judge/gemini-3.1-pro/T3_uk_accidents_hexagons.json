@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.33",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All requirements met: extruded HexagonLayer with count-based color/height, slider 500\u20135000 (default 1000) re-rendering via setProps, getTooltip showing `object.points.length`, exact initial view, CARTO dark-matter basemap; screenshots show hexagons rendered correctly.",
+  "Dated stack: deck.gl 8.9.33 standalone `deck.DeckGL` with `mapStyle` and the `window.mapboxgl = maplibregl` shim, causing a blocked request for mapbox-gl.css (ERR_BLOCKED_BY_ORB); relies on default lighting rather than an explicit LightingEffect.",
+  "Cartographically decent but no legend for the color/height scale, and with elevationScale 50 most cells read as a flat cyan carpet with only the London spike standing out."
+ ],
+ "total": 14,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

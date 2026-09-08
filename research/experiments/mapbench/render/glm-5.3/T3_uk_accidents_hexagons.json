@@ -1,0 +1,49 @@
+{
+ "slug": "glm-5.3",
+ "task": "T3_uk_accidents_hexagons",
+ "console_errors": [
+  "deck: update of TileLayer({id: 'basemap'}): Cannot read properties of undefined (reading 'west') TypeError: Cannot read properties of undefined (reading 'west')\n    at Object.renderSubLayers (http://127.0.0.1:8765/glm-5.3/T3_uk_accidents_hexagons.html:85:23)\n    at e.value (https://unpkg.com/deck.gl",
+  "deck: update of TileLayer({id: 'basemap'}): Cannot read properties of undefined (reading 'west') TypeError: Cannot read properties of undefined (reading 'west')\n    at Object.renderSubLayers (http://127.0.0.1:8765/glm-5.3/T3_uk_accidents_hexagons.html:85:23)\n    at e.value (https://unpkg.com/deck.gl",
+  "deck: update of TileLayer({id: 'basemap'}): Cannot read properties of undefined (reading 'west') TypeError: Cannot read properties of undefined (reading 'west')\n    at Object.renderSubLayers (http://127.0.0.1:8765/glm-5.3/T3_uk_accidents_hexagons.html:85:23)\n    at e.value (https://unpkg.com/deck.gl",
+  "deck: update of TileLayer({id: 'basemap'}): Cannot read properties of undefined (reading 'west') TypeError: Cannot read properties of undefined (reading 'west')\n    at Object.renderSubLayers (http://127.0.0.1:8765/glm-5.3/T3_uk_accidents_hexagons.html:85:23)\n    at e.value (https://unpkg.com/deck.gl",
+  "deck: update of TileLayer({id: 'basemap'}): Cannot read properties of undefined (reading 'west') TypeError: Cannot read properties of undefined (reading 'west')\n    at Object.renderSubLayers (http://127.0.0.1:8765/glm-5.3/T3_uk_accidents_hexagons.html:85:23)\n    at e.value (https://unpkg.com/deck.gl",
+  "deck: update of TileLayer({id: 'basemap'}): Cannot read properties of undefined (reading 'west') TypeError: Cannot read properties of undefined (reading 'west')\n    at Object.renderSubLayers (http://127.0.0.1:8765/glm-5.3/T3_uk_accidents_hexagons.html:85:23)\n    at e.value (https://unpkg.com/deck.gl",
+  "deck: update of TileLayer({id: 'basemap'}): Cannot read properties of undefined (reading 'west') TypeError: Cannot read properties of undefined (reading 'west')\n    at Object.renderSubLayers (http://127.0.0.1:8765/glm-5.3/T3_uk_accidents_hexagons.html:85:23)\n    at e.value (https://unpkg.com/deck.gl"
+ ],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/deck.gl@8.9.35/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/glm-5.3/T3_uk_accidents_hexagons.t3.png",
+  "t8": "render/glm-5.3/T3_uk_accidents_hexagons.t8.png",
+  "t14": "render/glm-5.3/T3_uk_accidents_hexagons.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": "deck-canvas"
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/deck.gl@8.9.35/dist.min.js"
+  ],
+  "links": [],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": false,
+  "hasMapboxGlobal": false,
+  "bodyText": "Hexagon Radius: 1000 m",
+  "buttons": [],
+  "sliders": 1,
+  "title": "3D Hexagon Heatmap — GB Road Accidents"
+ },
+ "deckgl_cdn_version": "8.9.35",
+ "maplibre_cdn_version": null,
+ "total_seconds": 14.1
+}

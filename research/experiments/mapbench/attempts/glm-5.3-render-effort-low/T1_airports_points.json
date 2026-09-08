@@ -1,0 +1,61 @@
+{
+ "slug": "glm-5.3",
+ "task": "T1_airports_points",
+ "console_errors": [
+  "Failed to load airport data: ReferenceError: deck is not defined\n    at http://127.0.0.1:8765/glm-5.3/T1_airports_points.html:142:23"
+ ],
+ "console_warnings": [
+  "[.WebGL-0x11c00498a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "[.WebGL-0x11c00498a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "[.WebGL-0x11c00498a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+  "[.WebGL-0x11c00498a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+ ],
+ "page_errors": [],
+ "request_failed": [
+  "https://unpkg.com/deck.gl@8.10.1/dist.min.js :: net::ERR_BLOCKED_BY_ORB",
+  "https://unpkg.com/@deck.gl/mapbox@8.10.1/dist.min.js :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.10.1/dist.min.js",
+  "https://unpkg.com/@deck.gl/mapbox@8.10.1/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/glm-5.3/T1_airports_points.t3.png",
+  "t8": "render/glm-5.3/T1_airports_points.t8.png",
+  "t14": "render/glm-5.3/T1_airports_points.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.10.1/dist.min.js",
+   "https://unpkg.com/@deck.gl/mapbox@8.10.1/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": false,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "AIRPORT TYPE\nMajor\nMid\nSmall",
+  "buttons": [
+   "",
+   "",
+   ""
+  ],
+  "sliders": 0,
+  "title": "Airports — deck.gl + MapLibre GL"
+ },
+ "deckgl_cdn_version": "8.10.1",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 14.1
+}

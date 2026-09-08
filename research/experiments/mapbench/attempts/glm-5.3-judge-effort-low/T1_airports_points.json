@@ -1,0 +1,16 @@
+{
+ "renders": 1,
+ "spec_compliance": 2,
+ "cartography": 1,
+ "interactivity": 1,
+ "api_currency": 1,
+ "deckgl_version": "8.10.1",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "deck.gl scripts failed to load: 'https://unpkg.com/deck.gl@8.10.1/dist.min.js :: net::ERR_BLOCKED_BY_ORB' and '@deck.gl/mapbox@8.10.1/dist.min.js' likewise, so 'ReferenceError: deck is not defined' \u2014 no airport points render in any screenshot, only the MapLibre demotiles basemap and legend.",
+  "Code itself is a reasonable design (ScatterplotLayer with radiusUnits:'pixels', type\u2192color/radius maps, custom hover tooltip, legend, exact initial view center [10,20] zoom 1.5), but dated v8.10.1 API and a CDN path that does not deliver a usable bundle.",
+  "Demotiles basemap with saturated multicolor countries would compete badly with red/orange/blue point colors even if data had rendered; no basemap tone consideration."
+ ],
+ "total": 6,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

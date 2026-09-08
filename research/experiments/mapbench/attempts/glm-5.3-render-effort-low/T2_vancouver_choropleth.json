@@ -1,0 +1,30 @@
+{
+ "slug": "glm-5.3",
+ "task": "T2_vancouver_choropleth",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [],
+ "screenshots": {
+  "t3": "render/glm-5.3/T2_vancouver_choropleth.t3.png",
+  "t8": "render/glm-5.3/T2_vancouver_choropleth.t8.png",
+  "t14": "render/glm-5.3/T2_vancouver_choropleth.t14.png"
+ },
+ "dom": {
+  "canvases": [],
+  "scripts": [],
+  "links": [],
+  "hasDeckGlobal": false,
+  "hasMaplibreGlobal": false,
+  "hasMapboxGlobal": false,
+  "bodyText": "",
+  "buttons": [],
+  "sliders": 0,
+  "title": ""
+ },
+ "deckgl_cdn_version": null,
+ "maplibre_cdn_version": null,
+ "total_seconds": 14
+}

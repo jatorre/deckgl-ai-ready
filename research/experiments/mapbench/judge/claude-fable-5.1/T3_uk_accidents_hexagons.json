@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All requirements met: HexagonLayer with count-driven color and elevation, slider 500\u20135000 (default 1000) rebuilding the layer, LightingEffect + material, CARTO dark-matter basemap, count tooltip, exact initial view; screenshot shows ~140k points aggregated into lit 3D hexagons.",
+  "Uses deck.gl 8.9.35 via `new DeckGL({mapLib: maplibregl, mapStyle})` \u2014 a v8 pattern; also triggered a blocked request for mapbox-gl.css (harmless). Not v9/MapboxOverlay.",
+  "Cartographic weakness: `upperPercentile: 100` with a long-tailed count distribution leaves nearly all hexagons in the lowest cyan bin, so color carries little information outside London; legend is only qualitative Low/High."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

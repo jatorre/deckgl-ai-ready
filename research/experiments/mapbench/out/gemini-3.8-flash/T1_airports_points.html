@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Global Airports - deck.gl</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- MapLibre GL JS CSS & JS -->
+  <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+  <!-- deck.gl Standalone Bundle -->
+  <script src="https://unpkg.com/deck.gl@8.9.35/dist.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0d1117;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Floating Legend */
+    .legend-card {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 22, 34, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: #f3f4f6;
+      font-size: 13px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .legend-title {
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .legend-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .legend-dot-wrapper {
+      width: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+    }
+
+    .legend-dot {
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .deck-tooltip {
+      font-family: inherit;
+      font-size: 12px;
+      line-height: 1.4;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <div class="legend-card">
+    <div class="legend-title">Airport Type</div>
+    <div class="legend-item">
+      <div class="legend-dot-wrapper">
+        <span class="legend-dot" style="width: 14px; height: 14px; background: rgb(239, 68, 68); box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);"></span>
+      </div>
+      <span>Major Airport</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot-wrapper">
+        <span class="legend-dot" style="width: 10px; height: 10px; background: rgb(245, 158, 11); box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);"></span>
+      </div>
+      <span>Mid-scale Airport</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot-wrapper">
+        <span class="legend-dot" style="width: 6px; height: 6px; background: rgb(6, 182, 212); box-shadow: 0 0 5px rgba(6, 182, 212, 0.6);"></span>
+      </div>
+      <span>Small Airport</span>
+    </div>
+  </div>
+
+  <script>
+    const DATA_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/line/airports.json';
+
+    // Style mapping for airport types
+    const TYPE_CONFIG = {
+      major: {
+        color: [239, 68, 68, 230],     // Vibrant Red
+        radius: 7,
+        label: 'Major'
+      },
+      mid: {
+        color: [245, 158, 11, 220],    // Amber
+        radius: 4.5,
+        label: 'Mid'
+      },
+      small: {
+        color: [6, 182, 212, 200],     // Cyan
+        radius: 2.5,
+        label: 'Small'
+      }
+    };
+
+    const deckgl = new deck.DeckGL({
+      container: 'map',
+      mapLib: maplibregl,
+      mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+      initialViewState: {
+        longitude: 10,
+        latitude: 20,
+        zoom: 1.5,
+        pitch: 0,
+        bearing: 0
+      },
+      controller: true,
+      getTooltip: ({ object }) => {
+        if (!object) return null;
+        const config = TYPE_CONFIG[object.type] || {};
+        return {
+          html: `
+            <div style="font-weight: 600; font-size: 13px; color: #fff; margin-bottom: 2px;">
+              ${object.name} (${object.abbrev})
+            </div>
+            <div style="color: #9ca3af; text-transform: capitalize;">
+              Type: <span style="color: rgb(${config.color ? config.color.slice(0, 3).join(',') : '255,255,255'}); font-weight: 500;">${object.type}</span>
+            </div>
+          `,
+          style: {
+            backgroundColor: '#1f2937',
+            border: '1px solid #374151',
+            padding: '8px 12px',
+            color: '#f3f4f6'
+          }
+        };
+      },
+      layers: [
+        new deck.ScatterplotLayer({
+          id: 'airports-layer',
+          data: DATA_URL,
+          getPosition: d => d.coordinates,
+          getRadius: d => (TYPE_CONFIG[d.type] ? TYPE_CONFIG[d.type].radius : 3),
+          getFillColor: d => (TYPE_CONFIG[d.type] ? TYPE_CONFIG[d.type].color : [200, 200, 200, 200]),
+          radiusUnits: 'pixels',
+          pickable: true,
+          stroked: true,
+          getLineColor: [0, 0, 0, 180],
+          getLineWidth: 1,
+          lineWidthUnits: 'pixels',
+          updateTriggers: {}
+        })
+      ]
+    });
+  </script>
+</body>
+</html>

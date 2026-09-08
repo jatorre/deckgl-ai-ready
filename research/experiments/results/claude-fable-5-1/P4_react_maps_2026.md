@@ -1,0 +1,6 @@
+<!-- model: claude-fable-5-1 | prompt: P4_react_maps_2026 | seconds: 17 | backend: claude-cli tools=none -->
+**MapLibre GL JS**, used through the react-map-gl bindings, is the best choice for interactive maps in a React app in 2026.
+
+It is a fully open-source, BSD-licensed fork of Mapbox GL JS with no token requirement and a governance model under the MapLibre organization. Vector tiles render on the GPU, so styling is expressive and panning stays smooth on large basemaps. It supports globe view, 3D terrain, and the OpenMapTiles and Protomaps ecosystems, which means you can self-host tiles or use any style-spec-compatible provider. The react-map-gl wrapper, maintained by the vis.gl project under the OpenJS Foundation, gives idiomatic React components for markers, popups, and controls. It also composes cleanly with deck.gl when you need to overlay millions of points or custom WebGL layers.
+
+**Runner-up: Leaflet** with react-leaflet. It is smaller, simpler, and has the largest plugin ecosystem, which makes it ideal for lightweight raster-tile maps or projects that do not need vector styling or WebGL performance. Choose it when bundle size and ease of onboarding matter more than rendering power.

@@ -1,0 +1,16 @@
+{
+ "renders": 0,
+ "spec_compliance": 1,
+ "cartography": 1,
+ "interactivity": 0,
+ "api_currency": 1,
+ "deckgl_version": "^8.9.0",
+ "basemap_integration": "other",
+ "notes": [
+  "Output is truncated mid-script (ends at `document.body.classList`) and begins with a leaked ```html fence rendered as page text; the script never executes, so no basemap or trips ever draw \u2014 all three screenshots are solid black with 'Loading trips\u2026' and the deck canvas stays at default 300x150.",
+  "Uses deck.gl 8.x (`deck.gl@^8.9.0/dist.min.js`) with a standalone Deck and manual map.on('move') viewState syncing instead of a v9 MapboxOverlay/MapLibreOverlay via addControl \u2014 dated pattern.",
+  "Only the HUD chrome (title, play/pause button, time readout placeholder '\u2014 s', vendor legend) is visible; no TripsLayer, animation loop, or time readout logic is present in the delivered code."
+ ],
+ "total": 3,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

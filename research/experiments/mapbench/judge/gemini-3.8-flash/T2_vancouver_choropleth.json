@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 4,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Choropleth renders correctly with 6 quantile classes in YlOrRd on Positron light basemap; thin white outlines (getLineColor [255,255,255,180], 0.5px) and tooltip showing valuePerSqm and growth via getTooltip are all present.",
+  "Legend labels are broken by over-aggressive rounding: '$2k \u2013 $4k' followed by '$4k \u2013 $4k' then '$4k \u2013 $5k' (formatVal rounds to nearest thousand), so two classes are indistinguishable to the reader.",
+  "Uses dated deck.gl 8.9.35 with the v8 standalone `new deck.DeckGL({mapStyle})` pattern rather than v9 MapboxOverlay/addControl; the bundle also tries to fetch mapbox-gl.css (blocked by ORB, non-fatal)."
+ ],
+ "total": 13,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

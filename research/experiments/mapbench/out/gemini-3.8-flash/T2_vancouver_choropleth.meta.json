@@ -1,0 +1,33 @@
+{
+ "slug": "gemini-3.8-flash",
+ "model": "google/gemini-3.8-flash",
+ "task": "T2_vancouver_choropleth",
+ "seconds": 28.6,
+ "finish_reason": "stop",
+ "usage": {
+  "prompt_tokens": 332,
+  "completion_tokens": 5312,
+  "total_tokens": 5644,
+  "cost": 0.020169,
+  "is_byok": false,
+  "prompt_tokens_details": {
+   "cached_tokens": 0,
+   "cache_write_tokens": 0,
+   "audio_tokens": 0,
+   "video_tokens": 0
+  },
+  "cost_details": {
+   "upstream_inference_cost": 0.020169,
+   "upstream_inference_prompt_cost": 0.000249,
+   "upstream_inference_completions_cost": 0.01992
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 2727,
+   "image_tokens": 0,
+   "audio_tokens": 0
+  }
+ },
+ "html_bytes": 7270,
+ "raw_chars": 7282,
+ "looks_like_html": true
+}

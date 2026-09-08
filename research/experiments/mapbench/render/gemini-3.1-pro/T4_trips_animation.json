@@ -1,0 +1,56 @@
+{
+ "slug": "gemini-3.1-pro",
+ "task": "T4_trips_animation",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.1/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.0/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gemini-3.1-pro/T4_trips_animation.t3.png",
+  "t8": "render/gemini-3.1-pro/T4_trips_animation.t8.png",
+  "t14": "render/gemini-3.1-pro/T4_trips_animation.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.0/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.css",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.1/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": true,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nTime: 669s\nPause",
+  "buttons": [
+   "Pause"
+  ],
+  "sliders": 0,
+  "title": "deck.gl TripsLayer with MapLibre"
+ },
+ "deckgl_cdn_version": "8.9.0",
+ "maplibre_cdn_version": "3.3.1",
+ "total_seconds": 16.3
+}

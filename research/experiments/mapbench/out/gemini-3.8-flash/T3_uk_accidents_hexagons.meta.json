@@ -1,0 +1,33 @@
+{
+ "slug": "gemini-3.8-flash",
+ "model": "google/gemini-3.8-flash",
+ "task": "T3_uk_accidents_hexagons",
+ "seconds": 34.5,
+ "finish_reason": "stop",
+ "usage": {
+  "prompt_tokens": 322,
+  "completion_tokens": 6775,
+  "total_tokens": 7097,
+  "cost": 0.02564775,
+  "is_byok": false,
+  "prompt_tokens_details": {
+   "cached_tokens": 0,
+   "cache_write_tokens": 0,
+   "audio_tokens": 0,
+   "video_tokens": 0
+  },
+  "cost_details": {
+   "upstream_inference_cost": 0.02564775,
+   "upstream_inference_prompt_cost": 0.0002415,
+   "upstream_inference_completions_cost": 0.02540625
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 3518,
+   "image_tokens": 0,
+   "audio_tokens": 0
+  }
+ },
+ "html_bytes": 8773,
+ "raw_chars": 8785,
+ "looks_like_html": true
+}

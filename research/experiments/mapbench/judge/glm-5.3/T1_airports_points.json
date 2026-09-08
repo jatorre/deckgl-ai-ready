@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 4,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "All 891 airports render with three distinct colors, legend, tooltip (name + abbrev), and exact initial view; MapboxOverlay added via map.addControl.",
+  "Size-by-type is largely defeated at world zoom: radii 35000m/18000m fall below radiusMinPixels:3 so mid and small render at the same pixel size; only major is visibly larger.",
+  "Demotiles basemap is saturated pastel (orange/yellow/purple country fills) which clashes with the orange #fdae61 'small' points and reduces figure-ground contrast; deck.gl pinned to 8.9.35 rather than 9.x."
+ ],
+ "total": 13,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

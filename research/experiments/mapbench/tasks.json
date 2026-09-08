@@ -1,0 +1,32 @@
+{
+  "preamble": "Build a single-page web map with deck.gl. Deliver ONE self-contained index.html: load every library from a public CDN with <script> tags (no build step, no npm, no bundler, no ES module imports from node_modules), use no API keys or tokens of any kind, and pick a basemap style URL that needs no token. The map must fill the browser window. Load the real dataset from the URL given; do not use placeholder data. Use the exact initial view given so results can be compared. Output only the complete HTML file in a single code block, with no explanation before or after.",
+  "models": {
+    "claude-fable-5.1": "anthropic/claude-fable-5.1",
+    "gpt-5.6-sol": "openai/gpt-5.6-sol",
+    "gemini-3.8-flash": "google/gemini-3.8-flash",
+    "gemini-3.1-pro": "google/gemini-3.1-pro-preview",
+    "glm-5.3": "z-ai/glm-5.3"
+  },
+  "tasks": {
+    "T1_airports_points": {
+      "title": "World airports as styled points with tooltip and legend",
+      "probe": "basic layer + MapLibre overlay integration + tooltip + legend",
+      "prompt": "Data: https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/line/airports.json is a JSON array of 891 objects shaped like {\"type\": \"major\" | \"mid\" | \"small\", \"name\": \"Sahnewal\", \"abbrev\": \"LUH\", \"coordinates\": [longitude, latitude]}.\n\nShow every airport as a point on top of a MapLibre GL JS basemap. Color the points by the `type` field with three clearly distinct colors and size them by type (major largest, small smallest), keeping points visible at world zoom. Show a hover tooltip with the airport name and abbrev. Add a small legend in a corner explaining the three colors. Initial view: longitude 10, latitude 20, zoom 1.5, pitch 0, bearing 0."
+    },
+    "T2_vancouver_choropleth": {
+      "title": "Choropleth of Vancouver block values with a classed legend",
+      "probe": "GeoJsonLayer + classification of skewed data + color scheme + legend craft",
+      "prompt": "Data: https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/geojson/vancouver-blocks.json is a GeoJSON FeatureCollection of 4,627 polygons. Each feature has properties valuePerSqm (a number from 0 to about 756,000, median about 4,000, heavily right-skewed) and growth (a number).\n\nMake a choropleth of valuePerSqm. Use a classification that copes with the skew (quantiles or a log scale) with 5 to 7 classes and a sequential color scheme, thin light outlines, a hover tooltip showing valuePerSqm and growth, and an HTML legend showing the class breaks with their colors. Use a light basemap. Initial view: longitude -123.10, latitude 49.25, zoom 11, pitch 0, bearing 0."
+    },
+    "T3_uk_accidents_hexagons": {
+      "title": "Extruded hexagon aggregation of 140k accident points with a radius slider",
+      "probe": "CSV loading + aggregation layer + extrusion, lighting and pitch + a control wired to a layer prop",
+      "prompt": "Data: https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv is a CSV with the header `lng,lat` and about 140,000 rows of road accident locations in Great Britain.\n\nAggregate the points into extruded 3D hexagons where both color and height encode the number of points in each cell. Add a slider that changes the hexagon radius between 500 and 5,000 meters (default 1,000) and re-renders the layer. Use lighting so the extrusion reads as 3D, a dark basemap, and a hover tooltip showing the count in the hovered cell. Initial view: longitude -1.4157, latitude 52.2324, zoom 6.6, pitch 45, bearing -27."
+    },
+    "T4_trips_animation": {
+      "title": "Animated taxi trips with play/pause over a dark basemap",
+      "probe": "TripsLayer animation loop + MapLibre overlay + UI state wired to layer props",
+      "prompt": "Data: https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json is a JSON array of 996 trips shaped like {\"vendor\": 0 | 1, \"path\": [[longitude, latitude], ...], \"timestamps\": [seconds, ...]}. Timestamps run from 6 to about 2,487 seconds.\n\nAnimate the trips as moving trails over a dark MapLibre GL JS basemap, colored by vendor with two distinct colors, with a trail length of about 180 seconds, looping continuously so one full pass of the data takes about 60 real seconds. Add a play/pause button and a readout of the current time in seconds. Initial view: longitude -74.00, latitude 40.72, zoom 12, pitch 45, bearing 0."
+    }
+  }
+}

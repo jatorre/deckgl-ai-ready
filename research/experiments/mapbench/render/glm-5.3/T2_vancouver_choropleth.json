@@ -1,0 +1,55 @@
+{
+ "slug": "glm-5.3",
+ "task": "T2_vancouver_choropleth",
+ "console_errors": [
+  "Error: A valid Mapbox access token is required to use Mapbox GL JS. To create an account or a new access token, visit https://account.mapbox.com/\n    at zt.errorCb (https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js:36:477212)\n    at zt.getSessionAPI (https://api.mapbox.com/mapbox-gl-js/v2.15."
+ ],
+ "console_warnings": [],
+ "page_errors": [
+  "Cannot access 'deck' before initialization"
+ ],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/deck.gl@8.9.30/dist.min.js",
+  "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js",
+  "https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js",
+  "https://cdn.jsdelivr.net/npm/simple-statistics@7.8.3/dist/simple-statistics.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/glm-5.3/T2_vancouver_choropleth.t3.png",
+  "t8": "render/glm-5.3/T2_vancouver_choropleth.t8.png",
+  "t14": "render/glm-5.3/T2_vancouver_choropleth.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "mapboxgl-canvas",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/deck.gl@8.9.30/dist.min.js",
+   "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js",
+   "https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js",
+   "https://cdn.jsdelivr.net/npm/simple-statistics@7.8.3/dist/simple-statistics.min.js"
+  ],
+  "links": [
+   "https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": false,
+  "hasMapboxGlobal": true,
+  "bodyText": "Land value per sqm (CAD)\n0.0 – 2,532\n2,532 – 3,195\n3,195 – 4,044\n4,044 – 4,324\n4,324 – 6,224\n6,224 – 7,188\n7,188 – 756,397",
+  "buttons": [
+   ""
+  ],
+  "sliders": 0,
+  "title": "Vancouver Blocks — valuePerSqm Choropleth"
+ },
+ "deckgl_cdn_version": "8.9.30",
+ "maplibre_cdn_version": null,
+ "total_seconds": 14
+}

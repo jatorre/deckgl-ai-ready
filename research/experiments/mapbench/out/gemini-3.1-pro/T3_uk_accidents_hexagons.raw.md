@@ -1,0 +1,151 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck.gl 3D Hexagon Heatmap</title>
+    
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/deck.gl@8.9.33/dist.min.js"></script>
+    <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js"></script>
+
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            background: #111; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        #map { 
+            width: 100vw; 
+            height: 100vh; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+        }
+        #control-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(30, 30, 30, 0.9);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            width: 280px;
+        }
+        #control-panel h3 { 
+            margin: 0 0 15px 0; 
+            font-size: 16px; 
+            font-weight: 500;
+        }
+        .slider-row { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 10px; 
+        }
+        input[type=range] { 
+            flex-grow: 1; 
+            cursor: pointer; 
+        }
+        .status-text {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        .status-text span {
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="control-panel">
+        <h3>Hexagon Radius</h3>
+        <div class="slider-row">
+            <span style="font-size: 12px; color: #aaa;">500</span>
+            <input type="range" id="radius-slider" min="500" max="5000" step="100" value="1000">
+            <span style="font-size: 12px; color: #aaa;">5000</span>
+        </div>
+        <div class="status-text">
+            Current: <span id="radius-value">1000</span>m
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        window.mapboxgl = maplibregl;
+
+        const DATA_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv';
+
+        let data = [];
+        let currentRadius = 1000;
+
+        const deckgl = new deck.DeckGL({
+            container: 'map',
+            mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+            initialViewState: {
+                longitude: -1.4157,
+                latitude: 52.2324,
+                zoom: 6.6,
+                pitch: 45,
+                bearing: -27
+            },
+            controller: true,
+            getTooltip: ({object}) => object && `Count: ${object.points.length}`
+        });
+
+        function renderLayer() {
+            const hexagonLayer = new deck.HexagonLayer({
+                id: 'heatmap',
+                data: data,
+                extruded: true,
+                radius: currentRadius,
+                elevationScale: 50,
+                getPosition: d => [Number(d.lng), Number(d.lat)],
+                pickable: true,
+                colorRange: [
+                    [1, 152, 189],
+                    [73, 227, 206],
+                    [216, 254, 181],
+                    [254, 237, 177],
+                    [254, 173, 84],
+                    [209, 55, 78]
+                ],
+                material: {
+                    ambient: 0.64,
+                    diffuse: 0.6,
+                    shininess: 32,
+                    specularColor: [51, 51, 51]
+                }
+            });
+
+            deckgl.setProps({
+                layers: [hexagonLayer]
+            });
+        }
+
+        d3.csv(DATA_URL).then(responseData => {
+            data = responseData;
+            renderLayer();
+        });
+
+        const slider = document.getElementById('radius-slider');
+        const radiusValue = document.getElementById('radius-value');
+
+        slider.addEventListener('input', (event) => {
+            currentRadius = Number(event.target.value);
+            radiusValue.textContent = currentRadius;
+            renderLayer();
+        });
+    </script>
+</body>
+</html>
+```

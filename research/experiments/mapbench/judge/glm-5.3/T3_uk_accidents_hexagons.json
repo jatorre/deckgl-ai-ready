@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 3,
+ "cartography": 1,
+ "interactivity": 2,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "other",
+ "notes": [
+  "Basemap never renders: TileLayer renderSubLayers destructures `props.bbox` instead of `props.tile.bbox`, throwing 'Cannot read properties of undefined (reading west)' on every tile \u2014 map is hexagons on a black void with no geographic context.",
+  "Hexagon aggregation, slider (500\u20135000, default 1000) and initial view are correct, but the 12-entry colorRange is non-sequential (includes black, random hues) so color does not read as count; no legend.",
+  "Tooltip positions with `event.x`/`event.y`, which don't exist on the deck/mjolnir event (should be info.x/info.y), so the tooltip will not follow the cursor; deck.gl 8.9.35 (v8 patterns, no LightingEffect) rather than 9.x."
+ ],
+ "total": 9,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

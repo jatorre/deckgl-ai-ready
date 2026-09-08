@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 2,
+ "deckgl_version": "9.1.0",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "All explicit requirements met: extruded HexagonLayer with getColorValue/getElevationValue = points.length, radius slider 500\u20135000 default 1000 wired via 'input' \u2192 overlay.setProps, LightingEffect with ambient+directional, CARTO dark-matter basemap, exact initial view, real CSV (status shows '140,056 locations loaded').",
+  "Cartographic weakness: at zoom 6.6 with 1,000 m radius the hexes are tiny and the lowest color class [32,75,122] nearly merges with the dark basemap, so most of the country reads as faint blue speckle; only London shows visible 3D peaks; no color/height legend.",
+  "Current v9.1 API usage: deck.MapboxOverlay added with map.addControl, gpuAggregation:false, colorScaleType:'quantize', robust getTooltip fallback (object.points?.length ?? object.count ?? elevationValue)."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

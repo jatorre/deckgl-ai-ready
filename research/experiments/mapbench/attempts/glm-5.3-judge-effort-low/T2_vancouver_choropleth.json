@@ -1,0 +1,16 @@
+{
+ "renders": 0,
+ "spec_compliance": 0,
+ "cartography": 0,
+ "interactivity": 0,
+ "api_currency": 0,
+ "deckgl_version": "unpinned",
+ "basemap_integration": "none",
+ "notes": [
+  "Generated HTML is empty (0 chars); no code was produced at all.",
+  "Render report confirms nothing loaded: 'canvases': [], 'hasDeckGlobal': false, 'bodyText': \"\".",
+  "All three screenshots are blank white pages."
+ ],
+ "total": 0,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

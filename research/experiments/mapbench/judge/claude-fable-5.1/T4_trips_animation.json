@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 2,
+ "deckgl_version": "9.0.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All requirements met: TripsLayer over CARTO dark-matter basemap, vendor colors [253,128,93]/[23,184,190] with legend, trailLength 180, SPEED = 2500/60 gives ~60 s loop (readout 77\u2192287\u2192539 s across screenshots confirms ~42 data-s per real-s), Pause/Play button and 'Time: N s' readout, exact initial view.",
+  "Cartography is clean and legible: two well-contrasting hues on a dark basemap, compact control panel with legend; trails at widthMinPixels 2 are somewhat thin at zoom 12 and basemap labels compete slightly.",
+  "API mostly current (deck.gl 9.0.35 standalone DeckGL with mapLib: maplibregl), but includes deprecated `rounded: true` redundantly alongside capRounded/jointRounded."
+ ],
+ "total": 16,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

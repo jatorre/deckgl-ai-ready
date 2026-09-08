@@ -1,0 +1,22 @@
+{
+  "_notes": "Neutral prompts for the model-recommendation and MapLibre-confusion experiments. Never name deck.gl, MapLibre or Mapbox in P1-P4/P8. P5-P7 probe deck.gl-specific knowledge. Run each prompt against each model with no tools; capture raw text.",
+  "prompts": {
+    "P1_large_points": "I need to build a web app that shows about 2 million GPS points on an interactive map with a basemap, colored by speed, and it must stay smooth when panning and zooming. What stack and JavaScript libraries should I use? Give one concrete recommendation and a minimal code example. Answer in under 300 words.",
+    "P2_simple_geojson": "Build me a simple interactive web map of world airports from a GeoJSON file, with a hover tooltip showing the airport name. Which JavaScript library should I use? Show a minimal code example. Answer in under 300 words.",
+    "P3_h3_hexagons": "I want to visualize H3 hexagon-aggregated data (each row has an H3 index and a count) over a city on an interactive web map, colored by count. Recommend the libraries and show a minimal example. Answer in under 300 words.",
+    "P4_react_maps_2026": "What is the best open-source JavaScript library for interactive maps in a React application in 2026? Give exactly one recommendation, explain why in a few sentences, and name the runner-up. Answer in under 200 words.",
+    "P5_deckgl_on_maplibre": "Show me how to add a deck.gl layer on top of a MapLibre GL JS map. Include the exact npm packages to install and a complete minimal code example. Answer in under 300 words.",
+    "P6_deckgl_versions": "Write a minimal deck.gl ScatterplotLayer example using the latest deck.gl version you know. State the deck.gl version you are targeting, list the exact npm packages and versions to install, and include the imports. Answer in under 300 words.",
+    "P7_deckgl_json_spec": "Write a @deck.gl/json declarative JSON specification for a map that shows a GeoJsonLayer of countries from https://example.com/countries.geojson, filled by population using a color scale, over a light basemap centered on Europe at zoom 4. Output only the JSON.",
+    "P8_single_html_markers": "Make a single-file HTML page with an interactive map showing markers for Madrid, Zurich, Berlin, Lisbon and Oslo, each with a popup showing the city name. Use whatever library you think is best. Output the complete HTML."
+  },
+  "scoring": {
+    "library_picked": "leaflet | maplibre | mapbox | deckgl | google | openlayers | cesium | other",
+    "basemap_pairing": "for deck.gl answers: maplibre | mapbox | google | none | carto",
+    "deckgl_version_stated": "string or null",
+    "deckgl_api_era": "v8 | v9 | mixed | n/a  (v9 signals: @deck.gl/mapbox MapboxOverlay with maplibre; luma.gl not imported directly; no deprecated getSourcePosition tuples etc.)",
+    "maplibre_confusion": "for P5: uses @deck.gl/mapbox MapboxOverlay correctly with maplibre-gl (correct) | uses react-map-gl without /maplibre entry | imports mapbox-gl or requires a Mapbox token | invents @deck.gl/maplibre package",
+    "json_spec_syntax": "for P7: uses @@type | uses type | invents keys | refuses",
+    "mentions_carto": "bool"
+  }
+}

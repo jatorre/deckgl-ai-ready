@@ -1,0 +1,55 @@
+{
+ "slug": "claude-fable-5.1",
+ "task": "T4_trips_animation",
+ "console_errors": [],
+ "console_warnings": [
+  "deck: `trips: rounded` is deprecated and will be removed in a later version. Use `jointRounded/capRounded` instead"
+ ],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@9.0.35/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/claude-fable-5.1/T4_trips_animation.t3.png",
+  "t8": "render/claude-fable-5.1/T4_trips_animation.t8.png",
+  "t14": "render/claude-fable-5.1/T4_trips_animation.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@9.0.35/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "MapLibre | © CARTO, © OpenStreetMap contributors\nPause\nTime: 631 s\nVendor 0\nVendor 1\n996 trips loaded",
+  "buttons": [
+   "Pause"
+  ],
+  "sliders": 0,
+  "title": "NYC Taxi Trips — deck.gl TripsLayer"
+ },
+ "deckgl_cdn_version": "9.0.35",
+ "maplibre_cdn_version": "4.7.1",
+ "total_seconds": 16.5
+}

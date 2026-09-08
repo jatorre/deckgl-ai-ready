@@ -1,0 +1,57 @@
+{
+ "slug": "glm-5.3",
+ "task": "T4_trips_animation",
+ "console_errors": [],
+ "console_warnings": [
+  "deck: `trips: rounded` is deprecated and will be removed in a later version. Use `jointRounded/capRounded` instead"
+ ],
+ "page_errors": [
+  "Cannot convert undefined or null to object"
+ ],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.35/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/glm-5.3/T4_trips_animation.t3.png",
+  "t8": "render/glm-5.3/T4_trips_animation.t8.png",
+  "t14": "render/glm-5.3/T4_trips_animation.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": "deckgl-overlay"
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.35/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nPause\ntime: 6.0s\nVendor 0   Vendor 1",
+  "buttons": [
+   "Pause"
+  ],
+  "sliders": 0,
+  "title": "NYC Trips — deck.gl"
+ },
+ "deckgl_cdn_version": "8.9.35",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 14.1
+}

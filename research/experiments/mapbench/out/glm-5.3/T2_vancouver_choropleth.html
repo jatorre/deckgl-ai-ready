@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vancouver Blocks — valuePerSqm Choropleth</title>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: Helvetica, Arial, sans-serif; }
+  #map { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  #legend {
+    position: absolute; bottom: 20px; right: 20px; z-index: 10;
+    background: rgba(255,255,255,0.95); border: 1px solid #ccc; border-radius: 6px;
+    padding: 12px 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.25); font-size: 12px; color: #333;
+    max-width: 260px;
+  }
+  #legend h3 { margin: 0 0 8px 0; font-size: 13px; font-weight: bold; }
+  .legend-row { display: flex; align-items: center; margin: 3px 0; }
+  .legend-swatch { width: 24px; height: 12px; border: 1px solid rgba(0,0,0,0.25); margin-right: 8px; flex: none; }
+  #tooltip {
+    position: absolute; z-index: 20; pointer-events: none; display: none;
+    background: rgba(255,255,255,0.96); border: 1px solid #bbb; border-radius: 5px;
+    padding: 8px 10px; font-size: 12px; color: #222; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  #tooltip .tt-title { font-weight: bold; margin-bottom: 4px; }
+</style>
+<script src="https://unpkg.com/deck.gl@8.9.30/dist.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-statistics@7.8.3/dist/simple-statistics.min.js"></script>
+</head>
+<body>
+<div id="map"></div>
+<div id="legend">
+  <h3>Land value per sqm (CAD)</h3>
+  <div id="legend-rows"></div>
+</div>
+<div id="tooltip"></div>
+
+<script>
+const DATA_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/geojson/vancouver-blocks.json';
+
+const COLOR_RAMP = ['#ffffd9','#edf8b1','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8'];
+const NUM_CLASSES = COLOR_RAMP.length;
+
+fetch(DATA_URL).then(r => r.json()).then(data => {
+  const values = data.features.map(f => f.properties.valuePerSqm).filter(v => typeof v === 'number' && v >= 0);
+  const breaks = ss.quantile(values, Array.from({length: NUM_CLASSES - 1}, (_, i) => (i + 1) / NUM_CLASSES));
+
+  function classIndex(v) {
+    for (let i = 0; i < breaks.length; i++) if (v <= breaks[i]) return i;
+    return NUM_CLASSES - 1;
+  }
+
+  // legend
+  const legendRows = document.getElementById('legend-rows');
+  const fmt = v => v >= 1000 ? Math.round(v).toLocaleString('en-CA') : v.toFixed(1);
+  const labels = [];
+  for (let i = 0; i < NUM_CLASSES; i++) {
+    const lo = i === 0 ? 0 : breaks[i - 1];
+    const hi = i === NUM_CLASSES - 1 ? Math.max(...values) : breaks[i];
+    labels.push(`${fmt(lo)} – ${fmt(hi)}`);
+  }
+  for (let i = 0; i < NUM_CLASSES; i++) {
+    const row = document.createElement('div');
+    row.className = 'legend-row';
+    row.innerHTML = `<span class="legend-swatch" style="background:${COLOR_RAMP[i]}"></span><span>${labels[i]}</span>`;
+    legendRows.appendChild(row);
+  }
+
+  // basemap: MapLibre style via mapbox-gl runtime (no token with open styles)
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'https://demotiles.maplibre.org/style.json', // free, tokenless light basemap
+    center: [-123.10, 49.25],
+    zoom: 11,
+    pitch: 0,
+    bearing: 0,
+    interactive: false
+  });
+
+  const tooltip = document.getElementById('tooltip');
+
+  const deck = new deck.Deck({
+    canvas: 'deck-canvas',
+    initialViewState: { longitude: -123.10, latitude: 49.25, zoom: 11, pitch: 0, bearing: 0 },
+    controller: true,
+    onViewStateChange: ({viewState}) => {
+      map.jumpTo({ center: [viewState.longitude, viewState.latitude], zoom: viewState.zoom, bearing: viewState.bearing, pitch: viewState.pitch });
+    },
+    layers: [
+      new deck.GeoJsonLayer({
+        id: 'vancouver-blocks',
+        data,
+        pickable: true,
+        stroked: true,
+        filled: true,
+        getFillColor: f => {
+          const c = COLOR_RAMP[classIndex(f.properties.valuePerSqm || 0)];
+          return [parseInt(c.slice(1,3),16), parseInt(c.slice(3,5),16), parseInt(c.slice(5,7),16)];
+        },
+        getLineColor: [255, 255, 255, 180],
+        getLineWidth: 8,
+        lineWidthUnits: 'meters',
+        opacity: 0.9,
+        onHover: ({object, x, y}) => {
+          if (object) {
+            tooltip.style.display = 'block';
+            tooltip.style.left = (x + 14) + 'px';
+            tooltip.style.top = (y + 14) + 'px';
+            tooltip.innerHTML =
+              `<div class="tt-title">Block</div>` +
+              `valuePerSqm: <b>${Math.round(object.properties.valuePerSqm).toLocaleString('en-CA')}</b><br>` +
+              `growth: <b>${object.properties.growth.toFixed(2)}</b>`;
+          } else {
+            tooltip.style.display = 'none';
+          }
+        },
+        updateTriggers: { getFillColor: [breaks.join(',')] }
+      })
+    ]
+  });
+});
+</script>
+</body>
+</html>

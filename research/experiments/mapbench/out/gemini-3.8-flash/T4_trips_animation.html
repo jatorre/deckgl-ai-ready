@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>deck.gl Trips Layer - NYC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- MapLibre GL CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" />
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+  <!-- deck.gl Standalone Bundle -->
+  <script src="https://unpkg.com/deck.gl@8.9.35/dist.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #111;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    #container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .ui-panel {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(18, 20, 24, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 16px 20px;
+      color: #f3f4f6;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      min-width: 220px;
+    }
+
+    .ui-panel h2 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .time-readout {
+      font-family: monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    button {
+      flex: 1;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    button:active {
+      background: #1e40af;
+    }
+
+    .legend {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-color {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+    }
+
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      background: rgba(18, 20, 24, 0.9);
+      color: #fff;
+      padding: 16px 24px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+
+  <div id="loading">Loading trips data...</div>
+
+  <div class="ui-panel">
+    <h2>NYC Taxi Trips</h2>
+    <div class="status-row">
+      <span>Time Elapsed:</span>
+      <span id="time-display" class="time-readout">0 s</span>
+    </div>
+    <div class="controls">
+      <button id="toggle-btn" type="button">
+        <span id="btn-icon">❚❚</span>
+        <span id="btn-label">Pause</span>
+      </button>
+    </div>
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-color" style="background: rgb(253, 128, 93);"></span>
+        <span>Vendor 0</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color" style="background: rgb(23, 184, 190);"></span>
+        <span>Vendor 1</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DATA_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json';
+    const BASEMAP_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
+
+    const LOOP_MIN = 0;
+    const LOOP_MAX = 2500;
+    const LOOP_DURATION_MS = 60000; // 60 seconds for full cycle
+
+    let tripsData = null;
+    let currentTime = LOOP_MIN;
+    let isPlaying = true;
+    let lastTimestamp = performance.now();
+
+    const timeDisplay = document.getElementById('time-display');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const btnIcon = document.getElementById('btn-icon');
+    const btnLabel = document.getElementById('btn-label');
+    const loadingElem = document.getElementById('loading');
+
+    const deckgl = new deck.DeckGL({
+      container: 'container',
+      mapLib: maplibregl,
+      mapStyle: BASEMAP_STYLE,
+      initialViewState: {
+        longitude: -74.00,
+        latitude: 40.72,
+        zoom: 12,
+        pitch: 45,
+        bearing: 0
+      },
+      controller: true
+    });
+
+    function renderLayers() {
+      if (!tripsData) return;
+
+      const layer = new deck.TripsLayer({
+        id: 'trips-layer',
+        data: tripsData,
+        getPath: d => d.path,
+        getTimestamps: d => d.timestamps,
+        getColor: d => (d.vendor === 0 ? [253, 128, 93] : [23, 184, 190]),
+        opacity: 0.8,
+        widthMinPixels: 2.5,
+        rounded: true,
+        fadeTrail: true,
+        trailLength: 180,
+        currentTime: currentTime
+      });
+
+      deckgl.setProps({ layers: [layer] });
+    }
+
+    function animate(now) {
+      if (isPlaying) {
+        const delta = now - lastTimestamp;
+        currentTime += (delta / LOOP_DURATION_MS) * (LOOP_MAX - LOOP_MIN);
+
+        if (currentTime > LOOP_MAX) {
+          currentTime = LOOP_MIN + (currentTime - LOOP_MAX);
+        }
+
+        timeDisplay.textContent = Math.floor(currentTime) + ' s';
+        renderLayers();
+      }
+      lastTimestamp = now;
+      requestAnimationFrame(animate);
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        lastTimestamp = performance.now();
+        btnIcon.textContent = '❚❚';
+        btnLabel.textContent = 'Pause';
+      } else {
+        btnIcon.textContent = '▶';
+        btnLabel.textContent = 'Play';
+      }
+    });
+
+    fetch(DATA_URL)
+      .then(response => response.json())
+      .then(data => {
+        tripsData = data;
+        loadingElem.style.display = 'none';
+        lastTimestamp = performance.now();
+        requestAnimationFrame(animate);
+      })
+      .catch(err => {
+        console.error('Failed to load trips data:', err);
+        loadingElem.textContent = 'Error loading trips data.';
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# secrets
+.env
+*.env
+*.env.local
+# CARTO-internal notes (quotes from private repos) — never published
+private/
+# local junk
+node_modules/
+.DS_Store
+*.tmp
+*.err
+*.log
+research/experiments/mapbench/generate_glm*.log

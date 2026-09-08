@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 2,
+ "deckgl_version": "9.1.5",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "All requirements met: 6-class quantile classification computed from data, YlOrRd sequential scheme, thin light outlines (getLineColor [250,250,250,225], 0.7px), custom hover tooltip showing valuePerSqm and growth, HTML legend with computed breaks, Positron light basemap, exact initial view.",
+  "Clean v9 pattern: deck.gl@9.1.5 dist.min.js with `new deck.MapboxOverlay({...})` added via `map.addControl(overlay)`, autoHighlight and updateTriggers used correctly; no console or HTTP errors.",
+  "Minor cartographic nit: YlOrRd's first two classes (\u22641,337 and 1,337\u20133,522) are close in hue and large low-value areas (UBC/Endowment Lands) read as washed-out pale yellow; otherwise strong legibility and legend quality."
+ ],
+ "total": 16,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

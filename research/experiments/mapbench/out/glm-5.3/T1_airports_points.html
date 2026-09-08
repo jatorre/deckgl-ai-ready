@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Airports Map — deck.gl + MapLibre</title>
+<link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+  #map { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  #legend {
+    position: absolute;
+    top: 12px; right: 12px;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 14px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    font-family: sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  #legend h3 { margin: 0 0 6px 0; font-size: 14px; }
+  .legend-row { display: flex; align-items: center; gap: 8px; }
+  .dot { border-radius: 50%; display: inline-block; flex: none; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="legend">
+  <h3>Airport type</h3>
+  <div class="legend-row"><span class="dot" style="width:14px;height:14px;background:#d7191c"></span> Major</div>
+  <div class="legend-row"><span class="dot" style="width:10px;height:10px;background:#2c7bb6"></span> Mid</div>
+  <div class="legend-row"><span class="dot" style="width:7px;height:7px;background:#fdae61"></span> Small</div>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/deck.gl@8.9.35/dist.min.js"></script>
+
+<script>
+  const INITIAL_VIEW_STATE = { longitude: 10, latitude: 20, zoom: 1.5, pitch: 0, bearing: 0 };
+
+  const TYPE_COLORS = {
+    major: [215, 25, 28],
+    mid:   [44, 123, 182],
+    small: [253, 174, 97]
+  };
+  const TYPE_RADII = {
+    major: 60000,
+    mid:   35000,
+    small: 18000
+  };
+
+  const map = new maplibregl.Map({
+    container: 'map',
+    style: 'https://demotiles.maplibre.org/style.json',
+    center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
+    zoom: INITIAL_VIEW_STATE.zoom,
+    pitch: INITIAL_VIEW_STATE.pitch,
+    bearing: INITIAL_VIEW_STATE.bearing
+  });
+
+  fetch('https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/line/airports.json')
+    .then(r => r.json())
+    .then(data => {
+      const deckOverlay = new deck.MapboxOverlay({
+        layers: [
+          new deck.ScatterplotLayer({
+            id: 'airports',
+            data: data,
+            pickable: true,
+            getPosition: d => d.coordinates,
+            getRadius: d => TYPE_RADII[d.type] || TYPE_RADII.small,
+            radiusUnits: 'meters',
+            radiusMinPixels: 3,
+            getFillColor: d => TYPE_COLORS[d.type] || TYPE_COLORS.small,
+            getLineColor: [0, 0, 0],
+            lineWidthMinPixels: 0.5,
+            stroked: true,
+            opacity: 0.9
+          })
+        ],
+        getTooltip: ({ object }) => {
+          if (object) {
+            return {
+              html: `<div style="font-family:sans-serif;font-size:13px;padding:4px;">
+                       <strong>${object.name}</strong> (${object.abbrev})
+                     </div>`,
+              style: { backgroundColor: 'rgba(255,255,255,0.95)', color: '#222', border: '1px solid #ccc' }
+            };
+          }
+          return null;
+        }
+      });
+      map.addControl(deckOverlay);
+      map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'bottom-right');
+    })
+    .catch(err => {
+      console.error('Failed to load airport data:', err);
+      document.body.insertAdjacentHTML('beforeend',
+        '<div style="position:absolute;top:12px;left:12px;z-index:3;background:#fff;padding:8px;border-radius:4px;font-family:sans-serif;">Failed to load data. See console.</div>');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Airports — deck.gl + MapLibre GL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    #map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #tooltip {
+      position: absolute;
+      z-index: 3;
+      display: none;
+      background: rgba(20, 22, 28, 0.92);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.4;
+      pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+      max-width: 240px;
+    }
+    #tooltip .name {
+      font-weight: 600;
+    }
+    #tooltip .abbrev {
+      color: #9fd4ff;
+    }
+    #legend {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #222;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    #legend h1 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #444;
+    }
+    #legend .row {
+      display: flex;
+      align-items: center;
+      margin: 4px 0;
+    }
+    #legend .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      flex: none;
+    }
+    .dot.major  { background: rgb(230, 25, 75); }
+    .dot.mid    { background: rgb(255, 159, 0); }
+    .dot.small  { background: rgb(0, 120, 255); }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <div id="legend">
+    <h1>Airport type</h1>
+    <div class="row"><span class="dot major"></span>Major</div>
+    <div class="row"><span class="dot mid"></span>Mid</div>
+    <div class="row"><span class="dot small"></span>Small</div>
+  </div>
+
+  <div id="tooltip">
+    <div class="name"></div>
+    <div class="abbrev"></div>
+  </div>
+
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/deck.gl@8.10.1/dist.min.js"></script>
+  <script src="https://unpkg.com/@deck.gl/mapbox@8.10.1/dist.min.js"></script>
+  <script>
+    var DATA_URL = "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/line/airports.json";
+
+    var map = new maplibregl.Map({
+      container: "map",
+      style: "https://demotiles.maplibre.org/style.json",
+      center: [10, 20],
+      zoom: 1.5,
+      pitch: 0,
+      bearing: 0
+    });
+    map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "bottom-right");
+
+    var COLORS = {
+      major: [230, 25, 75],
+      mid:   [255, 159, 0],
+      small: [0, 120, 255]
+    };
+    var FALLBACK_COLOR = [128, 128, 128];
+
+    // Screen-space radii (pixels) so points stay visible even at world zoom.
+    var RADII = { major: 9, mid: 6, small: 3.5 };
+
+    var tooltip = document.getElementById("tooltip");
+    var nameEl = tooltip.querySelector(".name");
+    var abbrevEl = tooltip.querySelector(".abbrev");
+
+    function onHover(info) {
+      if (info.object) {
+        nameEl.textContent = info.object.name;
+        abbrevEl.textContent = info.object.abbrev;
+        tooltip.style.display = "block";
+        tooltip.style.left = info.x + 14 + "px";
+        tooltip.style.top = info.y + 14 + "px";
+      } else {
+        tooltip.style.display = "none";
+      }
+    }
+
+    fetch(DATA_URL)
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var overlay = new deck.MapboxOverlay({
+          layers: [
+            new deck.ScatterplotLayer({
+              id: "airports",
+              data: data,
+              pickable: true,
+              getPosition: function (d) { return d.coordinates; },
+              getFillColor: function (d) {
+                return COLORS[d.type] || FALLBACK_COLOR;
+              },
+              getRadius: function (d) {
+                return RADII[d.type] || 4;
+              },
+              radiusUnits: "pixels",
+              radiusMinPixels: 3,
+              radiusMaxPixels: 14,
+              stroked: true,
+              getLineColor: [255, 255, 255],
+              lineWidthUnits: "pixels",
+              getLineWidth: 1,
+              lineWidthMinPixels: 1,
+              opacity: 0.9,
+              onHover: onHover,
+              updateTriggers: {
+                getFillColor: null,
+                getRadius: null
+              }
+            })
+          ]
+        });
+        map.addControl(overlay);
+      })
+      .catch(function (err) {
+        console.error("Failed to load airport data:", err);
+      });
+  </script>
+</body>
+</html>

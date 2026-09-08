@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All requirements met: extruded HexagonLayer with count-driven color/height, slider 500\u20135000 (default 1000) re-renders via renderLayers(), LightingEffect + material, CARTO dark-matter basemap, getTooltip showing count, exact initial view.",
+  "Uses dated deck.gl 8.9.35 standalone `new deck.DeckGL({mapStyle})` pattern rather than v9 MapboxOverlay/MapLibreOverlay; bundle also tried to fetch mapbox-gl.css (ERR_BLOCKED_BY_ORB), harmless but a sign of legacy integration.",
+  "Cartography is strong (dark basemap, legend matches colorRange, clear 3D shading), though elevationScale 50 makes the London spike dominate and most cells sit in the lowest blue class, compressing the color signal."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

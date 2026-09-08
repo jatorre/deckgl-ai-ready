@@ -1,0 +1,6 @@
+<!-- model: claude-opus-5 | prompt: P4_react_maps_2026 | seconds: 11 | backend: claude-cli tools=none -->
+**MapLibre GL JS**, used through the `react-map-gl` binding.
+
+It's the strongest default because it covers the whole common case well: vector tiles, WebGL rendering, a declarative style spec, terrain and globe projection, and no proprietary tile service or license strings attached. Since the Mapbox GL JS v2 license change, MapLibre has absorbed most of the community — it has an active maintainer base, a large plugin ecosystem, and tile providers (Protomaps, Stadia, OpenFreeMap, CARTO, and self-hosted setups) that all target its style spec, so you can swap basemaps without rewriting code. `react-map-gl` gives you the React-idiomatic layer: controlled/uncontrolled viewport state, `<Source>`/`<Layer>` as components, and clean effect cleanup. It also composes with deck.gl when you outgrow it.
+
+**Runner-up: deck.gl.** It's better than MapLibre for large-scale data visualization — millions of points, GPU-computed aggregation layers, arbitrary custom shaders — and it's the right pick if the map *is* the visualization rather than a backdrop. It's the runner-up only because it isn't a basemap renderer on its own; you typically pair it with MapLibre anyway, and for a standard interactive map it's more machinery than you need.

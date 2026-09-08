@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 4,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Data renders correctly on CARTO dark-matter basemap with exact initial view; major (red) and mid (amber) points clearly distinct, legend and tooltip (name + abbrev) implemented via getTooltip.",
+  "Small airports (cyan, 2.5px radius with 1px black stroke) are essentially invisible at world zoom in the screenshots, weakening 'keep points visible at world zoom'; heavy overplotting of 7px red dots in Europe/US.",
+  "Uses dated deck.gl 8.9.35 dist.min.js with `new deck.DeckGL({mapLib, mapStyle})` standalone pattern instead of v9 MapboxOverlay/addControl; harmless blocked request for mapbox-gl.css from the v8 bundle."
+ ],
+ "total": 14,
+ "judge_model": "anthropic/claude-fable-5.1"
+}
