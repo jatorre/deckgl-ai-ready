@@ -24,6 +24,7 @@ const browser = await chromium.launch({
 async function renderOne(slug, tkey) {
   const html = path.join(OUT, slug, `${tkey}.html`);
   if (!fs.existsSync(html)) return `missing ${slug}/${tkey}`;
+  if (!process.env.RERENDER && fs.existsSync(path.join(REN, slug, `${tkey}.json`))) return `skip   ${slug}/${tkey} (rendered)`;
   const dir = path.join(REN, slug); fs.mkdirSync(dir, { recursive: true });
   const report = { slug, task: tkey, console_errors: [], console_warnings: [], page_errors: [], request_failed: [], http_errors: [], scripts: [], screenshots: {} };
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 });

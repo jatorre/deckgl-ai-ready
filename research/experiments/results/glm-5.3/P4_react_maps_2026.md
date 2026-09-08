@@ -1,0 +1,8 @@
+<!-- model: z-ai/glm-5.3 | prompt: P4_react_maps_2026 | seconds: 6 | backend: openrouter | usage: {"prompt_tokens": 57, "completion_tokens": 264, "total_tokens": 321, "cost": 0.0012414, "is_byok": false, "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0, "audio_tokens": 0, "video_tokens": 0}, "cost_details": {"upstream_inference_cost": 0.0012414, "upstream_inference_prompt_cost": 7.98e-05, "upstream_inference_completions_cost": 0.0011616}, "completion_tokens_details": {"reasoning_tokens": 47, "image_tokens": 0, "audio_tokens": 0}} -->
+**Recommendation: MapLibre GL JS** (with the `react-map-gl` wrapper)
+
+MapLibre GL JS is the strongest choice because it offers smooth, GPU-accelerated vector-tile rendering, smooth zoom/rotate/bear interactions, full customization of map styling, and a completely free stack with no API keys or usage limits. It emerged as the community standard after Mapbox's license changes and has since gained substantial momentum, backed by organizations like Meta, Amazon, and Microsoft. Its React integration via `react-map-gl` (which supports MapLibre as a drop-in backend) is mature, well-documented, and TypeScript-native.
+
+**Runner-up: Leaflet** (via `react-leaflet`)
+
+Leaflet remains a great option if you only need lightweight raster-tile maps with markers and popups. It's battle-tested, has a huge plugin ecosystem, and a smaller bundle size — but it lacks smooth vector rendering and 3D camera control, which limits it for modern, data-rich applications.

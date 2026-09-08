@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 3,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Size encoding is not visible at the required world zoom: radii of 30000/18000/10000 m are all sub-pixel at zoom 1.5 and get clamped by radiusMinPixels: 3, so major/mid/small render identically (screenshot shows uniform dot sizes).",
+  "Exact-match COLORS[d.type] lookup falls back to gray for compound types present in the real data (e.g. 'mid and military'), producing unexplained gray dots (visible over India/Central Asia) that are not in the legend; no green 'small' points appear.",
+  "Dated stack: deck.gl 8.9.35 via standalone DeckGL + mapStyle (v8 pattern), also triggers a failed fetch of mapbox-gl.css; otherwise data URL, view state, tooltip (getTooltip name+abbrev) and legend are correctly implemented."
+ ],
+ "total": 12,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

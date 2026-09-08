@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 4,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.36",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "Strong, polished result: animated trips render over a dark CARTO basemap with mint/amber vendor palette, live metric counters (509\u2192518 'on the move'), legend, activity histogram scrubber, play/pause, speed and trail-length controls; clock advances 20:12\u219220:37 across screenshots so animation runs on load with no console errors.",
+  "Uses deck.gl 8.9.36 and maplibre-gl 3.6.2 \u2014 dated v8-era stack rather than current 9.x; also a stray request to api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css was blocked (harmless but indicates dated/incorrect asset reference).",
+  "Trails render as near-uniform thick glowing lines with little visible fade, and the basemap is so dark that street context is almost invisible \u2014 the 'trail' effect and geographic grounding are weaker than the UI polish suggests."
+ ],
+ "total": 14,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

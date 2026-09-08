@@ -1,0 +1,33 @@
+{
+ "slug": "claude-opus-4.8",
+ "model": "anthropic/claude-opus-4.8",
+ "task": "T2_vancouver_choropleth",
+ "seconds": 20.6,
+ "finish_reason": "stop",
+ "usage": {
+  "prompt_tokens": 458,
+  "completion_tokens": 2091,
+  "total_tokens": 2549,
+  "cost": 0.054565,
+  "is_byok": false,
+  "prompt_tokens_details": {
+   "cached_tokens": 0,
+   "cache_write_tokens": 0,
+   "audio_tokens": 0,
+   "video_tokens": 0
+  },
+  "cost_details": {
+   "upstream_inference_cost": 0.054565,
+   "upstream_inference_prompt_cost": 0.00229,
+   "upstream_inference_completions_cost": 0.052275
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 0,
+   "image_tokens": 0,
+   "audio_tokens": 0
+  }
+ },
+ "html_bytes": 4577,
+ "raw_chars": 4589,
+ "looks_like_html": true
+}

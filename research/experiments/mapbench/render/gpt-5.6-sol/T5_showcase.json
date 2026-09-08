@@ -1,0 +1,50 @@
+{
+ "slug": "gpt-5.6-sol",
+ "task": "T5_showcase",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@9.1.14/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gpt-5.6-sol/T5_showcase.t3.png",
+  "t8": "render/gpt-5.6-sol/T5_showcase.t8.png",
+  "t14": "render/gpt-5.6-sol/T5_showcase.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@9.1.14/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "1000 ft\nMapLibre | © CARTO, © OpenStreetMap contributors\nURBAN MOBILITY STUDY · MANHATTAN\nManhattan\nin Motion\n996 recorded New York taxi journeys unfold through the city. Each luminous trail preserves the recent past while its leading edge advances through simulation time.\nTAXI TRIP PLAYBACK\n996 journeys\n01:21\nLIVE\nPause\n30×\n60×\n120×\nCinematic camera\nVendor 0\nVendor 1",
+  "buttons": [
+   "",
+   "",
+   "",
+   "Pause"
+  ],
+  "sliders": 1,
+  "title": "Manhattan in Motion — NYC Taxi Trips"
+ },
+ "deckgl_cdn_version": "9.1.14",
+ "maplibre_cdn_version": "4.7.1",
+ "total_seconds": 37.5
+}

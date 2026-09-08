@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Night Cabs — NYC Taxi Trips</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/deck.gl@8.9.36/dist.min.js"></script>
+<style>
+  :root{
+    --bg-panel: rgba(11,13,17,0.78);
+    --border: rgba(255,255,255,0.09);
+    --text: #E9ECEF;
+    --muted: #8B929B;
+    --accent: #00E1DC;
+    --amber: #FF9A3C;
+    --cyan: #00E1DC;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ width:100%; height:100%; overflow:hidden; background:#0b0d11; }
+  body{ font-family:'Space Grotesk',sans-serif; color:var(--text); }
+  #map{ position:absolute; inset:0; }
+  /* subtle cinematic vignette */
+  #vignette{
+    position:absolute; inset:0; pointer-events:none; z-index:2;
+    box-shadow: inset 0 0 180px rgba(0,0,0,0.55);
+  }
+
+  .hud{ position:absolute; z-index:5; }
+
+  /* title block */
+  #title{
+    top:22px; left:22px; max-width:360px;
+    background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:14px; padding:18px 20px 16px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
+  #title h1{
+    font-size:21px; font-weight:600; letter-spacing:0.02em; line-height:1.15;
+  }
+  #title h1 em{ font-style:normal; color:var(--accent); }
+  #title p{
+    margin-top:8px; font-size:12.5px; line-height:1.55; color:var(--muted);
+  }
+  #title .src{
+    margin-top:10px; padding-top:10px; border-top:1px solid var(--border);
+    font-family:'IBM Plex Mono',monospace; font-size:10px; color:#5f6670; letter-spacing:0.04em;
+  }
+
+  /* control panel */
+  #panel{
+    top:22px; right:22px; width:238px;
+    background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:14px; padding:16px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  }
+  #panel .label{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:10.5px; text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--muted); margin:14px 0 6px;
+  }
+  #panel .label:first-of-type{ margin-top:2px; }
+  #panel .label b{ font-family:'IBM Plex Mono',monospace; font-weight:500; color:var(--text); font-size:11px; letter-spacing:0; }
+
+  #playBtn{
+    width:100%; padding:9px 12px; border-radius:9px; cursor:pointer;
+    background:var(--accent); color:#06222a; border:none;
+    font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; letter-spacing:0.03em;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition: filter .15s ease;
+  }
+  #playBtn:hover{ filter:brightness(1.1); }
+  #playBtn svg{ width:11px; height:11px; fill:#06222a; }
+
+  input[type=range]{
+    -webkit-appearance:none; appearance:none; width:100%; height:3px;
+    background:rgba(255,255,255,0.16); border-radius:2px; outline:none; cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:13px; height:13px; border-radius:50%;
+    background:var(--text); border:2px solid #0b0d11; box-shadow:0 0 0 1px rgba(255,255,255,0.3);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:11px; height:11px; border-radius:50%;
+    background:var(--text); border:2px solid #0b0d11;
+  }
+
+  .toggles{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+  .tog{ display:flex; align-items:center; gap:9px; font-size:12.5px; cursor:pointer; user-select:none; color:var(--text); }
+  .tog input{ display:none; }
+  .tog .box{
+    width:14px; height:14px; border-radius:4px; border:1px solid rgba(255,255,255,0.28);
+    display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .tog .box::after{ content:''; width:7px; height:7px; border-radius:2px; background:transparent; transition: background .15s ease; }
+  .tog input:checked + .box{ border-color:var(--accent); }
+  .tog input:checked + .box::after{ background:var(--accent); }
+
+  /* time readout */
+  #clock{
+    left:22px; bottom:22px;
+    background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:14px; padding:14px 18px 12px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    min-width:170px;
+  }
+  #clock .t{
+    font-family:'IBM Plex Mono',monospace; font-size:26px; font-weight:500;
+    letter-spacing:0.02em; color:var(--text);
+  }
+  #clock .t span{ color:var(--accent); }
+  #clock .bar{
+    margin-top:9px; height:3px; border-radius:2px; background:rgba(255,255,255,0.14); overflow:hidden;
+  }
+  #clock .bar i{ display:block; height:100%; width:0%; background:var(--accent); transition:width .1s linear; }
+  #clock .sub{ margin-top:8px; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+
+  /* legend */
+  #legend{
+    right:22px; bottom:22px;
+    background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:14px; padding:12px 16px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    display:flex; gap:18px;
+  }
+  #legend .item{ display:flex; align-items:center; gap:8px; font-size:12px; }
+  #legend .dot{ width:9px; height:9px; border-radius:50%; }
+  #legend .item small{ color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:10px; }
+
+  /* loading / error */
+  #loader{
+    position:absolute; inset:0; z-index:20; background:#0b0d11;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+    transition: opacity .6s ease;
+  }
+  #loader.done{ opacity:0; pointer-events:none; }
+  #loader .ring{
+    width:38px; height:38px; border-radius:50%;
+    border:2px solid rgba(255,255,255,0.12); border-top-color:var(--accent);
+    animation:spin 0.9s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  #loader .msg{ font-size:13px; color:var(--muted); letter-spacing:0.04em; }
+  #loader.error .ring{ animation:none; border-top-color:#ff5c5c; }
+
+  @media (max-width: 720px){
+    #title{ max-width:260px; padding:14px 16px; }
+    #title h1{ font-size:17px; }
+    #panel{ width:210px; top:16px; right:16px; padding:12px; }
+    #title{ top:16px; left:16px; }
+    #clock{ left:16px; bottom:16px; }
+    #legend{ right:16px; bottom:16px; padding:10px 12px; gap:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+<div id="vignette"></div>
+
+<div id="title" class="hud">
+  <h1>NIGHT <em>CABS</em></h1>
+  <p>A cinematic replay of 996 New York taxi rides tracing the street grid in motion — every route drawn as a comet of light, colored by cab company.</p>
+  <div class="src">deck.gl · TripsLayer · visgl trips-v7 dataset</div>
+</div>
+
+<div id="panel" class="hud">
+  <button id="playBtn">
+    <svg id="iconPause" viewBox="0 0 10 10"><rect x="1" y="0" width="3" height="10"/><rect x="6" y="0" width="3" height="10"/></svg>
+    <svg id="iconPlay" viewBox="0 0 10 10" style="display:none"><path d="M1 0 L10 5 L1 10 Z"/></svg>
+    <span id="playLabel">Pause</span>
+  </button>
+
+  <div class="label">Playback speed <b id="speedVal">60×</b></div>
+  <input type="range" id="speed" min="15" max="300" step="5" value="60">
+
+  <div class="label">Trail length <b id="trailVal">400s</b></div>
+  <input type="range" id="trail" min="60" max="1200" step="20" value="400">
+
+  <div class="label">Layers</div>
+  <div class="toggles">
+    <label class="tog"><input type="checkbox" id="togV0" checked><span class="box"></span>Vendor 0 trips</label>
+    <label class="tog"><input type="checkbox" id="togV1" checked><span class="box"></span>Vendor 1 trips</label>
+    <label class="tog"><input type="checkbox" id="togDots"><span class="box"></span>Pickup footprint</label>
+    <label class="tog"><input type="checkbox" id="togOrbit" checked><span class="box"></span>Orbit camera</label>
+  </div>
+</div>
+
+<div id="clock" class="hud">
+  <div class="t">T+<span id="timeText">00:00</span></div>
+  <div class="bar"><i id="progBar"></i></div>
+  <div class="sub">Elapsed trip time · loop <span id="loopLen">—</span></div>
+</div>
+
+<div id="legend" class="hud">
+  <div class="item"><span class="dot" style="background:var(--cyan)"></span>Vendor 0 <small id="c0">—</small></div>
+  <div class="item"><span class="dot" style="background:var(--amber)"></span>Vendor 1 <small id="c1">—</small></div>
+</div>
+
+<div id="loader">
+  <div class="ring"></div>
+  <div class="msg" id="loadMsg">Loading 996 taxi trips…</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DATA_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json';
+  var STYLE_URL = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
+
+  // Exact initial view — Manhattan, tilted, cinematic
+  var INITIAL_VIEW = {
+    center: [-73.992, 40.723],
+    zoom: 12.4,
+    pitch: 50,
+    bearing: 18
+  };
+
+  var VENDOR_COLORS = [
+    [0, 225, 220],    // vendor 0 — cyan
+    [255, 154, 60]    // vendor 1 — amber
+  ];
+
+  // ---------- state ----------
+  var trips = [];
+  var LOOP = 2400;          // seconds, computed from data
+  var time = 0;
+  var playing = true;
+  var speed = 60;           // data-seconds per real second
+  var trailLen = 400;       // seconds
+  var showDots = false;
+  var orbitOn = true;
+  var lastUserAction = -1e9;
+
+  // ---------- map ----------
+  var map = new maplibregl.Map({
+    container: 'map',
+    style: STYLE_URL,
+    center: INITIAL_VIEW.center,
+    zoom: INITIAL_VIEW.zoom,
+    pitch: INITIAL_VIEW.pitch,
+    bearing: INITIAL_VIEW.bearing,
+    attributionControl: { compact: true }
+  });
+  map.touchZoomRotate.enableRotation();
+  map.dragRotate.enable();
+
+  // pause the cinematic orbit briefly while the user interacts
+  ['mousedown', 'touchstart', 'wheel', 'drag', 'rotate', 'pitch', 'zoom'].forEach(function (ev) {
+    map.on(ev, function () { lastUserAction = performance.now(); });
+  });
+
+  var overlay = null;
+  map.on('load', function () {
+    overlay = new deck.MapboxOverlay({ layers: buildLayers(0) });
+    map.addLayer(overlay);
+  });
+
+  // ---------- deck layers ----------
+  function activeData() {
+    var v0 = document.getElementById('togV0').checked;
+    var v1 = document.getElementById('togV1').checked;
+    if (v0 && v1) return trips;
+    if (v0) return trips.filter(function (d) { return d.vendor === 0; });
+    if (v1) return trips.filter(function (d) { return d.vendor === 1; });
+    return [];
+  }
+
+  function buildLayers(t) {
+    var data = activeData();
+    var layers = [];
+
+    if (showDots && data.length) {
+      layers.push(new deck.ScatterplotLayer({
+        id: 'pickups',
+        data: data,
+        getPosition: function (d) { return d.path[0]; },
+        getFillColor: function (d) { return VENDOR_COLORS[d.vendor] || VENDOR_COLORS[0]; },
+        radiusMinPixels: 1.2,
+        radiusMaxPixels: 3,
+        opacity: 0.4,
+        stroked: false,
+        pickable: false
+      }));
+    }
+
+    layers.push(new deck.TripsLayer({
+      id: 'trips',
+      data: data,
+      getPath: function (d) { return d.path; },
+      getTimestamps: function (d) { return d.timestamps; },
+      getColor: function (d) { return VENDOR_COLORS[d.vendor] || VENDOR_COLORS[0]; },
+      opacity: 0.6,
+      widthMinPixels: 2.2,
+      rounded: true,
+      trailLength: trailLen,
+      currentTime: t
+    }));
+
+    return layers;
+  }
+
+  // ---------- animation loop ----------
+  var lastFrame = performance.now();
+  function frame(now) {
+    var dt = Math.min((now - lastFrame) / 1000, 0.1);
+    lastFrame = now;
+
+    if (playing && LOOP > 0) {
+      time = (time + speed * dt) % LOOP;
+    }
+
+    if (overlay) overlay.setProps({ layers: buildLayers(time) });
+
+    if (orbitOn && (now - lastUserAction) > 3500) {
+      map.jumpTo({ bearing: map.getBearing() + 2.0 * dt });
+    }
+
+    updateClock();
+    requestAnimationFrame(frame);
+  }
+
+  function updateClock() {
+    var total = Math.floor(time);
+    var mm = String(Math.floor(total / 60)).padStart(2, '0');
+    var ss = String(total % 60).padStart(2, '0');
+    document.getElementById('timeText').textContent = mm + ':' + ss;
+    document.getElementById('progBar').style.width = (LOOP ? (time / LOOP * 100) : 0).toFixed(2) + '%';
+  }
+
+  // ---------- controls ----------
+  function setPlay(p) {
+    playing = p;
+    document.getElementById('iconPause').style.display = p ? '' : 'none';
+    document.getElementById('iconPlay').style.display = p ? 'none' : '';
+    document.getElementById('playLabel').textContent = p ? 'Pause' : 'Play';
+  }
+  document.getElementById('playBtn').addEventListener('click', function () { setPlay(!playing); });
+  window.addEventListener('keydown', function (e) {
+    if (e.code === 'Space' && e.target === document.body) { e.preventDefault(); setPlay(!playing); }
+  });
+
+  document.getElementById('speed').addEventListener('input', function (e) {
+    speed = +e.target.value;
+    document.getElementById('speedVal').textContent = speed + '×';
+  });
+  document.getElementById('trail').addEventListener('input', function (e) {
+    trailLen = +e.target.value;
+    document.getElementById('trailVal').textContent = trailLen + 's';
+  });
+  document.getElementById('togDots').addEventListener('change', function (e) { showDots = e.target.checked; });
+  document.getElementById('togOrbit').addEventListener('change', function (e) { orbitOn = e.target.checked; });
+
+  // ---------- data ----------
+  fetch(DATA_URL)
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (json) {
+      // sanitize: keep only coherent trips
+      trips = (Array.isArray(json) ? json : []).filter(function (d) {
+        return d && d.path && d.timestamps &&
+               d.path.length === d.timestamps.length &&
+               d.path.length >= 2 &&
+               (d.vendor === 0 || d.vendor === 1 || d.vendor === '0' || d.vendor === '1');
+      }).map(function (d) {
+        return { vendor: +d.vendor, path: d.path, timestamps: d.timestamps };
+      });
+
+      if (!trips.length) throw new Error('no valid trips in dataset');
+
+      var maxT = 0, c0 = 0, c1 = 0;
+      trips.forEach(function (d) {
+        var end = d.timestamps[d.timestamps.length - 1];
+        if (end > maxT) maxT = end;
+        if (d.vendor === 0) c0++; else c1++;
+      });
+      LOOP = Math.ceil(maxT) || 2400;
+
+      document.getElementById('loopLen').textContent =
+        Math.floor(LOOP / 60) + 'm ' + (LOOP % 60) + 's';
+      document.getElementById('c0').textContent = c0 + ' rides';
+      document.getElementById('c1').textContent = c1 + ' rides';
+
+      document.getElementById('loader').classList.add('done');
+      requestAnimationFrame(frame);   // start animating immediately
+    })
+    .catch(function (err) {
+      var loader = document.getElementById('loader');
+      loader.classList.add('error');
+      document.getElementById('loadMsg').textContent =
+        'Could not load the trips dataset. Check your connection and reload. (' + err.message + ')';
+    });
+})();
+</script>
+</body>
+</html>

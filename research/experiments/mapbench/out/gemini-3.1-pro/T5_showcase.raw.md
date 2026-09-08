@@ -1,0 +1,396 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYC Taxi Flow Visualization</title>
+
+    <!-- MapLibre for Basemap (No Token Required) -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+
+    <!-- Deck.GL -->
+    <script>
+        // Polyfill Mapbox GL for Deck.gl to seamlessly use MapLibre without tokens
+        window.mapboxgl = maplibregl;
+    </script>
+    <script src="https://unpkg.com/deck.gl@8.9.3/dist.min.js"></script>
+
+    <!-- Google Fonts for Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Core Setup */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* UI Panel */
+        #ui-panel {
+            position: absolute;
+            top: 32px;
+            right: 32px;
+            width: 320px;
+            background: rgba(18, 18, 22, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 28px;
+            color: #ffffff;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            z-index: 10;
+            pointer-events: none; /* Allows interacting with map underneath */
+        }
+
+        .header {
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            margin: 0;
+            font-size: 13px;
+            color: #a0a0a8;
+            line-height: 1.5;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #e0e0e5;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .dot.vendor-a {
+            background: rgb(23, 184, 190);
+            box-shadow: 0 0 12px rgba(23, 184, 190, 0.8);
+        }
+
+        .dot.vendor-b {
+            background: rgb(253, 128, 93);
+            box-shadow: 0 0 12px rgba(253, 128, 93, 0.8);
+        }
+
+        /* Timeline */
+        .timeline {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 24px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+
+        .time-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #808088;
+            font-weight: 600;
+        }
+
+        .time-value {
+            font-variant-numeric: tabular-nums;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .progress-bg {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, rgb(23, 184, 190), rgb(253, 128, 93));
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.1s linear;
+        }
+
+        /* Loading Overlay */
+        #loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #050505;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(255, 255, 255, 0.05);
+            border-top-color: rgb(23, 184, 190);
+            border-right-color: rgb(253, 128, 93);
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+        }
+
+        .loading-text {
+            margin-top: 24px;
+            font-size: 12px;
+            color: #808088;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Initial Loader -->
+    <div id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Initializing Visualization</div>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <!-- Interface -->
+    <div id="ui-panel">
+        <div class="header">
+            <h1>New York Taxi Flow</h1>
+            <p>An animated 3D visualization of taxi trips pulsing through the streets of Manhattan.</p>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="dot vendor-a"></div>
+                Vendor A Activity
+            </div>
+            <div class="legend-item">
+                <div class="dot vendor-b"></div>
+                Vendor B Activity
+            </div>
+        </div>
+
+        <div class="timeline">
+            <div class="time-display">
+                <div class="time-label">Elapsed Time</div>
+                <div class="time-value" id="time-val">00:00</div>
+            </div>
+            <div class="progress-bg">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const DATA_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json';
+        const BUILDINGS_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/buildings.json';
+        
+        const LOOP_LENGTH = 2500; // Duration of animation loop (seconds)
+        const ANIMATION_SPEED = 1.5; // Seconds to advance per frame
+
+        // State
+        let tripsData = null;
+        let buildingsData = null;
+        let isLoaded = false;
+        let currentTime = 0;
+        let autoRotate = true;
+
+        // Initial Map View State (Centered on Manhattan)
+        let currentViewState = {
+            longitude: -74,
+            latitude: 40.72,
+            zoom: 13,
+            pitch: 45,
+            bearing: 0
+        };
+
+        // Lighting Setup for 3D Scene
+        const ambientLight = new deck.AmbientLight({
+            color: [255, 255, 255],
+            intensity: 1.0
+        });
+        const directionalLight = new deck.DirectionalLight({
+            color: [255, 255, 255],
+            intensity: 2.0,
+            direction: [-3, -1, -1]
+        });
+        const lightingEffect = new deck.LightingEffect({ambientLight, directionalLight});
+
+        // Initialize DeckGL
+        const deckgl = new deck.DeckGL({
+            container: 'map',
+            mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+            viewState: currentViewState,
+            controller: true,
+            effects: [lightingEffect],
+            onViewStateChange: ({viewState, interactionState}) => {
+                currentViewState = viewState;
+                // Disable cinematic rotation if user interacts
+                if (interactionState.isDragging || interactionState.isPanning || interactionState.isZooming || interactionState.isRotating) {
+                    autoRotate = false;
+                }
+                deckgl.setProps({viewState: currentViewState});
+            },
+            layers: []
+        });
+
+        // Data Fetching & Initialization
+        async function init() {
+            try {
+                const [tripsRes, buildingsRes] = await Promise.all([
+                    fetch(DATA_URL),
+                    fetch(BUILDINGS_URL)
+                ]);
+
+                if (!tripsRes.ok || !buildingsRes.ok) throw new Error("Failed to load datasets.");
+
+                tripsData = await tripsRes.json();
+                buildingsData = await buildingsRes.json();
+
+                // Transition out loading screen
+                const loader = document.getElementById('loading');
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    isLoaded = true;
+                    requestAnimationFrame(animate);
+                }, 600);
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loading').innerHTML = `
+                    <div style="color: #ff5a5a; font-size: 14px; font-weight: 500;">
+                        Error loading visualization data.<br>Please check network connection.
+                    </div>`;
+            }
+        }
+
+        // Layer Creation
+        function createLayers() {
+            return [
+                new deck.PolygonLayer({
+                    id: 'buildings',
+                    data: buildingsData,
+                    extruded: true,
+                    wireframe: false,
+                    opacity: 0.9, 
+                    getPolygon: f => f.polygon,
+                    getHeight: f => f.height,
+                    getFillColor: [18, 18, 22, 255], // Dark slate to match basemap
+                    material: {
+                        ambient: 0.2,
+                        diffuse: 0.8,
+                        shininess: 32,
+                        specularColor: [40, 40, 45]
+                    }
+                }),
+                new deck.TripsLayer({
+                    id: 'trips',
+                    data: tripsData,
+                    getPath: d => d.path,
+                    getTimestamps: d => d.timestamps,
+                    getColor: d => (d.vendor === 0 ? [23, 184, 190] : [253, 128, 93]),
+                    opacity: 0.8,
+                    widthMinPixels: 2.5,
+                    trailLength: 200,
+                    currentTime: currentTime,
+                    shadowEnabled: false
+                })
+            ];
+        }
+
+        // Update UI Elements
+        function updateUI(time) {
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            document.getElementById('time-val').innerText = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            const progress = (time / LOOP_LENGTH) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        // Animation Loop
+        function animate() {
+            if (!isLoaded) return;
+
+            // Advance time
+            currentTime = (currentTime + ANIMATION_SPEED) % LOOP_LENGTH;
+
+            // Cinematic camera pan
+            if (autoRotate) {
+                currentViewState.bearing += 0.05;
+            }
+
+            // Render Frame
+            deckgl.setProps({
+                viewState: currentViewState,
+                layers: createLayers()
+            });
+
+            updateUI(currentTime);
+
+            requestAnimationFrame(animate);
+        }
+
+        // Start initialization
+        init();
+    </script>
+</body>
+</html>
+```

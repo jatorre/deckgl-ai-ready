@@ -1,0 +1,899 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Manhattan in Motion — NYC Taxi Trips</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+  />
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/deck.gl@9.1.14/dist.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --cyan: #4deeea;
+      --coral: #ff5d73;
+      --ink: #071016;
+      --panel: rgba(8, 17, 24, 0.83);
+      --line: rgba(255, 255, 255, 0.12);
+      --muted: rgba(229, 242, 247, 0.65);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body,
+    #map {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #071016;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      color: #f5fbff;
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+    }
+
+    .maplibregl-canvas {
+      outline: none;
+    }
+
+    .vignette,
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .vignette {
+      background:
+        radial-gradient(circle at 52% 43%, transparent 38%, rgba(1, 6, 10, 0.12) 68%, rgba(1, 5, 8, 0.58) 100%),
+        linear-gradient(180deg, rgba(2, 8, 12, 0.18), transparent 24%, transparent 72%, rgba(2, 8, 12, 0.38));
+    }
+
+    .grain {
+      opacity: 0.07;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.26'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+
+    .topbar {
+      position: fixed;
+      z-index: 5;
+      top: 24px;
+      left: 28px;
+      max-width: min(510px, calc(100vw - 56px));
+      pointer-events: none;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.75);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 9px;
+      color: rgba(210, 232, 240, 0.68);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 0 5px rgba(77, 238, 234, 0.10), 0 0 18px var(--cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.85); opacity: 0.65; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 4.3vw, 64px);
+      line-height: 0.93;
+      font-weight: 760;
+      letter-spacing: -0.055em;
+    }
+
+    h1 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(237, 249, 255, 0.66);
+    }
+
+    .caption {
+      max-width: 430px;
+      margin-top: 14px;
+      color: rgba(232, 244, 249, 0.72);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .panel {
+      position: fixed;
+      z-index: 6;
+      right: 22px;
+      bottom: 22px;
+      width: min(350px, calc(100vw - 44px));
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.035), transparent 45%),
+        var(--panel);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+      backdrop-filter: blur(18px) saturate(130%);
+      -webkit-backdrop-filter: blur(18px) saturate(130%);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(77, 238, 234, 0.26), transparent 35%, transparent 65%, rgba(255, 93, 115, 0.22));
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      padding: 1px;
+    }
+
+    .panel-head,
+    .time-row,
+    .control-row,
+    .legend {
+      display: flex;
+      align-items: center;
+    }
+
+    .panel-head {
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .panel-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    #tripCount {
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      color: rgba(240, 250, 255, 0.8);
+    }
+
+    .time-row {
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    #timeDisplay {
+      font-size: 30px;
+      font-weight: 650;
+      letter-spacing: -0.035em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #status {
+      color: var(--cyan);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 4px;
+      margin: 4px 0 18px;
+      border-radius: 999px;
+      appearance: none;
+      background: linear-gradient(90deg, var(--cyan) var(--progress, 0%), rgba(255,255,255,0.12) var(--progress, 0%));
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      width: 15px;
+      height: 15px;
+      border: 2px solid #071016;
+      border-radius: 50%;
+      appearance: none;
+      background: #eaffff;
+      box-shadow: 0 0 0 3px rgba(77, 238, 234, 0.25), 0 0 13px rgba(77, 238, 234, 0.8);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 13px;
+      height: 13px;
+      border: 2px solid #071016;
+      border-radius: 50%;
+      background: #eaffff;
+      box-shadow: 0 0 0 3px rgba(77, 238, 234, 0.25);
+    }
+
+    .control-row {
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    button,
+    select {
+      height: 34px;
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 9px;
+      color: rgba(243, 251, 255, 0.9);
+      background: rgba(255,255,255,0.055);
+      font: inherit;
+      font-size: 11px;
+      outline: none;
+    }
+
+    button {
+      min-width: 74px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    button:hover,
+    select:hover {
+      border-color: rgba(77, 238, 234, 0.42);
+      background: rgba(77, 238, 234, 0.08);
+    }
+
+    select {
+      padding: 0 28px 0 10px;
+      cursor: pointer;
+    }
+
+    .camera-control {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-left: auto;
+      color: rgba(232, 244, 249, 0.72);
+      font-size: 11px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .camera-control input {
+      accent-color: var(--cyan);
+    }
+
+    .legend {
+      gap: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(232, 244, 249, 0.72);
+      font-size: 11px;
+    }
+
+    .swatch {
+      width: 22px;
+      height: 3px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .swatch.cyan {
+      color: var(--cyan);
+      background: var(--cyan);
+    }
+
+    .swatch.coral {
+      color: var(--coral);
+      background: var(--coral);
+    }
+
+    .tooltip {
+      position: fixed;
+      z-index: 10;
+      display: none;
+      min-width: 145px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px;
+      background: rgba(4, 11, 16, 0.9);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.4);
+      backdrop-filter: blur(12px);
+      pointer-events: none;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .tooltip strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 12px;
+    }
+
+    .tooltip span {
+      color: rgba(230, 243, 248, 0.65);
+    }
+
+    .loading {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      background: #071016;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-mark {
+      position: relative;
+      width: 82px;
+      height: 82px;
+    }
+
+    .loader-mark::before,
+    .loader-mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(77, 238, 234, 0.42);
+      border-radius: 50%;
+      animation: loader 1.8s ease-in-out infinite;
+    }
+
+    .loader-mark::after {
+      border-color: rgba(255, 93, 115, 0.42);
+      animation-delay: -0.9s;
+    }
+
+    @keyframes loader {
+      0% { transform: scale(0.35); opacity: 0; }
+      45% { opacity: 1; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+
+    .loading-text {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      width: 220px;
+      transform: translateX(-50%);
+      color: rgba(232, 244, 249, 0.65);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .maplibregl-ctrl-bottom-left {
+      left: 18px;
+      bottom: 15px;
+    }
+
+    .maplibregl-ctrl-bottom-right {
+      right: 18px;
+      bottom: auto;
+      top: 18px;
+    }
+
+    .maplibregl-ctrl-group,
+    .maplibregl-ctrl-scale {
+      border-color: rgba(255,255,255,0.12) !important;
+      color: rgba(235,247,252,0.72) !important;
+      background: rgba(7,16,22,0.75) !important;
+      box-shadow: none !important;
+      backdrop-filter: blur(10px);
+    }
+
+    .maplibregl-ctrl-group button {
+      min-width: 29px;
+      background-color: transparent;
+    }
+
+    .maplibregl-ctrl-group button + button {
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .maplibregl-ctrl-icon {
+      filter: invert(1);
+      opacity: 0.76;
+    }
+
+    .maplibregl-ctrl-attrib {
+      color: rgba(255,255,255,0.52) !important;
+      background: rgba(7,16,22,0.7) !important;
+    }
+
+    .maplibregl-ctrl-attrib a {
+      color: rgba(255,255,255,0.7) !important;
+    }
+
+    @media (max-width: 700px) {
+      .topbar {
+        top: 19px;
+        left: 19px;
+      }
+
+      .caption {
+        max-width: 320px;
+        font-size: 12px;
+      }
+
+      .panel {
+        right: 12px;
+        bottom: 12px;
+        width: calc(100vw - 24px);
+        padding: 15px;
+      }
+
+      .maplibregl-ctrl-bottom-left {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+
+  <header class="topbar">
+    <div class="eyebrow"><span class="live-dot"></span> Urban mobility study · Manhattan</div>
+    <h1>Manhattan <span>in Motion</span></h1>
+    <div class="caption">
+      996 recorded New York taxi journeys unfold through the city. Each luminous trail preserves the recent past while its leading edge advances through simulation time.
+    </div>
+  </header>
+
+  <section class="panel" aria-label="Animation controls">
+    <div class="panel-head">
+      <div class="panel-label">Taxi trip playback</div>
+      <div id="tripCount">Loading trips…</div>
+    </div>
+
+    <div class="time-row">
+      <div id="timeDisplay">00:00</div>
+      <div id="status">Live</div>
+    </div>
+
+    <input id="timeline" type="range" min="0" max="2487" step="1" value="6" aria-label="Simulation time" />
+
+    <div class="control-row">
+      <button id="playButton" type="button">Pause</button>
+      <select id="speedSelect" aria-label="Playback speed">
+        <option value="30">30×</option>
+        <option value="60" selected>60×</option>
+        <option value="120">120×</option>
+      </select>
+      <label class="camera-control">
+        <input id="cameraToggle" type="checkbox" checked />
+        Cinematic camera
+      </label>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="swatch cyan"></span> Vendor 0</div>
+      <div class="legend-item"><span class="swatch coral"></span> Vendor 1</div>
+    </div>
+  </section>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <div id="loading" class="loading">
+    <div class="loader-mark">
+      <div class="loading-text">Loading Manhattan journeys</div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const DATA_URL =
+        "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json";
+
+      const INITIAL_VIEW_STATE = {
+        longitude: -74,
+        latitude: 40.72,
+        zoom: 13,
+        pitch: 45,
+        bearing: 0
+      };
+
+      const COLORS = {
+        0: [77, 238, 234],
+        1: [255, 93, 115]
+      };
+
+      const LOOP_START = 6;
+      const LOOP_END = 2487;
+
+      const timeline = document.getElementById("timeline");
+      const timeDisplay = document.getElementById("timeDisplay");
+      const tripCount = document.getElementById("tripCount");
+      const playButton = document.getElementById("playButton");
+      const speedSelect = document.getElementById("speedSelect");
+      const cameraToggle = document.getElementById("cameraToggle");
+      const status = document.getElementById("status");
+      const tooltip = document.getElementById("tooltip");
+      const loading = document.getElementById("loading");
+
+      const map = new maplibregl.Map({
+        container: "map",
+        style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+        center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
+        zoom: INITIAL_VIEW_STATE.zoom,
+        pitch: INITIAL_VIEW_STATE.pitch,
+        bearing: INITIAL_VIEW_STATE.bearing,
+        antialias: true,
+        attributionControl: true,
+        maxPitch: 75
+      });
+
+      map.addControl(
+        new maplibregl.NavigationControl({
+          visualizePitch: true,
+          showCompass: true,
+          showZoom: true
+        }),
+        "top-right"
+      );
+
+      map.addControl(
+        new maplibregl.ScaleControl({
+          maxWidth: 90,
+          unit: "imperial"
+        }),
+        "bottom-left"
+      );
+
+      const state = {
+        trips: [],
+        currentTime: LOOP_START,
+        speed: 60,
+        playing: true,
+        lastFrame: performance.now(),
+        lastUiUpdate: 0,
+        overlay: null,
+        cameraEnabled: true,
+        cameraStep: 0
+      };
+
+      const mapReady = new Promise(resolve => map.once("load", resolve));
+      const dataReady = fetch(DATA_URL).then(response => {
+        if (!response.ok) {
+          throw new Error("Unable to load taxi trip data.");
+        }
+        return response.json();
+      });
+
+      function addBuildings() {
+        const style = map.getStyle();
+        const layers = style && style.layers ? style.layers : [];
+        const buildingSourceLayer = layers.find(layer =>
+          layer &&
+          layer.source &&
+          layer["source-layer"] === "building"
+        );
+
+        if (!buildingSourceLayer || map.getLayer("manhattan-buildings-3d")) {
+          return;
+        }
+
+        const firstLabel = layers.find(layer => layer.type === "symbol");
+
+        try {
+          map.addLayer(
+            {
+              id: "manhattan-buildings-3d",
+              source: buildingSourceLayer.source,
+              "source-layer": buildingSourceLayer["source-layer"],
+              type: "fill-extrusion",
+              minzoom: 13.2,
+              paint: {
+                "fill-extrusion-color": [
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  13.2, "#101b22",
+                  16, "#20333b"
+                ],
+                "fill-extrusion-height": [
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  13.2, 0,
+                  14.3, ["coalesce", ["get", "render_height"], 18]
+                ],
+                "fill-extrusion-base": [
+                  "coalesce",
+                  ["get", "render_min_height"],
+                  0
+                ],
+                "fill-extrusion-opacity": 0.54,
+                "fill-extrusion-vertical-gradient": true
+              }
+            },
+            firstLabel ? firstLabel.id : undefined
+          );
+        } catch (_) {
+          // The visualization remains complete if a basemap revision omits building heights.
+        }
+      }
+
+      function handleHover(info) {
+        if (!info || !info.object) {
+          tooltip.style.display = "none";
+          return;
+        }
+
+        const trip = info.object;
+        const vendorColor = trip.vendor === 0 ? "#4deeea" : "#ff5d73";
+        const points = Array.isArray(trip.path) ? trip.path.length : 0;
+
+        tooltip.innerHTML =
+          '<strong style="color:' + vendorColor + '">Vendor ' + trip.vendor + " taxi</strong>" +
+          "<span>" + points.toLocaleString() + " recorded positions</span>";
+
+        tooltip.style.display = "block";
+        tooltip.style.left = Math.min(info.x + 16, window.innerWidth - 175) + "px";
+        tooltip.style.top = Math.min(info.y + 16, window.innerHeight - 70) + "px";
+      }
+
+      function makeLayers() {
+        const t = state.currentTime;
+        const trips = state.trips;
+
+        return [
+          new deck.PathLayer({
+            id: "trip-network",
+            data: trips,
+            getPath: d => d.path,
+            getColor: d => {
+              const c = COLORS[d.vendor] || COLORS[0];
+              return [c[0], c[1], c[2], 34];
+            },
+            getWidth: 0.7,
+            widthUnits: "pixels",
+            widthMinPixels: 0.35,
+            opacity: 0.22,
+            capRounded: true,
+            jointRounded: true,
+            pickable: false
+          }),
+
+          new deck.ScatterplotLayer({
+            id: "trip-origins",
+            data: trips,
+            getPosition: d => d.path[0],
+            getRadius: 18,
+            radiusUnits: "meters",
+            radiusMinPixels: 1,
+            radiusMaxPixels: 5,
+            getFillColor: d => {
+              const c = COLORS[d.vendor] || COLORS[0];
+              return [c[0], c[1], c[2], 65];
+            },
+            stroked: true,
+            getLineColor: [220, 250, 255, 40],
+            lineWidthMinPixels: 0.5,
+            opacity: 0.45,
+            pickable: false
+          }),
+
+          new deck.TripsLayer({
+            id: "taxi-trails-glow",
+            data: trips,
+            getPath: d => d.path,
+            getTimestamps: d => d.timestamps,
+            getColor: d => {
+              const c = COLORS[d.vendor] || COLORS[0];
+              return [c[0], c[1], c[2], 92];
+            },
+            currentTime: t,
+            trailLength: 190,
+            widthMinPixels: 7,
+            widthMaxPixels: 11,
+            capRounded: true,
+            jointRounded: true,
+            fadeTrail: true,
+            opacity: 0.16,
+            pickable: false
+          }),
+
+          new deck.TripsLayer({
+            id: "taxi-trails",
+            data: trips,
+            getPath: d => d.path,
+            getTimestamps: d => d.timestamps,
+            getColor: d => COLORS[d.vendor] || COLORS[0],
+            currentTime: t,
+            trailLength: 150,
+            widthMinPixels: 2.2,
+            widthMaxPixels: 5,
+            capRounded: true,
+            jointRounded: true,
+            fadeTrail: true,
+            opacity: 0.93,
+            pickable: true,
+            autoHighlight: true,
+            highlightColor: [255, 255, 255, 100],
+            onHover: handleHover
+          }),
+
+          new deck.TripsLayer({
+            id: "taxi-heads",
+            data: trips,
+            getPath: d => d.path,
+            getTimestamps: d => d.timestamps,
+            getColor: () => [245, 255, 255],
+            currentTime: t,
+            trailLength: 3.5,
+            widthMinPixels: 3.7,
+            widthMaxPixels: 6,
+            capRounded: true,
+            jointRounded: true,
+            fadeTrail: true,
+            opacity: 0.96,
+            pickable: false
+          })
+        ];
+      }
+
+      function formatTime(seconds) {
+        const whole = Math.max(0, Math.floor(seconds));
+        const minutes = Math.floor(whole / 60);
+        const secs = whole % 60;
+        return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+      }
+
+      function updateUi() {
+        const progress = ((state.currentTime - LOOP_START) / (LOOP_END - LOOP_START)) * 100;
+        timeline.value = String(Math.round(state.currentTime));
+        timeline.style.setProperty("--progress", Math.max(0, Math.min(100, progress)) + "%");
+        timeDisplay.textContent = formatTime(state.currentTime);
+        status.textContent = state.playing ? "Live" : "Paused";
+        status.style.color = state.playing ? "var(--cyan)" : "rgba(229,242,247,.55)";
+      }
+
+      function animate(now) {
+        const delta = Math.min((now - state.lastFrame) / 1000, 0.1);
+        state.lastFrame = now;
+
+        if (state.playing) {
+          state.currentTime += delta * state.speed;
+          if (state.currentTime > LOOP_END) {
+            state.currentTime =
+              LOOP_START + ((state.currentTime - LOOP_START) % (LOOP_END - LOOP_START));
+          }
+        }
+
+        if (state.overlay) {
+          state.overlay.setProps({ layers: makeLayers() });
+        }
+
+        if (now - state.lastUiUpdate > 100) {
+          updateUi();
+          state.lastUiUpdate = now;
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      function moveCamera() {
+        if (!state.cameraEnabled || !cameraToggle.checked) return;
+
+        state.cameraStep += 1;
+        const direction = state.cameraStep % 2 === 0 ? 1 : -1;
+
+        map.easeTo({
+          center: [
+            INITIAL_VIEW_STATE.longitude + direction * 0.0026,
+            INITIAL_VIEW_STATE.latitude + Math.sin(state.cameraStep * 0.8) * 0.0016
+          ],
+          bearing: map.getBearing() + 8,
+          pitch: 49 + Math.sin(state.cameraStep * 0.65) * 5,
+          zoom: 13.15 + Math.sin(state.cameraStep * 0.45) * 0.13,
+          duration: 8500,
+          easing: t => t
+        });
+      }
+
+      playButton.addEventListener("click", () => {
+        state.playing = !state.playing;
+        playButton.textContent = state.playing ? "Pause" : "Play";
+        updateUi();
+      });
+
+      speedSelect.addEventListener("change", () => {
+        state.speed = Number(speedSelect.value);
+      });
+
+      timeline.addEventListener("input", () => {
+        state.currentTime = Number(timeline.value);
+        updateUi();
+      });
+
+      cameraToggle.addEventListener("change", () => {
+        state.cameraEnabled = cameraToggle.checked;
+        if (state.cameraEnabled) {
+          moveCamera();
+        }
+      });
+
+      map.on("dragstart", () => {
+        state.cameraEnabled = false;
+        cameraToggle.checked = false;
+      });
+
+      map.on("click", () => {
+        tooltip.style.display = "none";
+      });
+
+      Promise.all([mapReady, dataReady])
+        .then(([, trips]) => {
+          state.trips = trips;
+          tripCount.textContent = trips.length.toLocaleString() + " journeys";
+
+          addBuildings();
+
+          state.overlay = new deck.MapboxOverlay({
+            interleaved: true,
+            layers: makeLayers()
+          });
+
+          map.addControl(state.overlay);
+
+          updateUi();
+          loading.classList.add("hidden");
+
+          requestAnimationFrame(time => {
+            state.lastFrame = time;
+            requestAnimationFrame(animate);
+          });
+
+          setTimeout(moveCamera, 2800);
+          setInterval(moveCamera, 9000);
+        })
+        .catch(error => {
+          document.querySelector(".loading-text").textContent =
+            error && error.message ? error.message : "Unable to load visualization";
+        });
+    })();
+  </script>
+</body>
+</html>
+```

@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 4,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Animation runs on load with visible gold/cyan TripsLayer trails over CARTO dark basemap; stats update across screenshots (Active Cabs 44\u219285\u2192160, T+ 71.5s\u2192274.4s), no console errors.",
+  "Polished HUD: title, caption, live stats, vendor legend with counts (802/194), play/pause, timeline slider, speed and trail pills, Cinematic Orbit toggle \u2014 but trails are thin/short and no 3D buildings or lighting despite '3D reconstruction' caption.",
+  "Uses dated deck.gl 8.9.35 dist bundle (which also pulls mapbox-gl and attempts to fetch api.tiles.mapbox.com CSS, blocked by ORB) instead of deck.gl 9.x with MapboxOverlay/addControl."
+ ],
+ "total": 14,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

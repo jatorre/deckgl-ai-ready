@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.36",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All requirements met: TripsLayer with trailLength 180, two vendor colors, CARTO dark-matter (token-free), exact initial view; loop timing verified by readouts (150.9 s @3s, 334.3 s @8s, 596.7 s @14s \u2248 41 s/s \u2192 ~60 s per pass).",
+  "Play/pause button toggles correctly with elapsed-time preservation and live time readout; clean legend panel with matching swatches.",
+  "Uses dated deck.gl 8.9.36 dist.min.js with standalone DeckGL + mapLib rather than v9 MapboxOverlay/MapLibreOverlay; harmless failed request for mapbox-gl.css from the v8 bundle."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

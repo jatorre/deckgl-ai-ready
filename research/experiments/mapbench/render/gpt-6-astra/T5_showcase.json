@@ -1,0 +1,66 @@
+{
+ "slug": "gpt-6-astra",
+ "task": "T5_showcase",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.36/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gpt-6-astra/T5_showcase.t3.png",
+  "t8": "render/gpt-6-astra/T5_showcase.t8.png",
+  "t14": "render/gpt-6-astra/T5_showcase.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.36/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nURBAN OBSERVATORY\n/ MOBILITY STUDIES · 001\nREPLAY IN MOTION\nNEW YORK CITY / TAXI TRAJECTORIES\nA city,\nin motion.\n\n996 journeys. One living network. Follow the pulse of New York, one taxi at a time.\n\n515\nON THE MOVE\n996\nRECORDED TRIPS\nTwo fleets. Shared streets.\nActive\nVendor 0\n417\nVendor 1\n98\nBright points mark interpolated positions.\nFading lines trace the la",
+  "buttons": [
+   "",
+   "",
+   "",
+   "",
+   "16×",
+   "32×",
+   "64×",
+   "30s",
+   "90s",
+   "180s",
+   "Route network"
+  ],
+  "sliders": 1,
+  "title": "In Motion — New York Taxi Atlas"
+ },
+ "deckgl_cdn_version": "8.9.36",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 30.8
+}

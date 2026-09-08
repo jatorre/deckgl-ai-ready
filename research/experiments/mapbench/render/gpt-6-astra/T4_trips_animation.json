@@ -1,0 +1,56 @@
+{
+ "slug": "gpt-6-astra",
+ "task": "T4_trips_animation",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.36/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gpt-6-astra/T4_trips_animation.t3.png",
+  "t8": "render/gpt-6-astra/T4_trips_animation.t8.png",
+  "t14": "render/gpt-6-astra/T4_trips_animation.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.36/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nNYC Trip Trails\nPause\nTime: 729.7 s\nVendor 0\nVendor 1\n\n996 trips · 180 s trails · 60 s per loop",
+  "buttons": [
+   "Pause"
+  ],
+  "sliders": 0,
+  "title": "Animated NYC Trips"
+ },
+ "deckgl_cdn_version": "8.9.36",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 17.9
+}

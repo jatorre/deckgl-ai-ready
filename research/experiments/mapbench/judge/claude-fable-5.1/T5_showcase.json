@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 2,
+ "deckgl_version": "9.0.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Animation runs on load with no errors: clock advances 00:22\u219200:52\u219201:22 across screenshots, amber/cyan TripsLayer trails and lit 3D buildings (buildings.json) render over CARTO dark-matter, camera bearing drifts slowly ('Camera orbiting' badge).",
+  "Rich, well-styled UI: title/caption/stats, vendor legend, play/pause, seek bar, speed & trail sliders, cinematic/buildings/vendor toggles, reset view, Space shortcut \u2014 report confirms 2 buttons and 2 sliders present.",
+  "Minor cartographic weakness: at zoom 13 with the default 180 s trail the trips read as short thin dashes and are sparse early in the loop; left-side panels consume ~30% of the viewport at 1280x800 and cover the Jersey City label."
+ ],
+ "total": 16,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

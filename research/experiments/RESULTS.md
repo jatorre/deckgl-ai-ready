@@ -93,3 +93,20 @@ How the frontier pair changes the picture:
 ## Caveats
 
 Single sample per cell, default temperature, three backends with different system prompts. Treat counts as directional. Rerun with `./run_claude.sh` and `./run_proxy.py <model-id>`; delete a result file to regenerate it.
+
+## 7. Frontier set, one model per family (added 2026-09-08)
+
+For the talk the table was reduced to one current model per family, run through OpenRouter unless noted: Opus 4.8 (`anthropic/claude-opus-4.8`), Fable 5.1 (claude CLI), GPT-5.6 Sol (Codex CLI), GPT-6 Astra (`openai/gpt-6-astra`, reasoning effort low), Gemini 3.1 Pro (LiteLLM proxy, vertex), Gemini 3.8 Flash (`google/gemini-3.8-flash`), GLM 5.3 (`z-ai/glm-5.3`, 4k reasoning cap). Runner: `run_openrouter.py`. Raw answers under `results/<slug>/`.
+
+| Ask | Opus 4.8 | Fable 5.1 | GPT-5.6 Sol | GPT-6 Astra | Gemini 3.1 Pro | Gemini 3.8 Flash | GLM 5.3 |
+|---|---|---|---|---|---|---|---|
+| 2M GPS points | deck.gl | deck.gl | deck.gl | deck.gl | deck.gl | deck.gl | deck.gl (+MapLibre) |
+| Simple airports GeoJSON | Leaflet | MapLibre | MapLibre | Leaflet | Leaflet | Leaflet | Leaflet |
+| H3 hexagons | pydeck (Python) | deck.gl | deck.gl | deck.gl | deck.gl | deck.gl | Leaflet |
+| React, 2026 | MapLibre | MapLibre | MapLibre | MapLibre | MapLibre | MapLibre | MapLibre |
+| Single HTML file | Leaflet | Leaflet | Leaflet | Leaflet | Leaflet | Leaflet | Leaflet |
+| "Latest" deck.gl | 9.0 | 9.1 (hedged) | 9.1.14 | 9.1.0 (hedged) | 9.0.0 | 9.0.38 | 9.1 |
+| deck.gl on MapLibre | MapboxOverlay ✓ | MapboxOverlay ✓ | **MapLibreOverlay (9.4) ✓** | MapboxOverlay ✓ | MapboxOverlay ✓ | MapboxOverlay ✓ | MapboxOverlay via react-map-gl, sloppy |
+| `@deck.gl/json` choropleth | invented `interpolateColor` | valid | CARTO `colorContinuous` | valid | valid | valid | invented `quantileColorScale`, `type` key |
+
+Reading: every frontier model has moved to deck.gl 9, none past 9.1 (latest 9.4.0). All seven use the pre-9.4 MapLibre integration correctly except GPT-5.6 Sol, which knows the new module. Four of seven write a valid data-driven accessor; two invent a helper function; one uses CARTO's vocabulary. GLM 5.3 also paired deck.gl with Mapbox GL and an access token in its version answer, and named a non-existent `MaplibreOverlay` class in its 2M-points answer.

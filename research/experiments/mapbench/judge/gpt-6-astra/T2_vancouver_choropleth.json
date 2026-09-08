@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.36",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All requirements met: data-driven nearest-rank quantiles (6 classes) over the real 4,627 features, ColorBrewer Blues, `getLineColor: [250,250,250,220]` 0.5px outlines, Positron light basemap, exact initial view, tooltip with valuePerSqm and growth, HTML legend with computed breaks.",
+  "Dated stack: `deck.gl@8.9.36/dist.min.js` with `new deck.DeckGL({map: maplibregl, mapStyle})` scripting-API pattern rather than 9.x MapboxOverlay/addControl; deck 8.9 also tries to pull `api.tiles.mapbox.com/.../mapbox-gl.css` (blocked, non-fatal).",
+  "Cartographic nit: lowest class `[239,243,255]` is nearly indistinguishable from the pale Positron land, so the bottom quantile reads as 'no data'; otherwise clean hierarchy and legend."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

@@ -1,0 +1,55 @@
+{
+ "slug": "claude-fable-5.1",
+ "task": "T5_showcase",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@9.0.35/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/claude-fable-5.1/T5_showcase.t3.png",
+  "t8": "render/claude-fable-5.1/T5_showcase.t8.png",
+  "t14": "render/claude-fable-5.1/T5_showcase.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@9.0.35/dist.min.js"
+  ],
+  "links": [
+   "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "MapLibre | © CARTO, © OpenStreetMap contributors\nDECK.GL · TRIPSLAYER · NEW YORK CITY\nManhattan in Motion\n\n996 real yellow-cab journeys replayed against the skyline of Lower Manhattan. Each glowing trail is one taxi; its head marks where the cab is right now, and the tail fades as the seconds pass.\n\n996\nTRIPS\n47,933\nGPS POINTS\n41 min\nTIME WINDOW\nVendor 0\nVendor 1\nDrag to orbit, scroll to zoom, hov",
+  "buttons": [
+   "❚❚",
+   "Reset view"
+  ],
+  "sliders": 2,
+  "title": "Manhattan in Motion — 996 NYC Taxi Trips"
+ },
+ "deckgl_cdn_version": "9.0.35",
+ "maplibre_cdn_version": "4.7.1",
+ "total_seconds": 26.9
+}

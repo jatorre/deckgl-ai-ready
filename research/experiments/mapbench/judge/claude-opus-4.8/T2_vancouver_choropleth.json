@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All requirements met: 6-class quantile breaks computed from data (`computeQuantiles(values, COLORS.length)`), YlOrRd sequential scheme, thin white outlines (`lineWidthMinPixels: 0.5`), hover tooltip with valuePerSqm and growth, HTML legend with class ranges, exact initial view, token-free Positron basemap.",
+  "Uses dated deck.gl 8.9.35 `dist.min.js` with `new deck.DeckGL({mapStyle...})` standalone pattern rather than v9 MapboxOverlay/MapLibreOverlay; also triggers a failed mapbox-gl CSS request (ERR_BLOCKED_BY_ORB) though non-fatal.",
+  "Cartography is clean and legible; basemap renders somewhat grey/darker than expected for Positron but choropleth contrast remains strong, legend is well formatted."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

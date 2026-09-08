@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>deck.gl title map</title>
+<link href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" rel="stylesheet">
+<style>
+  html, body, #map { margin: 0; width: 100%; height: 100%; background: #1f49fd; overflow: hidden; }
+  .maplibregl-ctrl-attrib, .maplibregl-ctrl-logo { display: none !important; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/deck.gl@9.4.0/dist.min.js"></script>
+<script>
+// Live deck.gl map used as the title-slide background. Brand palette: CARTO blue ground, lime roads and trails.
+const BLUE = '#1f49fd', BLUE_DEEP = '#1436cf', BLUE_LAND = '#2350f7', BLUE_BUILDING = '#2b5bff', LIME = '#c9f04a', LIME_DIM = '#9bd33f';
+const TRIPS = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json';
+
+async function brandStyle() {
+  const style = await (await fetch('https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json')).json();
+  for (const l of style.layers) {
+    const id = l.id.toLowerCase(); l.paint = l.paint || {}; l.layout = l.layout || {};
+    if (l.type === 'background') { l.paint['background-color'] = BLUE; continue; }
+    if (l.type === 'symbol') { l.layout.visibility = 'none'; continue; }
+    if (id.includes('water')) { l.paint[l.type === 'line' ? 'line-color' : 'fill-color'] = BLUE_DEEP; continue; }
+    if (l.type === 'fill') { l.paint['fill-color'] = id.includes('building') ? BLUE_BUILDING : BLUE_LAND; l.paint['fill-opacity'] = 1; delete l.paint['fill-outline-color']; continue; }
+    if (l.type === 'line') {
+      if (/boundary|admin/.test(id)) { l.layout.visibility = 'none'; continue; }
+      const major = /motorway|trunk|primary|secondary|highway|major|bridge/.test(id) && !/casing|minor|service|path|track/.test(id);
+      l.paint['line-color'] = major ? LIME : LIME_DIM; l.paint['line-opacity'] = major ? 0.8 : 0.42;
+      continue;
+    }
+  }
+  return style;
+}
+
+(async () => {
+  const map = new maplibregl.Map({
+    container: 'map', style: await brandStyle(), center: [-73.985, 40.735], zoom: 12.4, pitch: 52, bearing: -22,
+    interactive: false, attributionControl: false, fadeDuration: 0
+  });
+  await new Promise(r => map.on('load', r));
+  const trips = await (await fetch(TRIPS)).json();
+  const Overlay = deck.MapLibreOverlay || deck.MapboxOverlay;
+  const overlay = new Overlay({ interleaved: false, layers: [] });
+  map.addControl(overlay);
+  const LOOP = 2500, SPEED = 28, TRAIL = 260; // data seconds per real second
+  let t0 = performance.now();
+  function frame(now) {
+    const time = ((now - t0) / 1000 * SPEED) % LOOP;
+    overlay.setProps({ layers: [ new deck.TripsLayer({
+      id: 'trips', data: trips, getPath: d => d.path, getTimestamps: d => d.timestamps,
+      getColor: d => d.vendor === 0 ? [255, 255, 255] : [235, 255, 200], opacity: 1,
+      widthMinPixels: 5, capRounded: true, jointRounded: true, fadeTrail: true, trailLength: TRAIL, currentTime: time
+    }) ] });
+    map.setBearing(-22 + ((now - t0) / 1000) * 0.6); // slow cinematic drift
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

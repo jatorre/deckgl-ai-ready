@@ -1,0 +1,54 @@
+{
+ "slug": "glm-5.3",
+ "task": "T5_showcase",
+ "console_errors": [
+  "Error: layers.undefined: either \"type\" or \"ref\" is required\n    at Object.En [as x] (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js:31:122659)\n    at Jt (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js:35:102287)\n    at se._validate (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre",
+  "Error: layers.undefined: missing required property \"source\"\n    at Object.En [as x] (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js:31:122659)\n    at Jt (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js:35:102287)\n    at se._validate (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre",
+  "Error: layers.undefined: missing required property \"id\"\n    at Object.En [as x] (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js:31:122659)\n    at Jt (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js:35:102287)\n    at se._validate (https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl."
+ ],
+ "console_warnings": [
+  "deck: `trips: rounded` is deprecated and will be removed in a later version. Use `jointRounded/capRounded` instead"
+ ],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.36/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/glm-5.3/T5_showcase.t3.png",
+  "t8": "render/glm-5.3/T5_showcase.t8.png",
+  "t14": "render/glm-5.3/T5_showcase.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.36/dist.min.js"
+  ],
+  "links": [
+   "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap",
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nNIGHT CABS\n\nA cinematic replay of 996 New York taxi rides tracing the street grid in motion — every route drawn as a comet of light, colored by cab company.\n\ndeck.gl · TripsLayer · visgl trips-v7 dataset\nPause\nPLAYBACK SPEED\n60×\nTRAIL LENGTH\n400S\nLAYERS\nVendor 0 trips\nVendor 1 trips\nPickup footprint\nOrbit camera\nT+12:36\nELAPSED TRIP TIME · LOOP 41M 27S\nVendor ",
+  "buttons": [
+   "Pause"
+  ],
+  "sliders": 2,
+  "title": "Night Cabs — NYC Taxi Trips"
+ },
+ "deckgl_cdn_version": "8.9.36",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 14.1
+}

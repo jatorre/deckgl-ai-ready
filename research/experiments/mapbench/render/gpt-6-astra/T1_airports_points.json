@@ -1,0 +1,55 @@
+{
+ "slug": "gpt-6-astra",
+ "task": "T1_airports_points",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@9.1.14/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gpt-6-astra/T1_airports_points.t3.png",
+  "t8": "render/gpt-6-astra/T1_airports_points.t8.png",
+  "t14": "render/gpt-6-astra/T1_airports_points.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": "deckgl-overlay"
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@9.1.14/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "MapLibre | © CARTO, © OpenStreetMap contributors\nWorld airports\nMajor\nMid\nSmall",
+  "buttons": [
+   "",
+   "",
+   ""
+  ],
+  "sliders": 0,
+  "title": "World Airports"
+ },
+ "deckgl_cdn_version": "9.1.14",
+ "maplibre_cdn_version": "4.7.1",
+ "total_seconds": 14.1
+}

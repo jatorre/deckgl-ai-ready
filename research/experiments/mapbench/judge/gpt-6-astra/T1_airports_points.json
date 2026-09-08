@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 4,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 2,
+ "deckgl_version": "9.1.14",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "All core requirements implemented: ScatterplotLayer over MapLibre Positron, exact initial view, colors/sizes keyed by `type`, getTooltip with `${object.name}\\n${object.abbrev}`, top-left legend, NavigationControl.",
+  "Small airports are barely legible: at radius 3px with a white stroke the fill collapses to a dark speck that reads as black in the screenshots, not the legend's green (#159447) \u2014 weak encoding for that class at world zoom.",
+  "Major class at 7px radius heavily overplots in Europe/US East/East Asia; otherwise clean v9 usage (MapboxOverlay via map.addControl, radiusUnits:'pixels', parameters:{depthCompare:'always'})."
+ ],
+ "total": 14,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

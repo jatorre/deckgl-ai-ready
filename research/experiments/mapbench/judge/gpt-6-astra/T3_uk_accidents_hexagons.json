@@ -1,0 +1,16 @@
+{
+ "renders": 1,
+ "spec_compliance": 4,
+ "cartography": 1,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.36",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "Hexagons render over Great Britain but appear as a uniform near-black flat texture in all screenshots: no visible color gradient and no discernible extrusion, so the color/height-by-count encoding does not read. Likely cause is `colorScaleType: 'linear'`/`elevationScaleType: 'linear'` on heavily skewed counts, pushing nearly every cell to the lowest bin.",
+  "All explicit requirements are wired in code: HexagonLayer with extruded:true, SUM weight=1 (count) for color and elevation, range slider 500\u20135000 default 1000 re-calling setProps, LightingEffect with ambient+directional lights, CARTO dark-matter basemap, getTooltip showing `object.points.length`, exact initial view.",
+  "Uses deck.gl 8.9.36 (`dist.min.js`) with `deck.MapboxOverlay` + `map.addControl` \u2014 functional but a v8-era pattern rather than current 9.x; the panel/legend UI is polished but the gradient legend does not match anything visible on the map."
+ ],
+ "total": 10,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

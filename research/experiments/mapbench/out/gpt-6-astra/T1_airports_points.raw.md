@@ -1,0 +1,176 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>World Airports</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <style>
+    html, body, #map {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    #legend {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+      color: #17212b;
+      font-size: 13px;
+      pointer-events: none;
+    }
+    #legend strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 25px;
+    }
+    .symbol {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+    }
+    .dot {
+      border: 1px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+    }
+    .major { width: 14px; height: 14px; background: #d73027; }
+    .mid   { width: 10px; height: 10px; background: #1976d2; }
+    .small { width: 6px; height: 6px; background: #159447; }
+    #status {
+      position: absolute;
+      bottom: 32px;
+      left: 16px;
+      z-index: 2;
+      max-width: calc(100% - 64px);
+      padding: 8px 12px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.96);
+      color: #17212b;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map" aria-label="Interactive map of world airports"></div>
+  <aside id="legend" aria-label="Airport type legend">
+    <strong>World airports</strong>
+    <div class="legend-row"><span class="symbol"><span class="dot major"></span></span>Major</div>
+    <div class="legend-row"><span class="symbol"><span class="dot mid"></span></span>Mid</div>
+    <div class="legend-row"><span class="symbol"><span class="dot small"></span></span>Small</div>
+  </aside>
+  <div id="status" role="status">Loading airports…</div>
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/deck.gl@9.1.14/dist.min.js"></script>
+  <script>
+    const INITIAL_VIEW_STATE = {
+      longitude: 10,
+      latitude: 20,
+      zoom: 1.5,
+      pitch: 0,
+      bearing: 0
+    };
+
+    const COLORS = {
+      major: [215, 48, 39],
+      mid: [25, 118, 210],
+      small: [21, 148, 71]
+    };
+    const RADII = {major: 7, mid: 5, small: 3};
+
+    const map = new maplibregl.Map({
+      container: "map",
+      style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+      center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
+      zoom: INITIAL_VIEW_STATE.zoom,
+      pitch: INITIAL_VIEW_STATE.pitch,
+      bearing: INITIAL_VIEW_STATE.bearing,
+      renderWorldCopies: true,
+      attributionControl: true
+    });
+
+    map.addControl(new maplibregl.NavigationControl(), "top-right");
+
+    const overlay = new deck.MapboxOverlay({
+      interleaved: false,
+      layers: [],
+      getTooltip: ({object}) => object ? {
+        text: `${object.name}\n${object.abbrev}`,
+        style: {
+          backgroundColor: "#17212b",
+          color: "#fff",
+          fontSize: "13px",
+          padding: "8px 12px",
+          borderRadius: "5px",
+          whiteSpace: "pre-line"
+        }
+      } : null
+    });
+
+    map.addControl(overlay);
+
+    async function loadAirports() {
+      const status = document.getElementById("status");
+      try {
+        const response = await fetch(
+          "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/line/airports.json"
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const airports = await response.json();
+        if (!Array.isArray(airports)) {
+          throw new Error("Expected an airport array.");
+        }
+
+        overlay.setProps({
+          layers: [
+            new deck.ScatterplotLayer({
+              id: "airports",
+              data: airports,
+              pickable: true,
+              autoHighlight: true,
+              highlightColor: [255, 210, 60, 220],
+              getPosition: airport => airport.coordinates,
+              getFillColor: airport => COLORS[airport.type],
+              getRadius: airport => RADII[airport.type],
+              radiusUnits: "pixels",
+              radiusMinPixels: 3,
+              stroked: true,
+              getLineColor: [255, 255, 255, 230],
+              getLineWidth: 0.8,
+              lineWidthUnits: "pixels",
+              wrapLongitude: true,
+              parameters: {depthCompare: "always"}
+            })
+          ]
+        });
+        status.hidden = true;
+      } catch (error) {
+        status.textContent = `Unable to load airports: ${error.message}`;
+        console.error(error);
+      }
+    }
+
+    loadAirports();
+  </script>
+</body>
+</html>
+```

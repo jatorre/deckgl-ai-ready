@@ -1,0 +1,54 @@
+{
+ "slug": "gpt-6-astra",
+ "task": "T2_vancouver_choropleth",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.36/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gpt-6-astra/T2_vancouver_choropleth.t3.png",
+  "t8": "render/gpt-6-astra/T2_vancouver_choropleth.t8.png",
+  "t14": "render/gpt-6-astra/T2_vancouver_choropleth.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.36/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nVancouver property values\n\nValue per square metre · 6 quantile classes\n\n4,627 blocks loaded\n0 ≤ value ≤ 1,337\n1,337 < value ≤ 3,522\n3,522 < value ≤ 4,079\n4,079 < value ≤ 5,008\n5,008 < value ≤ 6,883\n6,883 < value ≤ 756,397\n\nQuantiles place approximately equal numbers of blocks in each class, revealing variation despite the strongly skewed values. Hover over a b",
+  "buttons": [],
+  "sliders": 0,
+  "title": "Vancouver Property Values"
+ },
+ "deckgl_cdn_version": "8.9.36",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 14.1
+}

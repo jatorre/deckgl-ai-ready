@@ -35,16 +35,26 @@ def judge(slug, tkey):
         p = rep.get("screenshots", {}).get(t)
         if p and os.path.exists(os.path.join(HERE, p)):
             content.append({"type": "text", "text": f"Screenshot {t}:"}); content.append({"type": "image_url", "image_url": {"url": img(os.path.join(HERE, p))}})
-    body = {"model": JUDGE_MODEL, "messages": [{"role": "system", "content": RUBRIC}, {"role": "user", "content": content}], "max_tokens": 1500}
+    body = {"model": JUDGE_MODEL, "messages": [{"role": "system", "content": RUBRIC}, {"role": "user", "content": content}], "max_tokens": 3500}
     req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", data=json.dumps(body).encode(),
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "HTTP-Referer": "https://carto.com", "X-Title": "deckgl-mapbench-judge"})
     try:
         resp = json.load(urllib.request.urlopen(req, timeout=300)); text = resp["choices"][0]["message"].get("content") or ""
     except urllib.error.HTTPError as e: return f"FAIL {slug}/{tkey} HTTP {e.code}: {e.read()[:200].decode(errors='replace')}"
     except Exception as e: return f"FAIL {slug}/{tkey}: {str(e)[:200]}"
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text.strip(), flags=re.S)
     m = re.search(r"\{.*\}", text, re.S)
     try: scores = json.loads(m.group(0))
-    except Exception: return f"FAIL {slug}/{tkey} unparseable judge output: {text[:200]!r}"
+    except Exception:
+        # truncated JSON: salvage the numeric fields and whatever notes closed cleanly
+        try:
+            nums = {k: int(v) for k, v in re.findall(r'"(renders|spec_compliance|cartography|interactivity|api_currency)"\s*:\s*(\d+)', text)}
+            if len(nums) < 5: raise ValueError("incomplete")
+            dv = re.search(r'"deckgl_version"\s*:\s*"([^"]*)"', text); bi = re.search(r'"basemap_integration"\s*:\s*"([^"]*)"', text)
+            notes = re.findall(r'"((?:[^"\\]|\\.){20,})"', text.split('"notes"')[1]) if '"notes"' in text else []
+            scores = {**nums, "deckgl_version": dv.group(1) if dv else None, "basemap_integration": bi.group(1) if bi else None, "notes": notes[:3], "salvaged": True}
+        except Exception:
+            return f"FAIL {slug}/{tkey} unparseable judge output: {text[:200]!r}"
     scores["total"] = sum(scores.get(k, 0) for k in ["renders", "spec_compliance", "cartography", "interactivity", "api_currency"])
     scores["judge_model"] = JUDGE_MODEL
     json.dump(scores, open(outp, "w"), indent=1)

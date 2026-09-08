@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 4,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Trips render and animate correctly over CARTO dark-matter with two vendor colors; readout progression (144 s @3s, 328 s @8s, 578 s @14s) confirms ~41 s/s speed, matching the ~60 s full-pass requirement with trailLength 180.",
+  "Uses deck.gl 8.9.35 with the standalone `new DeckGL({mapLib: maplibregl, mapStyle})` pattern and deprecated `rounded: true` prop; the dist bundle also tries to fetch mapbox-gl.css (blocked, harmless) \u2014 dated v8 API rather than v9 MapboxOverlay.",
+  "No legend explaining which color maps to which vendor; otherwise clean dark basemap with good trail contrast and a working Pause/Play button plus time readout."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

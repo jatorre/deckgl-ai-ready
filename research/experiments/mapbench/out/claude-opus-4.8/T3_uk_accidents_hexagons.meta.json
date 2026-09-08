@@ -1,0 +1,33 @@
+{
+ "slug": "claude-opus-4.8",
+ "model": "anthropic/claude-opus-4.8",
+ "task": "T3_uk_accidents_hexagons",
+ "seconds": 19.2,
+ "finish_reason": "stop",
+ "usage": {
+  "prompt_tokens": 435,
+  "completion_tokens": 1788,
+  "total_tokens": 2223,
+  "cost": 0.046875,
+  "is_byok": false,
+  "prompt_tokens_details": {
+   "cached_tokens": 0,
+   "cache_write_tokens": 0,
+   "audio_tokens": 0,
+   "video_tokens": 0
+  },
+  "cost_details": {
+   "upstream_inference_cost": 0.046875,
+   "upstream_inference_prompt_cost": 0.002175,
+   "upstream_inference_completions_cost": 0.0447
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 0,
+   "image_tokens": 0,
+   "audio_tokens": 0
+  }
+ },
+ "html_bytes": 3746,
+ "raw_chars": 3758,
+ "looks_like_html": true
+}

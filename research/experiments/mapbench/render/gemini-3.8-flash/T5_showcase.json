@@ -1,0 +1,67 @@
+{
+ "slug": "gemini-3.8-flash",
+ "task": "T5_showcase",
+ "console_errors": [],
+ "console_warnings": [
+  "deck: `taxi-trips: rounded` is deprecated and will be removed in a later version. Use `jointRounded/capRounded` instead"
+ ],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.35/dist.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gemini-3.8-flash/T5_showcase.t3.png",
+  "t8": "render/gemini-3.8-flash/T5_showcase.t8.png",
+  "t14": "render/gemini-3.8-flash/T5_showcase.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.35/dist.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css",
+   "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": true,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nAUTONOMOUS DYNAMIC FEED\nManhattan Taxi Streams\nTemporal 3D reconstruction of 996 GPS taxi paths weaving across Manhattan's street grid.\nACTIVE CABS\n185\nSIM TIME\n06:05:28\nFLEET VENDORS\nVendor 1 (Gold)\n802 trips\nVendor 2 (Cyan)\n194 trips\nT+ 328.5s\n2487s (Loop)\nSpeed\n0.5x\n1x\n2.5x\n5x\nTrail\nShort\nNormal\nLong\nCinematic Orbit",
+  "buttons": [
+   "",
+   "0.5x",
+   "1x",
+   "2.5x",
+   "5x",
+   "Short",
+   "Normal",
+   "Long",
+   "Cinematic Orbit"
+  ],
+  "sliders": 1,
+  "title": "Manhattan Taxi Trajectories — deck.gl"
+ },
+ "deckgl_cdn_version": "8.9.35",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 16.9
+}

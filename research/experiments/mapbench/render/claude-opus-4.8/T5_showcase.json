@@ -1,0 +1,59 @@
+{
+ "slug": "claude-opus-4.8",
+ "task": "T5_showcase",
+ "console_errors": [],
+ "console_warnings": [
+  "deck: `trips: rounded` is deprecated and will be removed in a later version. Use `jointRounded/capRounded` instead"
+ ],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/deck.gl@8.9.35/dist.min.js",
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"
+ ],
+ "screenshots": {
+  "t3": "render/claude-opus-4.8/T5_showcase.t3.png",
+  "t8": "render/claude-opus-4.8/T5_showcase.t8.png",
+  "t14": "render/claude-opus-4.8/T5_showcase.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/deck.gl@8.9.35/dist.min.js",
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nNew York City · Taxi Trips\n\n996 yellow-cab journeys through Manhattan, replayed as glowing animated trails over a single ~41-minute window. Vendor A and Vendor B are shown in distinct hues.\n\nVENDOR\nVendor A (0)\nVendor B (1)\nPLAYBACK\n04:22\nSpeed\nTrail length\n⏸ Pause\n🎥 Cinematic: On",
+  "buttons": [
+   "⏸ Pause",
+   "🎥 Cinematic: On"
+  ],
+  "sliders": 2,
+  "title": "NYC Taxi Trips — Animated Trails"
+ },
+ "deckgl_cdn_version": "8.9.35",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 17
+}

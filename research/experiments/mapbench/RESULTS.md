@@ -1,12 +1,30 @@
 # How well do frontier models build single-page deck.gl maps?
 
-Experiment run 2026-09-08 for the Zurich talk. Four tasks, one shot, no tools, identical prompt, five model configurations via OpenRouter. Each output is a self-contained HTML file rendered headlessly at 1280×800 with Playwright and Chromium (SwiftShader WebGL), then scored by Claude Fable 5.1 as judge on a fixed 17-point rubric over the code, the render report and three screenshots. Grid with thumbnails, scores and judge notes: `report.html`. Raw files: `out/<model>/<task>.html`, render reports and screenshots in `render/`, judge JSON in `judge/`. Rebuild with `./generate.py`, `node render.mjs`, `./judge.py`, `./report.py`, `./summarize.py`.
+Experiment run 2026-09-08 for the Zurich talk. Five tasks (four specified, one open brief), one shot, no tools, identical prompt, seven frontier models via OpenRouter. Each output is a self-contained HTML file rendered headlessly at 1280×800 with Playwright and Chromium (SwiftShader WebGL), then scored by Claude Fable 5.1 as judge on a fixed 17-point rubric over the code, the render report and three screenshots. Grid with thumbnails, scores and judge notes: `report.html`. Raw files: `out/<model>/<task>.html`, render reports and screenshots in `render/`, judge JSON in `judge/`. Rebuild with `./generate.py`, `node render.mjs`, `./judge.py`, `./report.py`, `./summarize.py`.
 
 **Tasks.** T1 world airports as typed points with tooltip and legend over MapLibre. T2 choropleth of 4,627 Vancouver blocks with a skew-aware classification and an HTML legend. T3 extruded hexagon aggregation of 140k UK accident points with a radius slider, lighting and pitch. T4 animated taxi trips with play/pause and a time readout. Data from the deck.gl-data repository so loading is never the variable. Fixed initial views so screenshots are comparable.
 
-**Rubric.** renders 0–2, spec compliance 0–5, cartography 0–5, interactivity 0–3, API currency 0–2. Max 17 per task, 68 per model.
+**Rubric.** renders 0–2, spec compliance 0–5, cartography 0–5, interactivity 0–3, API currency 0–2. Max 17 per task, 68 for the four specified tasks, 85 with the open brief (T5).
 
-## Scores
+**T5, the open brief.** "Build the most impressive, polished, single-page deck.gl visualization of this data that you can" over the same taxi-trips data, dark basemap, must animate on load. Added after the four specified tasks converged; it is where models differ.
+
+## Scores (final, 7 models × 5 tasks)
+
+| Model | T1–T4 /68 | T5 open brief /17 | Total /85 | deck.gl pinned |
+|---|---|---|---|---|
+| Fable 5.1 | 60 | 16 | 76 | 9.0.x ×3, 8.9.35 ×2 |
+| GPT-5.6 Sol | 61 | 15 | 76 | 9.1.x ×4, 8.9.36 |
+| Gemini 3.8 Flash | 57 | 14 | 71 | 8.9.35 ×5 |
+| GPT-6 Astra | 54 | 14 | 68 | 9.1.14, 8.9.36 ×4 |
+| Gemini 3.1 Pro | 58 | 10 | 68 | 8.9.x ×5 |
+| Opus 4.8 | 56 | 10 | 66 | 8.9.35 ×5 |
+| GLM 5.3 | 32 | 5 | 37 | 8.9.x ×5 |
+
+27 of 35 files pin a deck.gl 8.9.x bundle; 8 pin 9.x; none 9.2+. 27 of 35 rendered the intended data (judge `renders = 2`).
+
+**Open brief highlights.** Fable 5.1 built "Manhattan in Motion": TripsLayer plus lit 3D buildings from a second dataset, cinematic orbiting camera, playback and trail sliders, layer toggles, 16/17. GPT-6 Astra built "Urban Observatory": a designed editorial page with animated trails, live counters, an active-trips timeline chart, speed and trail controls, 14/17 (API currency 1: v8 bundle). GPT-5.6 Sol: animated trails with drifting camera and live counters, 15/17 on the current API. Gemini 3.8 Flash: gold and cyan trails with live stats, 14/17. Opus 4.8's basemap never rendered (a `clearColor` parameter blanked it), 10/17. Gemini 3.1 Pro's trails were invisible at headless frame rates, 10/17. GLM 5.3 attached the overlay with `map.addLayer` instead of `addControl`, 5/17.
+
+## Scores (original four-model run)
 
 | Model | Total | T1 | T2 | T3 | T4 | Renders data | API currency | deck.gl pinned | Basemap integration |
 |---|---|---|---|---|---|---|---|---|---|

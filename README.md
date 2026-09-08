@@ -10,7 +10,8 @@ Talk, research and experiments for **"Making deck.gl AI-Ready: Declarative Specs
 | Path | What |
 |---|---|
 | `research/experiments/RESULTS.md` | Experiment 1: what 10 models recommend for maps, how current their deck.gl knowledge is, whether the MapLibre relationship confuses them, and whether they can write `@deck.gl/json`. Raw answers in `results/`. |
-| `research/experiments/mapbench/` | Experiment 2: 5 frontier models build 4 single-page deck.gl maps; rendered headlessly, scored with a fixed rubric. `report.html` is the visual grid, `RESULTS.md` the write-up, `out/` the generated maps. |
+| `research/experiments/mapbench/` | Experiment 2: 7 frontier models (Opus 4.8, Fable 5.1, GPT-5.6 Sol, GPT-6 Astra, Gemini 3.1 Pro, Gemini 3.8 Flash, GLM 5.3) build 4 specified single-page deck.gl maps plus one open brief; rendered headlessly, scored with a fixed rubric. `report.html` is the visual grid, `RESULTS.md` the write-up, `out/` the generated maps. |
+| `talk/` | Outline with speaker notes, the live deck.gl title map (`title-map.html`), brand assets, and `build-grids.py`, which feeds the slides' result grids from the experiment data. |
 | `research/experiments/*.sh`, `*.py`, `*.mjs` | The harnesses. Model calls go through the `claude` CLI, the Codex CLI, a LiteLLM proxy and OpenRouter; keys are read from an untracked `.env`. |
 
 Everything was researched, run and written with Claude Code in the two days before the talk; the session is linked from the commits.

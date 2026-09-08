@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 3,
+ "cartography": 2,
+ "interactivity": 2,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Basemap is invisible: all screenshots show a flat dark void with no streets, despite CARTO attribution present. Cause is `parameters: { clearColor: [0.02, 0.03, 0.06, 1] }` \u2014 an opaque clear makes the deck canvas cover the underlying MapLibre canvas, defeating the required dark basemap.",
+  "Trails do animate on load (t8/t14 show cyan/amber TripsLayer paths, clock advancing), with a working control panel (speed, trail length, pause, cinematic orbit toggle), legend and title; but trails are thin and not 'glowing' as the caption claims, and with no map context the result reads as sparse marks on black.",
+  "Dated stack: deck.gl 8.9.35 `dist.min.js` standalone `DeckGL({mapStyle})` pattern (v8), plus a stray mapbox-gl.css fetch blocked by ORB; dead code `deckgl.viewManager ? null : null` and per-frame `setProps({viewState})` fights the controller while cinematic is on."
+ ],
+ "total": 10,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

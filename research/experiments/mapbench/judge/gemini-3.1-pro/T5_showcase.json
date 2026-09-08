@@ -1,0 +1,16 @@
+{
+ "renders": 1,
+ "spec_compliance": 3,
+ "cartography": 3,
+ "interactivity": 2,
+ "api_currency": 1,
+ "deckgl_version": "8.9.3",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "Trips essentially invisible in all screenshots: timer shows only 00:09\u219200:25 over 14 s (~1 fps in headless) so currentTime barely exceeds the 6 s trip start; only a single cyan and single orange speck appear at t14. Extruded buildings render fine, but the core TripsLayer animation is not evident.",
+  "Dated stack: deck.gl@8.9.3 dist.min.js with `window.mapboxgl = maplibregl` polyfill and standalone `deck.DeckGL({mapStyle})`; caused a blocked request for api.tiles.mapbox.com/mapbox-gl-js CSS. Animation speed and camera rotation are frame-based (bearing += 0.05/frame), so they degrade with frame rate.",
+  "Strong UI polish: glass panel with title, caption, two-vendor legend, elapsed-time readout and progress bar; dark CARTO basemap fills window and is token-free; no console errors. No interactive controls (0 buttons/sliders, panel is pointer-events:none)."
+ ],
+ "total": 10,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

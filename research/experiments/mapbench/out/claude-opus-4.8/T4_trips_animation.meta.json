@@ -1,0 +1,33 @@
+{
+ "slug": "claude-opus-4.8",
+ "model": "anthropic/claude-opus-4.8",
+ "task": "T4_trips_animation",
+ "seconds": 15.6,
+ "finish_reason": "stop",
+ "usage": {
+  "prompt_tokens": 448,
+  "completion_tokens": 1460,
+  "total_tokens": 1908,
+  "cost": 0.03874,
+  "is_byok": false,
+  "prompt_tokens_details": {
+   "cached_tokens": 0,
+   "cache_write_tokens": 0,
+   "audio_tokens": 0,
+   "video_tokens": 0
+  },
+  "cost_details": {
+   "upstream_inference_cost": 0.03874,
+   "upstream_inference_prompt_cost": 0.00224,
+   "upstream_inference_completions_cost": 0.0365
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 0,
+   "image_tokens": 0,
+   "audio_tokens": 0
+  }
+ },
+ "html_bytes": 3344,
+ "raw_chars": 3356,
+ "looks_like_html": true
+}

@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 1,
+ "deckgl_version": "8.9.35",
+ "basemap_integration": "deckgl-standalone-with-mapStyle",
+ "notes": [
+  "All requirements met: HexagonLayer extruded with count-driven color/height, LightingEffect, CARTO dark-matter style, slider 500\u20135000 default 1000 rerendering via setProps, custom onHover tooltip using info.object.points.length, exact initial view \u2014 screenshots show the 3D hex heatmap rendered correctly.",
+  "Uses dated deck.gl 8.9.35 with the v8 scripting-API pattern (new DeckGL({mapLib, mapStyle})) rather than 9.x MapboxOverlay/addControl; a stray mapbox-gl.css request was blocked (harmless).",
+  "No legend explaining the color/height ramp, and hexagons obscure most basemap labels; otherwise good contrast and hierarchy with the London spike clearly standing out."
+ ],
+ "total": 14,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

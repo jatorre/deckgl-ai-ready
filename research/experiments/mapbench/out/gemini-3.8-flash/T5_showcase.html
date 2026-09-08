@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Manhattan Taxi Trajectories — deck.gl</title>
+  
+  <!-- MapLibre GL JS & CSS (Token-free map engine) -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" />
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  
+  <!-- deck.gl standalone bundle -->
+  <script src="https://unpkg.com/deck.gl@8.9.35/dist.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #080a0f;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #e2e8f0;
+    }
+
+    #app {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Ambient Vignette Overlay */
+    .vignette-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.75), inset 0 0 240px rgba(3, 7, 18, 0.5);
+      z-index: 2;
+    }
+
+    /* Common Card Styles */
+    .glass-card {
+      background: rgba(13, 17, 26, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      z-index: 10;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Header Panel */
+    .header-panel {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 320px;
+      padding: 20px 22px;
+    }
+
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse-dot 1.8s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+
+    .description {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #94a3b8;
+      margin-bottom: 16px;
+    }
+
+    /* Real-time Metrics Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 14px;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    /* Legend Panel */
+    .legend-panel {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      padding: 16px 18px;
+      width: 220px;
+    }
+
+    .panel-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #64748b;
+      margin-bottom: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .legend-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .legend-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legend-line {
+      width: 18px;
+      height: 4px;
+      border-radius: 2px;
+      position: relative;
+    }
+    .legend-line::after {
+      content: '';
+      position: absolute;
+      right: -2px;
+      top: -2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: inherit;
+      filter: blur(1px);
+    }
+
+    .legend-line.vendor-0 {
+      background: #ffb12a;
+      box-shadow: 0 0 10px rgba(255, 177, 42, 0.7);
+    }
+    .legend-line.vendor-1 {
+      background: #00e5ff;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+    }
+
+    .legend-text {
+      font-size: 12px;
+      font-weight: 500;
+      color: #cbd5e1;
+    }
+
+    .legend-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* Floating Playback Control Bar */
+    .playback-bar {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(840px, calc(100% - 48px));
+      padding: 16px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-play {
+      background: #f8fafc;
+      color: #090d16;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
+    }
+    .btn-play:hover {
+      background: #ffffff;
+      transform: scale(1.06);
+    }
+    .btn-play svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .slider-track-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .time-readout {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .time-current {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      cursor: pointer;
+      position: relative;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 10px #38bdf8;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+    }
+
+    .controls-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 10px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .pill-btn-group {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 2px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .pill-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pill-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .pill-btn:hover:not(.active) {
+      color: #f1f5f9;
+    }
+
+    .camera-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .camera-btn.active {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: rgba(168, 85, 247, 0.4);
+      color: #c084fc;
+    }
+
+    /* Initial Loading Overlay */
+    #loader {
+      position: absolute;
+      inset: 0;
+      background: #080a0f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      gap: 16px;
+      transition: opacity 0.5s ease;
+    }
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(56, 189, 248, 0.15);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loader-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #94a3b8;
+      letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 768px) {
+      .header-panel {
+        top: 16px;
+        left: 16px;
+        right: 16px;
+        width: auto;
+      }
+      .legend-panel {
+        display: none;
+      }
+      .playback-bar {
+        bottom: 16px;
+        width: calc(100% - 32px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div class="vignette-overlay"></div>
+
+  <!-- Loading State -->
+  <div id="loader">
+    <div class="spinner"></div>
+    <div class="loader-text">INITIALIZING MANHATTAN CAB TRAJECTORIES...</div>
+  </div>
+
+  <!-- Main HUD Overlay -->
+  <div class="glass-card header-panel">
+    <div class="badge-live">
+      <span class="badge-dot"></span>
+      Autonomous Dynamic Feed
+    </div>
+    <h1>Manhattan Taxi Streams</h1>
+    <div class="description">
+      Temporal 3D reconstruction of 996 GPS taxi paths weaving across Manhattan's street grid.
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">Active Cabs</div>
+        <div class="stat-value" id="stat-active">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Sim Time</div>
+        <div class="stat-value" id="stat-clock">00:00:00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend Panel -->
+  <div class="glass-card legend-panel">
+    <div class="panel-title">Fleet Vendors</div>
+    <div class="legend-item" id="filter-v0" title="Click to toggle Vendor 0">
+      <div class="legend-info">
+        <div class="legend-line vendor-0"></div>
+        <span class="legend-text">Vendor 1 (Gold)</span>
+      </div>
+      <span class="legend-count" id="count-v0">—</span>
+    </div>
+    <div class="legend-item" id="filter-v1" title="Click to toggle Vendor 1">
+      <div class="legend-info">
+        <div class="legend-line vendor-1"></div>
+        <span class="legend-text">Vendor 2 (Cyan)</span>
+      </div>
+      <span class="legend-count" id="count-v1">—</span>
+    </div>
+  </div>
+
+  <!-- Playback Control Bar -->
+  <div class="glass-card playback-bar">
+    <div class="timeline-row">
+      <button class="btn-play" id="btn-toggle-play" aria-label="Pause/Play">
+        <svg id="play-icon" viewBox="0 0 24 24" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
+      <div class="slider-track-wrap">
+        <div class="time-readout">
+          <span>T+ <span id="label-curr-sec" class="time-current">0.0s</span></span>
+          <span id="label-max-sec">2487s (Loop)</span>
+        </div>
+        <input type="range" id="time-slider" min="0" max="2500" step="1" value="0">
+      </div>
+    </div>
+
+    <div class="controls-secondary">
+      <div class="control-group">
+        <span>Speed</span>
+        <div class="pill-btn-group">
+          <button class="pill-btn" data-speed="10">0.5x</button>
+          <button class="pill-btn active" data-speed="20">1x</button>
+          <button class="pill-btn" data-speed="50">2.5x</button>
+          <button class="pill-btn" data-speed="100">5x</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <span>Trail</span>
+        <div class="pill-btn-group">
+          <button class="pill-btn" data-trail="60">Short</button>
+          <button class="pill-btn active" data-trail="120">Normal</button>
+          <button class="pill-btn" data-trail="240">Long</button>
+        </div>
+      </div>
+
+      <button class="camera-btn" id="btn-cinematic">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        <span>Cinematic Orbit</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Exact initial view state centered on Manhattan
+    const INITIAL_VIEW_STATE = {
+      longitude: -74,
+      latitude: 40.72,
+      zoom: 13,
+      pitch: 45,
+      bearing: 0,
+      maxPitch: 65,
+      minZoom: 10,
+      maxZoom: 17
+    };
+
+    const DATA_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json';
+    const LOOP_LENGTH = 2500; // Total timestamp span
+
+    // State Variables
+    let tripsData = [];
+    let currentTime = 0;
+    let isPlaying = true;
+    let playbackSpeed = 20; // units per second
+    let trailLength = 120;
+    let isCinematic = false;
+    let visibleVendors = { 0: true, 1: true };
+    let currentViewState = { ...INITIAL_VIEW_STATE };
+    let lastTimestamp = performance.now();
+
+    // MapLibre token-free style setup
+    window.mapboxgl = maplibregl;
+
+    // Initialize deck.gl instance with MapLibre dark-matter basemap
+    const deckgl = new deck.DeckGL({
+      container: 'app',
+      map: maplibregl,
+      mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+      initialViewState: currentViewState,
+      controller: true,
+      onViewStateChange: ({ viewState }) => {
+        currentViewState = viewState;
+      }
+    });
+
+    // Helper: Interpolate active cab positions for glowing vehicular spark-heads
+    function getActiveVehiclePositions(trips, time) {
+      const active = [];
+      for (let i = 0; i < trips.length; i++) {
+        const trip = trips[i];
+        if (!visibleVendors[trip.vendor]) continue;
+
+        const ts = trip.timestamps;
+        const start = ts[0];
+        const end = ts[ts.length - 1];
+
+        if (time >= start && time <= end) {
+          // Binary search for closest segment
+          let low = 0;
+          let high = ts.length - 1;
+          while (low <= high) {
+            const mid = (low + high) >> 1;
+            if (ts[mid] <= time) {
+              low = mid + 1;
+            } else {
+              high = mid - 1;
+            }
+          }
+          const idx = Math.max(0, high);
+          if (idx < ts.length - 1) {
+            const t0 = ts[idx];
+            const t1 = ts[idx + 1];
+            const ratio = (time - t0) / (t1 - t0 || 1);
+            const p0 = trip.path[idx];
+            const p1 = trip.path[idx + 1];
+
+            active.push({
+              position: [
+                p0[0] + (p1[0] - p0[0]) * ratio,
+                p0[1] + (p1[1] - p0[1]) * ratio
+              ],
+              vendor: trip.vendor
+            });
+          }
+        }
+      }
+      return active;
+    }
+
+    // Update & Re-render deck.gl layers
+    function updateLayers() {
+      const filteredTrips = tripsData.filter(d => visibleVendors[d.vendor]);
+      const activeVehicles = getActiveVehiclePositions(tripsData, currentTime);
+
+      // UI Counter update
+      document.getElementById('stat-active').innerText = activeVehicles.length;
+
+      const layers = [
+        // 1. The glowing trajectory trails
+        new deck.TripsLayer({
+          id: 'taxi-trips',
+          data: filteredTrips,
+          getPath: d => d.path,
+          getTimestamps: d => d.timestamps,
+          getColor: d => (d.vendor === 0 ? [255, 177, 42] : [0, 229, 255]),
+          opacity: 0.85,
+          widthMinPixels: 2.5,
+          rounded: true,
+          fadeTrail: true,
+          trailLength: trailLength,
+          currentTime: currentTime
+        }),
+
+        // 2. Halo outer glow on active vehicle heads
+        new deck.ScatterplotLayer({
+          id: 'vehicle-glow',
+          data: activeVehicles,
+          getPosition: d => d.position,
+          getFillColor: d => (d.vendor === 0 ? [255, 177, 42, 60] : [0, 229, 255, 60]),
+          radiusUnits: 'meters',
+          getRadius: 38,
+          radiusMinPixels: 3,
+          radiusMaxPixels: 12
+        }),
+
+        // 3. Bright pinpoint vehicle sparks
+        new deck.ScatterplotLayer({
+          id: 'vehicle-sparks',
+          data: activeVehicles,
+          getPosition: d => d.position,
+          getFillColor: d => (d.vendor === 0 ? [255, 240, 200, 255] : [220, 255, 255, 255]),
+          radiusUnits: 'meters',
+          getRadius: 14,
+          radiusMinPixels: 2,
+          radiusMaxPixels: 6
+        })
+      ];
+
+      deckgl.setProps({ layers });
+    }
+
+    // Format seconds to HH:MM:SS virtual clock
+    function formatSimTime(seconds) {
+      const baseSec = 6 * 3600 + Math.floor(seconds); // Start simulated at 06:00:00 AM
+      const hrs = String(Math.floor(baseSec / 3600) % 24).padStart(2, '0');
+      const mins = String(Math.floor((baseSec % 3600) / 60)).padStart(2, '0');
+      const secs = String(baseSec % 60).padStart(2, '0');
+      return `${hrs}:${mins}:${secs}`;
+    }
+
+    // Main Animation Loop
+    function animate(now) {
+      const dt = (now - lastTimestamp) / 1000;
+      lastTimestamp = now;
+
+      if (isPlaying && tripsData.length > 0) {
+        currentTime = (currentTime + dt * playbackSpeed) % LOOP_LENGTH;
+        
+        // Sync slider & readouts
+        const slider = document.getElementById('time-slider');
+        slider.value = currentTime;
+        document.getElementById('label-curr-sec').innerText = `${currentTime.toFixed(1)}s`;
+        document.getElementById('stat-clock').innerText = formatSimTime(currentTime);
+
+        // Optional smooth cinematic orbit
+        if (isCinematic) {
+          currentViewState = {
+            ...currentViewState,
+            bearing: (currentViewState.bearing + 0.05) % 360
+          };
+          deckgl.setProps({ initialViewState: currentViewState });
+        }
+
+        updateLayers();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    // Load Real Taxi Data
+    fetch(DATA_URL)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        tripsData = data;
+
+        // Count totals per vendor
+        let c0 = 0, c1 = 0;
+        data.forEach(d => { if (d.vendor === 0) c0++; else c1++; });
+        document.getElementById('count-v0').innerText = `${c0} trips`;
+        document.getElementById('count-v1').innerText = `${c1} trips`;
+
+        // Hide loader with smooth transition
+        const loader = document.getElementById('loader');
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 500);
+
+        // Enhance MapLibre Basemap with 3D buildings once ready
+        const map = deckgl.getMapboxMap();
+        if (map) {
+          const addBuildings = () => {
+            try {
+              const layers = map.getStyle().layers;
+              const labelLayer = layers && layers.find(l => l.type === 'symbol' && l.layout && l.layout['text-field']);
+              const labelId = labelLayer ? labelLayer.id : undefined;
+
+              if (map.getSource('carto') && !map.getLayer('3d-buildings')) {
+                map.addLayer({
+                  id: '3d-buildings',
+                  source: 'carto',
+                  'source-layer': 'building',
+                  type: 'fill-extrusion',
+                  minzoom: 13,
+                  paint: {
+                    'fill-extrusion-color': '#11151f',
+                    'fill-extrusion-height': ['coalesce', ['get', 'render_height'], 12],
+                    'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
+                    'fill-extrusion-opacity': 0.72
+                  }
+                }, labelId);
+              }
+            } catch (err) {
+              // Silently handle if source layout differs
+            }
+          };
+
+          if (map.isStyleLoaded()) {
+            addBuildings();
+          } else {
+            map.once('style.load', addBuildings);
+          }
+        }
+
+        // Trigger immediate animation start
+        lastTimestamp = performance.now();
+        requestAnimationFrame(animate);
+      })
+      .catch(err => {
+        console.error('Data loading error:', err);
+        document.querySelector('.loader-text').innerText = 'ERROR LOADING DATASET';
+        document.querySelector('.spinner').style.borderTopColor = '#ef4444';
+      });
+
+    // Interactive Controls Setup
+    const playBtn = document.getElementById('btn-toggle-play');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const slider = document.getElementById('time-slider');
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playIcon.style.display = isPlaying ? 'none' : 'block';
+      pauseIcon.style.display = isPlaying ? 'block' : 'none';
+      if (isPlaying) {
+        lastTimestamp = performance.now();
+      }
+    });
+
+    slider.addEventListener('input', (e) => {
+      currentTime = parseFloat(e.target.value);
+      document.getElementById('label-curr-sec').innerText = `${currentTime.toFixed(1)}s`;
+      document.getElementById('stat-clock').innerText = formatSimTime(currentTime);
+      updateLayers();
+    });
+
+    // Speed Preset Buttons
+    document.querySelectorAll('[data-speed]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('[data-speed]').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        playbackSpeed = parseFloat(e.target.dataset.speed);
+      });
+    });
+
+    // Trail Length Buttons
+    document.querySelectorAll('[data-trail]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('[data-trail]').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        trailLength = parseFloat(e.target.dataset.trail);
+        updateLayers();
+      });
+    });
+
+    // Cinematic Orbit Toggle
+    const cinematicBtn = document.getElementById('btn-cinematic');
+    cinematicBtn.addEventListener('click', () => {
+      isCinematic = !isCinematic;
+      cinematicBtn.classList.toggle('active', isCinematic);
+    });
+
+    // Vendor Visibility Toggles
+    const setupVendorFilter = (elementId, vendorKey) => {
+      const el = document.getElementById(elementId);
+      el.addEventListener('click', () => {
+        visibleVendors[vendorKey] = !visibleVendors[vendorKey];
+        el.style.opacity = visibleVendors[vendorKey] ? '1' : '0.35';
+        updateLayers();
+      });
+    };
+    setupVendorFilter('filter-v0', 0);
+    setupVendorFilter('filter-v1', 1);
+
+    // Prevent propagation on UI panels to retain smooth map interaction
+    document.querySelectorAll('.glass-card').forEach(panel => {
+      panel.addEventListener('pointerdown', e => e.stopPropagation());
+      panel.addEventListener('wheel', e => e.stopPropagation());
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+ "renders": 1,
+ "spec_compliance": 1,
+ "cartography": 2,
+ "interactivity": 1,
+ "api_currency": 0,
+ "deckgl_version": "8.9.36",
+ "basemap_integration": "other",
+ "notes": [
+  "Fatal integration bug: `map.addLayer(overlay)` instead of `map.addControl(overlay)` \u2014 MapLibre rejects the MapboxOverlay as a style layer (console: 'layers.undefined: either \"type\" or \"ref\" is required'), so no TripsLayer is ever drawn; all three screenshots show only the CARTO dark basemap.",
+  "Data does load (legend shows '802 rides'/'194 rides', clock advances to T+12:30) but the animation and orbit camera are not visible \u2014 the view is pixel-identical at 3 s, 8 s and 14 s.",
+  "HUD design (title, control panel, legend, clock) is polished and legible, and the dark basemap/Manhattan centering are correct, but the map itself carries zero data, violating 'no console errors, no missing data'."
+ ],
+ "total": 5,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

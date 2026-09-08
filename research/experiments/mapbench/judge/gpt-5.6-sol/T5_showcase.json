@@ -1,0 +1,16 @@
+{
+ "renders": 2,
+ "spec_compliance": 5,
+ "cartography": 3,
+ "interactivity": 3,
+ "api_currency": 2,
+ "deckgl_version": "9.1.14",
+ "basemap_integration": "maplibre-overlay",
+ "notes": [
+  "Animation runs on load and camera drifts (timer 00:12\u219200:56, view shifts across screenshots); '996 journeys' confirms real data load, zero console/HTTP errors.",
+  "Trip trails are visually weak: at t14 they appear as tiny cyan/coral specks and short dashes against a relatively bright Carto dark-matter road grid, so data does not dominate the visual hierarchy despite 'luminous trail' caption.",
+  "Polished UI (title, caption, glass panel with slider, play/pause, speed select, camera toggle, vendor legend, single maplibre canvas suggests interleaved deck.gl 9.1.14 overlay); minor defect: caption text overlaps/garbles at t3 ('while its leading' doubled) and header collides with basemap labels like 'Hoboken'."
+ ],
+ "total": 15,
+ "judge_model": "anthropic/claude-fable-5.1"
+}

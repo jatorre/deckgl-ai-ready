@@ -1,8 +1,10 @@
 {
   "preamble": "Build a single-page web map with deck.gl. Deliver ONE self-contained index.html: load every library from a public CDN with <script> tags (no build step, no npm, no bundler, no ES module imports from node_modules), use no API keys or tokens of any kind, and pick a basemap style URL that needs no token. The map must fill the browser window. Load the real dataset from the URL given; do not use placeholder data. Use the exact initial view given so results can be compared. Output only the complete HTML file in a single code block, with no explanation before or after.",
   "models": {
+    "claude-opus-4.8": "anthropic/claude-opus-4.8",
     "claude-fable-5.1": "anthropic/claude-fable-5.1",
     "gpt-5.6-sol": "openai/gpt-5.6-sol",
+    "gpt-6-astra": "openai/gpt-6-astra",
     "gemini-3.8-flash": "google/gemini-3.8-flash",
     "gemini-3.1-pro": "google/gemini-3.1-pro-preview",
     "glm-5.3": "z-ai/glm-5.3"
@@ -27,6 +29,11 @@
       "title": "Animated taxi trips with play/pause over a dark basemap",
       "probe": "TripsLayer animation loop + MapLibre overlay + UI state wired to layer props",
       "prompt": "Data: https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json is a JSON array of 996 trips shaped like {\"vendor\": 0 | 1, \"path\": [[longitude, latitude], ...], \"timestamps\": [seconds, ...]}. Timestamps run from 6 to about 2,487 seconds.\n\nAnimate the trips as moving trails over a dark MapLibre GL JS basemap, colored by vendor with two distinct colors, with a trail length of about 180 seconds, looping continuously so one full pass of the data takes about 60 real seconds. Add a play/pause button and a readout of the current time in seconds. Initial view: longitude -74.00, latitude 40.72, zoom 12, pitch 45, bearing 0."
+    },
+    "T5_showcase": {
+      "title": "Open brief: the most impressive deck.gl visualization you can build",
+      "probe": "ambition, depth and polish when the spec is open; differentiates models",
+      "prompt": "Data: https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/trips-v7.json is a JSON array of 996 New York taxi trips shaped like {\"vendor\": 0 | 1, \"path\": [[longitude, latitude], ...], \"timestamps\": [seconds, ...]}, timestamps from 6 to about 2,487 seconds.\n\nBuild the most impressive, polished, single-page deck.gl visualization of this data that you can. You decide the design. Ideas, not requirements: animated trails, 3D extruded buildings or other 3D context, lighting and effects, a slowly moving cinematic camera, a legend, a title and a short caption, a control panel, a considered color palette. It must start animating on load without user interaction, be centered on Manhattan, use a dark token-free basemap, and be robust: no console errors, no missing data. Judge yourself as a demanding visualization designer would."
     }
   }
 }

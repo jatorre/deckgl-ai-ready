@@ -1,0 +1,33 @@
+{
+ "slug": "claude-opus-4.8",
+ "model": "anthropic/claude-opus-4.8",
+ "task": "T1_airports_points",
+ "seconds": 13.9,
+ "finish_reason": "stop",
+ "usage": {
+  "prompt_tokens": 440,
+  "completion_tokens": 1349,
+  "total_tokens": 1789,
+  "cost": 0.035925,
+  "is_byok": false,
+  "prompt_tokens_details": {
+   "cached_tokens": 0,
+   "cache_write_tokens": 0,
+   "audio_tokens": 0,
+   "video_tokens": 0
+  },
+  "cost_details": {
+   "upstream_inference_cost": 0.035925,
+   "upstream_inference_prompt_cost": 0.0022,
+   "upstream_inference_completions_cost": 0.033725
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 0,
+   "image_tokens": 0,
+   "audio_tokens": 0
+  }
+ },
+ "html_bytes": 3006,
+ "raw_chars": 3018,
+ "looks_like_html": true
+}

@@ -1,0 +1,56 @@
+{
+ "slug": "claude-opus-4.8",
+ "task": "T3_uk_accidents_hexagons",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [
+  "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css :: net::ERR_BLOCKED_BY_ORB"
+ ],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/deck.gl@8.9.35/dist.min.js",
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/papaparse@5.4.1/papaparse.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/claude-opus-4.8/T3_uk_accidents_hexagons.t3.png",
+  "t8": "render/claude-opus-4.8/T3_uk_accidents_hexagons.t8.png",
+  "t14": "render/claude-opus-4.8/T3_uk_accidents_hexagons.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": ""
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/deck.gl@8.9.35/dist.min.js",
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/papaparse@5.4.1/papaparse.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css",
+   "https://api.tiles.mapbox.com/mapbox-gl-js/v3.6.2/mapbox-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nHexagon radius: 1000 m",
+  "buttons": [],
+  "sliders": 1,
+  "title": "Deck.gl 3D Hexagon Heatmap"
+ },
+ "deckgl_cdn_version": "8.9.35",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 14.1
+}

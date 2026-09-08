@@ -1,0 +1,33 @@
+{
+ "slug": "gpt-6-astra",
+ "model": "openai/gpt-6-astra",
+ "task": "T5_showcase",
+ "seconds": 170.6,
+ "finish_reason": "stop",
+ "usage": {
+  "prompt_tokens": 325,
+  "completion_tokens": 10180,
+  "total_tokens": 10505,
+  "cost": 0.51225,
+  "is_byok": false,
+  "prompt_tokens_details": {
+   "cached_tokens": 0,
+   "cache_write_tokens": 0,
+   "audio_tokens": 0,
+   "video_tokens": 0
+  },
+  "cost_details": {
+   "upstream_inference_cost": 0.51225,
+   "upstream_inference_prompt_cost": 0.00325,
+   "upstream_inference_completions_cost": 0.509
+  },
+  "completion_tokens_details": {
+   "reasoning_tokens": 1034,
+   "image_tokens": 0,
+   "audio_tokens": 0
+  }
+ },
+ "html_bytes": 31327,
+ "raw_chars": 31339,
+ "looks_like_html": true
+}

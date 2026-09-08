@@ -1,0 +1,57 @@
+{
+ "slug": "gpt-6-astra",
+ "task": "T3_uk_accidents_hexagons",
+ "console_errors": [],
+ "console_warnings": [],
+ "page_errors": [],
+ "request_failed": [],
+ "http_errors": [],
+ "scripts": [
+  "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+  "https://unpkg.com/deck.gl@8.9.36/dist.min.js",
+  "https://cdn.jsdelivr.net/npm/d3-dsv@3.0.1/dist/d3-dsv.min.js"
+ ],
+ "screenshots": {
+  "t3": "render/gpt-6-astra/T3_uk_accidents_hexagons.t3.png",
+  "t8": "render/gpt-6-astra/T3_uk_accidents_hexagons.t8.png",
+  "t14": "render/gpt-6-astra/T3_uk_accidents_hexagons.t14.png"
+ },
+ "dom": {
+  "canvases": [
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "maplibregl-canvas",
+    "id": ""
+   },
+   {
+    "w": 1280,
+    "h": 800,
+    "cls": "",
+    "id": "deckgl-overlay"
+   }
+  ],
+  "scripts": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js",
+   "https://unpkg.com/deck.gl@8.9.36/dist.min.js",
+   "https://cdn.jsdelivr.net/npm/d3-dsv@3.0.1/dist/d3-dsv.min.js"
+  ],
+  "links": [
+   "https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css"
+  ],
+  "hasDeckGlobal": true,
+  "hasMaplibreGlobal": true,
+  "hasMapboxGlobal": false,
+  "bodyText": "© CARTO, © OpenStreetMap contributors\nRoad accidents\n\nGreat Britain · 3D hexagonal aggregation\n\nHexagon radius\n1,000 m\n500 m\n5,000 m\nFewer accidents\nMore accidents\n\nColor and height show the number of accidents per cell.\n\n140,029 accident locations loaded\n\nHover for counts · Drag to pan · Scroll to zoom\nRight-drag to rotate and tilt",
+  "buttons": [
+   "",
+   "",
+   ""
+  ],
+  "sliders": 1,
+  "title": "Great Britain Road Accidents — 3D Hexagon Map"
+ },
+ "deckgl_cdn_version": "8.9.36",
+ "maplibre_cdn_version": "3.6.2",
+ "total_seconds": 14.1
+}

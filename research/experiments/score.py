@@ -44,7 +44,7 @@ for f in sorted(glob.glob(f"{R}/*/*.md")):
     rows.append((key, model, s))
 by_key = collections.defaultdict(list)
 for key, model, s in rows: by_key[key].append((model, s))
-order = ["claude-haiku-4-5-20251001","claude-sonnet-5","claude-opus-5","claude-fable-5-1","codex-gpt-5.6-sol","gpt-4o","gpt-5-mini","gpt-5.2","gemini-3.7-flash","gemini-3.1-pro-preview"]
+order = ["claude-haiku-4-5-20251001","claude-sonnet-5","claude-opus-5","claude-opus-4.8","claude-fable-5-1","codex-gpt-5.6-sol","gpt-6-astra","gpt-4o","gpt-5-mini","gpt-5.2","gemini-3.7-flash","gemini-3.8-flash","gemini-3.1-pro-preview","glm-5.3"]
 for key in sorted(by_key):
     print(f"\n### {key}")
     for model in order:

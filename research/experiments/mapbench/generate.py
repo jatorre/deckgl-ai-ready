@@ -21,6 +21,8 @@ def run(slug, model, tkey, task):
     if os.path.exists(meta_path): return f"skip {slug}/{tkey}"
     prompt = cfg["preamble"] + "\n\n" + task["prompt"]
     body = {"model": model, "messages": [{"role": "user", "content": prompt}], "max_tokens": 24000}
+    if "gpt-6" in model:  # reasoning counts toward the budget on OpenAI models
+        body["max_tokens"] = 40000
     if "glm" in model:  # GLM 5.3 spends the whole budget on hidden reasoning by default (24k reasoning tokens, empty content)
         body["reasoning"] = {"max_tokens": 8000}; body["max_tokens"] = 32000  # thinking is mandatory on this endpoint; effort=low still burned 40k reasoning tokens on 3 of 4 tasks
     req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", data=json.dumps(body).encode(),
