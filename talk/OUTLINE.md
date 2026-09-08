@@ -24,7 +24,7 @@ Live deck.gl map behind (`talk/title-map.html`: MapLibre restyled in CARTO blue 
 - **Many applications will use deck.gl with agents to drive dynamic maps** — the logical interface: agent writes declarative JSON; flow diagram with the missing back-channel.
 - **Everyone is already doing it** — CARTO, SQLRooms, pydeck/kepler/noodles + Ib's 2018 RFC quote and the 2026 v2 tracker.
 - **How CARTO does it, two ways** — verbs on a live map vs a document the agent writes; both hit the same wall.
-- **The problem: nothing fails loudly** — 36 KB of instructions; 0 errors on unknown layers; 1.9 MB Vega-Lite schema vs counting layers; errors-only passive feedback; write-only loop.
+- **Two problems: we flood the agent's context, and it never learns what happened** — going in: 36 KB of rules because there is no schema (vs a 1.9 MB Vega-Lite schema for charts); coming back: nothing (silent drops, no state); errors-only passive feedback.
 - **Can frontier models write the spec?** — 7-model chips (4 valid, 1 CARTO helper, 2 invented helpers), the invented-helper snippet, "what the user sees".
 - **Proposal** — schema from Zod, loud failure, state read-back, patch semantics, data sources, registry profiles; two provocations; finish what Ib started.
 

@@ -266,17 +266,19 @@
 
 <section data-q="3" data-background-color="#4b2ccf">
   <span class="kicker">Q3 · How can agents drive deck.gl interactively?</span>
-  <h2>The problem: nothing fails loudly</h2>
-  <div class="three">
-    <div class="card"><div class="stat" style="margin:0"><div class="n amber">36 KB</div><div class="l">of instructions an agent must read to write a valid spec</div></div><p class="xs" style="margin-top:.5em">Half of it lists ways to get an <b>empty map with no error</b>: wrong layer, wrong layer-source pairing, missing aggregation, deep expression.</p></div>
-    <div class="card"><div class="stat" style="margin:0"><div class="n amber">0</div><div class="l">errors when a layer type is unknown</div></div><p class="xs" style="margin-top:.5em">Upstream: <code>log.warn</code>, returns <code>null</code>. The docs: "Error detection is currently limited and error messages may not be very helpful."</p></div>
-    <div class="card"><div class="stat" style="margin:0"><div class="n amber">1.9 MB</div><div class="l">JSON Schema we validate Vega-Lite charts against, in the same service</div></div><p class="xs" style="margin-top:.5em">For deck.gl specs we count layers before and after conversion. Charts get a type system. Maps get prose.</p></div>
+  <h2>We flood the agent's context, and it never learns what happened</h2>
+  <div class="two" style="gap:26px">
+    <div class="card"><div class="xs" style="color:var(--lime);font-weight:700;letter-spacing:.08em;text-transform:uppercase">Going in</div>
+      <div class="stat" style="margin:.1em 0 .2em"><div class="n amber">36 KB</div><div class="l" style="max-width:22ch">of rules the agent must read on every call</div></div>
+      <p class="small" style="margin:.2em 0 0;font-size:.62em">The spec has no schema, so every rule about what will render lives in prose: which layers exist, which layer takes which source, which props are required, which expressions are allowed. Half of it lists ways to get an <b>empty map with no error</b>. For charts, the same service hands a 1.9 MB JSON Schema to a validator instead.</p>
+    </div>
+    <div class="card"><div class="xs" style="color:var(--lime);font-weight:700;letter-spacing:.08em;text-transform:uppercase">Coming back</div>
+      <div class="stat" style="margin:.1em 0 .2em"><div class="n amber">0</div><div class="l" style="max-width:22ch">errors, viewport, counts or clicks returned to the agent</div></div>
+      <p class="small" style="margin:.2em 0 0;font-size:.62em">An unknown layer type is logged and replaced with <code>null</code>; the map renders without it. The docs: "Error detection is currently limited." Nothing flows back from the rendered map, so the agent cannot see what it built. We send errors only, passively, with the legal alternatives spelled out. Silence equals success.</p>
+    </div>
   </div>
-  <ul class="small check" style="margin-top:.7em">
-    <li><b>An agent recovers from any error it can see.</b> It cannot recover from an empty map, so we send errors only, passively, with the legal alternatives spelled out. Silence equals success.</li>
-    <li><b>The loop is write-only.</b> No viewport, counts or clicks come back. The agent cannot look at its own map.</li>
-  </ul>
-  <aside class="notes">Actively messaging the model about a failure over an optimistic tool result made it oscillate and retry identical arguments. Everything on this slide is a workaround for one upstream behaviour.</aside>
+  <p class="lead" style="margin-top:.55em;font-size:.95em">An agent recovers from any error it can see. Not from an empty map.</p>
+  <aside class="notes">Both problems have the same root: deck.gl JSON has no schema and no return channel. Because there is no schema, we push nine thousand tokens of rules into the context every time, and most of it is a list of silent failures. Because there is no return channel, when the guess is wrong the agent hears nothing: the map is empty and the tool result said success. Actively messaging the model about a failure over that optimistic result made it oscillate and retry identical arguments, which is why the feedback is errors-only and passive. Everything on this slide is a workaround for one upstream behaviour.</aside>
 </section>
 
 <section data-q="3" data-background-color="#4b2ccf">
