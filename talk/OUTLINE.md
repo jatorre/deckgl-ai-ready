@@ -34,6 +34,12 @@ Live deck.gl map behind (`talk/title-map.html`: MapLibre restyled in CARTO blue 
 ## Q5 · How do we handle AI contributions? (plum)
 - **deck.gl has no policy for AI contributions. The contributions are already here.** — evidence + suggestions.
 
+## Proposal PRs (opened 8 Sept, drafts from jatorre/deck.gl)
+- visgl/deck.gl #10677 — website: publish llms.txt and per-page Markdown (mirrors luma.gl's plugin config; local build verified).
+- visgl/deck.gl #10678 — docs: `skills/deckgl` agent skill + "Working with AI Coding Agents" guide.
+- visgl/deck.gl #10679 — RFC: `@deck.gl/json` v2 as the agent-native interface (dev-docs/RFCs/v10.0).
+Each commit carries an `Assisted-by: Claude (Claude Code)` trailer and the PR bodies disclose it.
+
 ## Close
 Four asks for Thursday (JSON v2; llms.txt + skills; improve docs and examples now with AI; AI contribution policy). "Agents are deck.gl's newest users. They already like it. Let's make it easy for them to be right."
 

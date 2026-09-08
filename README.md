@@ -16,6 +16,10 @@ Talk, research and experiments for **"Making deck.gl AI-Ready: Declarative Specs
 
 Everything was researched, run and written with Claude Code in the two days before the talk; the session is linked from the commits.
 
+## Proposal pull requests
+
+The suggestions in the talk were opened as draft PRs against `visgl/deck.gl` the day before the talk, each disclosing AI assistance: [#10677 llms.txt](https://github.com/visgl/deck.gl/pull/10677), [#10678 agent skill and AI guide](https://github.com/visgl/deck.gl/pull/10678), [#10679 JSON v2 RFC](https://github.com/visgl/deck.gl/pull/10679).
+
 ## License
 
 Code and harnesses: MIT. Slides and text: CC BY 4.0. Model outputs in `results/` and `mapbench/out/` are reproduced as generated for research purposes.
