@@ -330,30 +330,30 @@
   <h2>How does deck.gl compare with similar projects?</h2>
   <table>
     <tr><th>Site</th><th>llms.txt</th><th>Agent skills</th><th>MCP server</th></tr>
-    <tr><td>luma.gl <span class="xs">same TSC</span></td><td class="ok">yes, 97 KB</td><td class="muted">—</td><td class="muted">—</td></tr>
+    <tr><td>luma.gl <span class="xs">same TSC</span></td><td class="ok">yes, 97 KB + page Markdown</td><td class="ok">official <code>lumagl</code> skill in the repo, plus a "Working with AI" guide</td><td class="muted">—</td></tr>
     <tr><td>maplibre.org</td><td class="ok">yes</td><td class="ok">official repo, 9 skills, "to inform the LLMs"</td><td class="muted">community</td></tr>
     <tr><td>docs.mapbox.com</td><td class="ok">yes</td><td class="muted">—</td><td class="ok">two official, one for coding agents</td></tr>
     <tr><td><b>deck.gl</b></td><td class="bad">404</td><td class="bad">none</td><td class="bad">none</td></tr>
   </table>
   <div class="two" style="margin-top:.7em">
     <p class="small"><b class="muted">Measured consequence.</b> Every frontier model stops at deck.gl 9.0 or 9.1. Most generated maps load a v8 bundle. Six of seven explain a module rename that already happened.</p>
-    <div class="card teal"><h3>Suggestions</h3><ul class="small"><li>llms.txt and page-level Markdown; luma.gl already has the pipeline</li><li>An official agent-skills repo: MapLibre on 9.4, v8 to v9 migration, binary data at scale, the JSON spec, the aggregation layers' unwritten rules</li><li>A machine-readable what's-new</li></ul></div>
+    <div class="card teal"><h3>Suggestions: copy luma.gl, one repo over</h3><ul class="small"><li>The same llms.txt plugin and page-level Markdown; luma.gl's config is 30 lines</li><li>A <code>skills/deckgl</code> skill in the repo: MapLibre on 9.4, v8 to v9, binary data at scale, the JSON spec, the aggregation layers' unwritten rules</li><li>A "Working with AI" page and a machine-readable what's-new</li></ul></div>
   </div>
-  <aside class="notes">MapLibre launched skills in February "to inform the LLMs" and stop "bad or wrong MapLibre integrations". That is question two in one sentence, done seven months ago. Cheapest fix in the talk.</aside>
+  <aside class="notes">MapLibre launched skills in February "to inform the LLMs" and stop "bad or wrong MapLibre integrations". And luma.gl, in this same TSC, already ships the whole kit: the llms.txt plugin, a progressive skill installable with npx skills add, and a developer-guide page on working with AI agents. deck.gl only has to copy its sibling. Cheapest fix in the talk, and I have a draft PR.</aside>
 </section>
 
 <!-- ===== Q5 ===== -->
 <section data-q="5" data-background-color="#5a1f7a">
   <span class="kicker">Q5 · How do we handle AI contributions?</span>
-  <h2>deck.gl has no policy for AI contributions. The contributions are already here.</h2>
+  <h2>deck.gl briefs the agents, but has no policy for their contributions</h2>
   <div class="two">
     <ul class="small">
-      <li>Contributing guide, PR template, TSC charter, governance, developer process: <b>zero</b> mentions of AI.</li>
+      <li>deck.gl has an <code>AGENTS.md</code> telling <i>agents</i> how to contribute. Its contributing guide, PR template and every TSC document tell <i>humans</i> nothing about contributing with AI.</li>
       <li>Elsewhere: bans (Zig, Gentoo, QEMU, Bevy, GIMP) · disclosure (curl, Linux, Apache, LLVM, Kubernetes, NumPy) · conditional (CPython, PyTorch).</li>
       <li>OpenJS Foundation, after the 19,000-line Node.js PR built with a coding agent: the DCO covers AI-assisted code.</li>
       <li>Already in our ecosystem: a deck integration planned "with the help of gpt-5.4"; three AI-forward RFCs in one day; this talk.</li>
     </ul>
-    <div class="card teal"><h3>Suggestions</h3><ul class="small"><li>Disclosure: an <code>Assisted-by:</code> trailer; the contributor understands and has tested the code</li><li>No AI on good-first-issues, LLVM's rule</li><li>A PR template checkbox</li><li>An <code>AGENTS.md</code>: the developer-process docs are now the agent's instructions</li></ul></div>
+    <div class="card teal"><h3>Suggestions</h3><ul class="small"><li>Disclosure: an <code>Assisted-by:</code> trailer; the contributor understands and has tested the code</li><li>No AI on good-first-issues, LLVM's rule</li><li>A PR template checkbox</li><li>Point <code>AGENTS.md</code> and the developer process at the same policy: those docs are now the agent's instructions too</li></ul></div>
   </div>
   <aside class="notes">The maintainers' fear is slop and review burden, and it is legitimate. Disclosure plus "you understand and tested it" plus protecting good-first-issues is where most mature projects landed. We only need to write it down.</aside>
 </section>
