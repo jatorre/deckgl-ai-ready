@@ -79,7 +79,7 @@
 <div class="slides">
 
 <!-- 0 · Title -->
-<section data-background-color="#0b0f14">
+<section data-background-color="#0b0f14" data-background-image="research/experiments/mapbench/render/claude-fable-5.1/T3_uk_accidents_hexagons.t14.png" data-background-size="cover" data-background-position="right center" data-background-opacity="0.28">
   <span class="kicker">Open Visualization Collaborator Summit · Zürich · 9 Sept 2026</span>
   <h1>Making deck.gl<br>AI-Ready</h1>
   <p class="lead">Declarative specs as an agent-native interface for maps</p>
@@ -256,7 +256,7 @@
 
 <section>
   <span class="kicker">Q3 · How can agents drive deck.gl interactively?</span>
-  <h2>What it costs to make a model write valid deck.gl JSON today</h2>
+  <h2>The cost of valid deck.gl JSON today</h2>
   <div class="three">
     <div class="card"><div class="stat" style="margin:0"><div class="n amber">36 KB</div><div class="l">the tool description an agent must read, about 9,000 tokens</div></div><p class="xs" style="margin-top:.6em">Half of it is a catalogue of <b>silent</b> failures: unregistered layer → empty map, no error. Wrong layer/source pairing → empty. Missing aggregation → empty. Deep ternary → blank tile.</p></div>
     <div class="card"><h3>Charts vs maps, same service</h3><p class="small">Vega-Lite charts: validated with Ajv against the official 1.9 MB JSON Schema, errors formatted for the model.<br>deck.gl specs: count the layers before and after conversion.</p><p class="xs">Charts get a type system. Maps get prose.</p></div>
@@ -273,7 +273,7 @@
 
 <section>
   <span class="kicker">Q3 · How can agents drive deck.gl interactively?</span>
-  <h2>Can models write the spec? <span class="muted">Choropleth by population, 10 models</span></h2>
+  <h2>Can models write the spec? <span class="muted">10 models, one choropleth</span></h2>
   <div class="two">
     <table>
       <tr><th>Outcome</th><th>Models</th></tr>
