@@ -345,6 +345,14 @@
 <!-- ===== Q5 ===== -->
 <section data-q="5" data-background-color="#5a1f7a">
   <span class="kicker">Q5 · How do we handle AI contributions?</span>
+  <h2>The contributions are already AI-assisted. Look at the PR descriptions.</h2>
+  <div style="background:#fff;border-radius:12px;padding:10px 12px 4px"><img src="talk/pr-description-length-monthly.png" alt="Median PR description length per month in visgl/deck.gl" style="width:100%;display:block;margin:0"></div>
+  <p class="small" style="margin-top:.6em">Median length of a pull request description in <b>visgl/deck.gl</b>, bots excluded: about 400 characters through mid-2025, 1,200 to 2,500 since late 2025. Four of the six most active contributors quadrupled theirs within two quarters; two did not change. The repo\'s own <code>AGENTS.md</code> now tells agents to prepare the PR description.</p>
+  <aside class="notes">Recomputed from the GitHub API on 772 human-authored PRs since September 2024, authors anonymized. Long, structured PR bodies are the fingerprint of an agent writing the description. This is not a complaint: the descriptions got better. It is evidence that AI assistance is already the norm here, with no norm for saying so. Backup slide has the per-author view.</aside>
+</section>
+
+<section data-q="5" data-background-color="#5a1f7a">
+  <span class="kicker">Q5 · How do we handle AI contributions?</span>
   <h2>deck.gl briefs the agents, but has no policy for their contributions</h2>
   <div class="two">
     <ul class="small">
@@ -416,6 +424,13 @@
     <li>Hexagons: hand-rolled TileLayer reading <code>props.bbox</code> instead of <code>props.tile.bbox</code>; hexagons on black.</li>
     <li>Trips: mutates <code>layer.props.currentTime</code> and calls internal <code>setState</code> instead of recreating the layer; the animation dies on frame one.</li>
   </ul>
+</section>
+
+<section data-background-color="#0b1a3a">
+  <span class="kicker amber">Backup · Q5 detail</span>
+  <h2>PR description length by author, visgl/deck.gl, quarterly medians</h2>
+  <div style="background:#fff;border-radius:12px;padding:10px 12px 4px"><img src="talk/pr-description-length-by-author.png" alt="Median PR description length per quarter for the six most active authors" style="width:100%;display:block;margin:0"></div>
+  <p class="xs" style="margin-top:.5em">Six most active authors, anonymized, plus everyone else (80 authors). Four of six rise from a few hundred characters to about 2,000 between 2025 Q4 and 2026 Q2; two stay flat. Bots excluded.</p>
 </section>
 
 <section data-background-color="#0b1a3a">
