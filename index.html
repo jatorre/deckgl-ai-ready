@@ -353,17 +353,17 @@
 
 <section data-q="5" data-background-color="#5a1f7a">
   <span class="kicker">Q5 · How do we handle AI contributions?</span>
-  <h2>deck.gl briefs the agents, but has no policy for their contributions</h2>
+  <h2>The Foundation has a policy. Our repos don't say so.</h2>
   <div class="two">
     <ul class="small">
-      <li>deck.gl has an <code>AGENTS.md</code> telling <i>agents</i> how to contribute. Its contributing guide, PR template and every TSC document tell <i>humans</i> nothing about contributing with AI.</li>
-      <li>Elsewhere: bans (Zig, Gentoo, QEMU, Bevy, GIMP) · disclosure (curl, Linux, Apache, LLVM, Kubernetes, NumPy) · conditional (CPython, PyTorch).</li>
-      <li>OpenJS Foundation, after the 19,000-line Node.js PR built with a coding agent: the DCO covers AI-assisted code.</li>
-      <li>Already in our ecosystem: a deck integration planned "with the help of gpt-5.4"; three AI-forward RFCs in one day; this talk.</li>
+      <li>OpenJS adopted a <b>Policy on Use of AI Coding Assistants</b> on 27 March 2026. It binds every submission to a vis.gl repo: you are responsible, humans alone sign the DCO, add an <code>Assisted-by</code> tag.</li>
+      <li>deck.gl has an <code>AGENTS.md</code> telling <i>agents</i> how to contribute. Its contributing guide, PR template and every TSC document tell <i>humans</i> nothing about it.</li>
+      <li>Node.js wrote it into its contributing docs in August; MapLibre has a policy and a PR checkbox. Elsewhere: bans (Zig, Gentoo, QEMU), disclosure (curl, Linux, LLVM, Kubernetes, NumPy).</li>
+      <li>Already here: PR descriptions tripled; an RFC "planned with the help of gpt-5.4"; three AI-forward RFCs in one day; this talk.</li>
     </ul>
-    <div class="card teal"><h3>Suggestions</h3><ul class="small"><li>Disclosure: an <code>Assisted-by:</code> trailer; the contributor understands and has tested the code</li><li>No AI on good-first-issues, LLVM's rule</li><li>A PR template checkbox</li><li>Point <code>AGENTS.md</code> and the developer process at the same policy: those docs are now the agent's instructions too</li></ul></div>
+    <div class="card teal"><h3>Suggestion: write it down. PRs are open.</h3><ul class="small" style="font-size:.68em"><li>vis.gl developer process: adopt the OpenJS policy plus eight practices from Node.js, MapLibre, LLVM and the kernel: <a href="https://github.com/visgl/tsc/pull/20" target="_blank" rel="noopener">visgl/tsc #20</a></li><li>deck.gl: contributing section, PR-template checkbox, <code>AGENTS.md</code> pointer: <a href="https://github.com/visgl/deck.gl/pull/10680" target="_blank" rel="noopener">#10680</a></li><li>Disclose, understand, verify; good first issues for people; no unattended agents</li></ul></div>
   </div>
-  <aside class="notes">The maintainers' fear is slop and review burden, and it is legitimate. Disclosure plus "you understand and tested it" plus protecting good-first-issues is where most mature projects landed. We only need to write it down.</aside>
+  <aside class="notes">The maintainers' fear is slop and review burden, and it is legitimate. The Foundation already settled the legal floor in March: responsibility stays with the submitter, only humans sign the DCO, tag your assistance. Node.js and MapLibre wrote it into their repos. Disclosure plus "you understand and tested it" plus protecting good-first-issues is where most mature projects landed. We only need to write it down, and the PR does.</aside>
 </section>
 
 <!-- ===== Close ===== -->
@@ -375,10 +375,10 @@
     <li>Adopt <code>@deck.gl/json</code> v2 as a TSC priority, with a schema and a conversion report. CARTO brings its production evidence and helps drive it.</li>
     <li>Ship llms.txt and an official agent-skills repo this quarter.</li>
     <li>Improve our documentation and examples now, with AI.</li>
-    <li>Adopt a disclosure-based AI contribution policy.</li>
+    <li>Adopt the OpenJS AI policy into the vis.gl developer process, with disclosure.</li>
   </ol>
   <div class="hairline"></div>
-  <p class="small" style="margin:.2em 0 .5em">Ready for Thursday: two draft PRs, <a href="https://github.com/visgl/deck.gl/pull/10677" target="_blank" rel="noopener">llms.txt #10677</a> and <a href="https://github.com/visgl/deck.gl/pull/10678" target="_blank" rel="noopener">agent skill and AI guide #10678</a>, and the JSON v2 proposal <a href="https://github.com/visgl/deck.gl-community/issues/596#issuecomment-5583845859" target="_blank" rel="noopener">on the tracker</a>. Each discloses it was drafted with an agent and reviewed.</p>
+  <p class="small" style="margin:.2em 0 .5em">Ready for Thursday: <a href="https://github.com/visgl/deck.gl/pull/10677" target="_blank" rel="noopener">llms.txt #10677</a> · <a href="https://github.com/visgl/deck.gl/pull/10678" target="_blank" rel="noopener">agent skill and AI guide #10678</a> · JSON v2 <a href="https://github.com/visgl/deck.gl-community/issues/596#issuecomment-5583845859" target="_blank" rel="noopener">on the tracker</a> · AI-contributions policy <a href="https://github.com/visgl/tsc/pull/20" target="_blank" rel="noopener">tsc #20</a> and <a href="https://github.com/visgl/deck.gl/pull/10680" target="_blank" rel="noopener">#10680</a>. Each discloses it was drafted with an agent and reviewed.</p>
   <p class="lead" style="font-size:1.1em">Agents are deck.gl's newest users. They already like it.<br>Let's make it easy for them to be right.</p>
   <p class="xs" style="color:#fff"><a class="url" href="https://github.com/jatorre/deckgl-ai-ready" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid rgba(203,233,83,.6)">jatorre.github.io/deckgl-ai-ready</a> · <a href="https://github.com/jatorre/deckgl-ai-ready" target="_blank" rel="noopener" style="color:#fff;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.6)">everything in this talk, reproducible</a></p>
   </div>
