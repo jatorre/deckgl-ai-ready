@@ -7,10 +7,20 @@
 <style>
   html, body, #map { margin: 0; width: 100%; height: 100%; background: #1f49fd; overflow: hidden; }
   .maplibregl-ctrl-attrib, .maplibregl-ctrl-logo { display: none !important; }
+  /* optional overlays, driven by the query string: ?fade=left adds the brand-style solid-to-map gradient; ?dim=0.35 darkens uniformly */
+  #fade { position: absolute; inset: 0; pointer-events: none; z-index: 5; display: none;
+          background: linear-gradient(90deg, #1f49fd 0%, #1f49fd 30%, rgba(31,73,253,.92) 42%, rgba(31,73,253,.55) 56%, rgba(31,73,253,0) 74%); }
+  #dim { position: absolute; inset: 0; pointer-events: none; z-index: 5; display: none; background: #1f49fd; }
 </style>
 </head>
 <body>
 <div id="map"></div>
+<div id="fade"></div><div id="dim"></div>
+<script>
+  const q = new URLSearchParams(location.search);
+  if (q.get('fade') === 'left') document.getElementById('fade').style.display = 'block';
+  if (q.get('dim')) { const d = document.getElementById('dim'); d.style.display = 'block'; d.style.opacity = q.get('dim'); }
+</script>
 <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/deck.gl@9.4.0/dist.min.js"></script>
 <script>
