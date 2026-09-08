@@ -17,8 +17,8 @@ Live deck.gl map behind (`talk/title-map.html`: MapLibre restyled in CARTO blue 
 ## Q2 · How well do frontier models write deck.gl? (teal)
 - **How we tested it** — five maps (four specified + open brief), one prompt, no tools; headless render, screenshots, model judge on a 17-point rubric, then human review.
 - **Almost every map works** — 7 × 4 grid, thumbnails link to live pages, four-task score per model.
-- **The open brief is where they differ** — 7 showcase thumbnails with the judge's first note and score.
-- **Working maps, written like it's 2024** — four findings: generation-behind code, copying showcase examples, same cartographic defaults, open-weight model breaks the immutable-layer contract. Suggestion: freshness + checkable rules.
+- **The open brief is where they differ** — 7 showcase thumbnails with the judge's first note and score, plus the prompt used.
+- **Working maps, written like it's 2024** — four findings: generation-behind code, copying showcase examples, same cartographic defaults, open-weight model breaks the immutable-layer contract. Conclusion: our examples are the training data and they are years old; update them with AI so the next models learn from current, ambitious deck.gl.
 
 ## Q3 · How can agents drive deck.gl interactively? (violet)
 - **Many applications will use deck.gl with agents to drive dynamic maps** — the logical interface: agent writes declarative JSON; flow diagram with the missing back-channel.
@@ -35,7 +35,7 @@ Live deck.gl map behind (`talk/title-map.html`: MapLibre restyled in CARTO blue 
 - **deck.gl has no policy for AI contributions. The contributions are already here.** — evidence + suggestions.
 
 ## Close
-Three asks for Thursday. "Agents are deck.gl's newest users. They already like it. Let's make it easy for them to be right."
+Four asks for Thursday (JSON v2; llms.txt + skills; improve docs and examples now with AI; AI contribution policy). "Agents are deck.gl's newest users. They already like it. Let's make it easy for them to be right."
 
 ## Backup
 References · deck.gl-on-MapLibre per model (ten models) · GLM 5.3 detail · adjacent talks.

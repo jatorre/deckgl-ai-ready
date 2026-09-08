@@ -198,7 +198,7 @@
 
 <section data-q="2" data-background-color="#0b6b8a">
   <span class="kicker">Q2 · How well do frontier models write deck.gl?</span>
-  <h2 style="margin-bottom:.3em">Almost every map works. <span class="muted">Click any to open it.</span></h2>
+  <h2 style="margin-bottom:.3em">Almost every map works.</h2>
   <div class="g7" id="grid4"></div>
   <p class="xs" style="margin-top:.5em" id="grid4note">Score is the four-task total out of 68. Thumbnails are the 8-second screenshot of the generated page, unedited.</p>
   <aside class="notes">One-shot outputs from a single prompt, rendered exactly as generated. Hover, legends, sliders and animation all wired. Click a thumbnail to open the live map in a new tab.</aside>
@@ -214,14 +214,14 @@
 <section data-q="2" data-background-color="#0b6b8a">
   <span class="kicker">Q2 · How well do frontier models write deck.gl?</span>
   <h2>Working maps, written like it's 2024</h2>
-  <ul class="check" style="font-size:.95em">
-    <li><b>The code is a generation behind.</b> Most files load a deck.gl 8.9 bundle or use v8 patterns; only GPT-5.6 Sol used the current overlay integration in every task; none used 9.2 or later.</li>
+  <ul class="check" style="font-size:.8em">
+    <li><b>The code is a generation behind.</b> Most files load a deck.gl 8.9 bundle or use v8 patterns; only GPT-5.6 Sol used the current overlay integration; none used 9.2 or later.</li>
     <li><b>They copy the showcase examples.</b> The hexagon and trips tasks pulled every model toward the official example's stack, palette and defaults, v8 included.</li>
     <li><b>Same cartographic choices, same blind spots.</b> Every choropleth is YlOrRd quantiles; skewed data goes unhandled; legends vanish when not demanded. Good, never excellent.</li>
-    <li><b>The open-weight model knows the words, not the rules.</b> GLM 5.3 mutated layer props instead of replacing layers, shadowed the library global, and once pinned a version that does not exist.</li>
+    <li><b>The open-weight model knows the words, not the rules.</b> GLM 5.3 mutated layer props instead of replacing layers and shadowed the library global.</li>
   </ul>
-  <p class="small" style="margin-top:.6em"><b class="muted">Suggestion.</b> The gap is not capability. It is freshness and unwritten rules. Both are fixed by documentation an agent can read at run time, and by making the rules checkable.</p>
-  <aside class="notes">Speed is not quality: Gemini 3.8 Flash produced the most code per second and the nicest panels and scored lowest on API currency. Rules like "layers are immutable, replace them" are exactly what a schema or a skill would carry. That is questions three and four.</aside>
+  <div class="card teal" style="margin-top:.7em;padding:14px 20px"><p class="small" style="margin:0"><b style="color:var(--lime)">Conclusion.</b> Our examples are the training data, and they are years old. The open brief shows what models can build now. <b>Update the examples with AI</b>, and the next generation of models learns deck.gl from those.</p></div>
+  <aside class="notes">Speed is not quality: Gemini 3.8 Flash produced the most code per second and the nicest panels and scored lowest on API currency. The gap is not capability; it is freshness and unwritten rules, and the cheapest lever we own is the examples. The hexagon and trips examples are what every model reproduced, stack and palette included. If those examples were current, ambitious and correct, the models would be too. Rules like "layers are immutable, replace them" are what a schema or a skill would carry. That is questions three and four.</aside>
 </section>
 
 <!-- ===== Q3 ===== -->
@@ -362,10 +362,11 @@
 <section data-background-iframe="talk/title-map.html?dim=0.45" data-background-color="#1f49fd">
   <div style="background:rgba(11,26,58,.55);border-radius:18px;padding:26px 34px;backdrop-filter:blur(4px)">
   <span class="kicker">For Thursday's "Future of Vis.gl"</span>
-  <h2>Three asks</h2>
-  <ol class="asks">
+  <h2 style="margin-bottom:.3em">Four asks</h2>
+  <ol class="asks" style="font-size:.92em">
     <li>Adopt <code>@deck.gl/json</code> v2 as a TSC priority, with a schema and a conversion report. CARTO brings its production evidence and helps drive it.</li>
     <li>Ship llms.txt and an official agent-skills repo this quarter.</li>
+    <li>Improve our documentation and examples now, with AI.</li>
     <li>Adopt a disclosure-based AI contribution policy.</li>
   </ol>
   <div class="hairline"></div>
@@ -449,7 +450,7 @@ const SCORES = window.__SCORES__ || {}, CAPS = window.__CAPS__ || {};
   g.innerHTML = h;
   const s = document.getElementById('showcase');
   s.innerHTML = MODELS.map(m=>`<div><a href="${MB}out/${m[0]}/T5_showcase.html" target="_blank" rel="noopener"><img src="${MB}render/${m[0]}/T5_showcase.t8.w560.jpg" alt=""></a><div class="cap"><b>${m[1]} · ${SCORES[m[0]]?.T5 ?? '…'}/17</b><br>${CAPS[m[0]] ?? ''}</div></div>`).join('')
-    + `<div class="card" style="padding:12px 14px"><p class="xs" style="color:#fff;margin:0">${window.__SHOWCASE_NOTE__ || ''}</p></div>`;
+    + `<div class="card" style="padding:10px 12px"><div style="font-size:.4em;color:var(--lime);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">The prompt, one shot</div><p style="font-size:.42em;color:#fff;margin:0;line-height:1.28">"Build the most impressive, polished, single-page deck.gl visualization of this data that you can. You decide the design. Ideas, not requirements: animated trails, 3D buildings, lighting, a cinematic camera, a legend, a control panel. Must animate on load, centered on Manhattan, dark token-free basemap, no console errors. Judge yourself as a demanding visualization designer would."</p></div>`;
 })();
 Reveal.initialize({ width: 1280, height: 720, margin: 0.06, minScale: 0.2, maxScale: 2.0, hash: true, slideNumber: 'c/t', progress: true, controls: false,
   transition: 'fade', transitionSpeed: 'fast', center: false, preloadIframes: false, plugins: [ RevealNotes ] });
