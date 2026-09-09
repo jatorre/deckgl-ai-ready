@@ -368,20 +368,34 @@
   <aside class="notes">The maintainers' fear is slop and review burden, and it is legitimate. The Foundation already settled the legal floor in March: responsibility stays with the submitter, only humans sign the DCO, tag your assistance. Node.js and MapLibre wrote it into their repos. Disclosure plus "you understand and tested it" plus protecting good-first-issues is where most mature projects landed. We only need to write it down, and the PR does.</aside>
 </section>
 
+<section data-q="5" data-background-color="#5a1f7a">
+  <span class="kicker">Q5 · How do we handle AI contributions?</span>
+  <h2>But let's be real: everybody is assisted. The question is our posture.</h2>
+  <ul class="small" style="font-size:.78em">
+    <li><b>Naming the tool is free advertising.</b> Assume every PR is AI-assisted and stop caring which vendor. Care about what the author verified.</li>
+    <li><b>The flood is coming.</b> PRs opened for social validation, and PRs from autonomous agents that fix bugs and improve performance without anyone asking. CARTO already runs agents like that on its own code. Who reviews them here, and who pays for that time?</li>
+    <li><b>Automation is not optional.</b> A security issue in a library like this will be found by agents first. The only defence that keeps up is agent-driven too.</li>
+    <li><b>So the real design question:</b> how do agent contributions plug into deck.gl? Verified how, tested how, budgeted how, reviewed by whom.</li>
+  </ul>
+  <p class="lead" style="margin-top:.5em;font-size:.95em">Disclosure is the easy part. The posture is the discussion.</p>
+  <aside class="notes">The previous slide is what every mature project did in the last year, and it is right to do it. But it answers last year's question. Everybody uses agents now, so disclosure tells you little, and naming vendors in a foundation's commit history is marketing. The question for Thursday is posture: when contributions arrive faster than humans can review them, some of them from agents nobody prompted, do we want that? If yes, under what budget and verification? If no, how do we keep up with the agents that find the bugs? At CARTO we already run agents that open fixes on our own repositories; I assume the labs do far more. That is where the industry is going, and a security-relevant library cannot opt out of it.</aside>
+</section>
+
 <!-- ===== Close ===== -->
 <section data-background-iframe="talk/title-map.html?dim=0.45" data-background-color="#1f49fd">
-  <div style="background:rgba(11,26,58,.55);border-radius:18px;padding:20px 30px;backdrop-filter:blur(4px)">
+  <div style="background:rgba(11,26,58,.55);border-radius:18px;padding:16px 28px;backdrop-filter:blur(4px)">
   <span class="kicker">For Thursday's "Future of Vis.gl"</span>
-  <h2 style="margin-bottom:.25em">Four asks</h2>
-  <ol class="asks" style="font-size:.86em">
+  <h2 style="margin-bottom:.2em">Five asks</h2>
+  <ol class="asks" style="font-size:.78em">
     <li>Adopt <code>@deck.gl/json</code> v2 as a TSC priority, with a schema and a conversion report. CARTO helps drive it.</li>
     <li>Ship llms.txt and an official agent-skills repo this quarter.</li>
     <li>Improve our documentation and examples now, with AI.</li>
     <li>Adopt the OpenJS AI policy into the vis.gl developer process, with disclosure.</li>
+    <li>Are we OK with automatic development? Who pays for it?</li>
   </ol>
   <div class="hairline"></div>
   <p class="xs" style="margin:.2em 0 .4em;color:#fff">Ready for Thursday, each disclosed and reviewed: <a href="https://github.com/visgl/deck.gl/pull/10677" target="_blank" rel="noopener">llms.txt #10677</a> · <a href="https://github.com/visgl/deck.gl/pull/10678" target="_blank" rel="noopener">skill and AI guide #10678</a> · JSON v2 <a href="https://github.com/visgl/deck.gl-community/issues/596#issuecomment-5583845859" target="_blank" rel="noopener">on the tracker</a> · AI policy <a href="https://github.com/visgl/tsc/pull/20" target="_blank" rel="noopener">tsc #20</a>, <a href="https://github.com/visgl/deck.gl/pull/10680" target="_blank" rel="noopener">#10680</a></p>
-  <p class="lead" style="font-size:1em;margin:.3em 0">Agents are deck.gl's newest users. They already like it.<br>Let's make it easy for them to be right.</p>
+  <p class="lead" style="font-size:.9em;margin:.2em 0">Agents are deck.gl's newest users and its newest developers.<br>They already like it. Let's make it easy for them to be right.</p>
   <p class="xs" style="color:#fff;margin-top:.2em"><a class="url" href="https://github.com/jatorre/deckgl-ai-ready" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid rgba(203,233,83,.6)">jatorre.github.io/deckgl-ai-ready</a> · <a href="https://github.com/jatorre/deckgl-ai-ready" target="_blank" rel="noopener" style="color:#fff;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.6)">everything in this talk, reproducible</a></p>
   </div>
   <aside class="notes">Thank you. Questions.</aside>

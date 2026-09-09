@@ -41,8 +41,10 @@ Live deck.gl map behind (`talk/title-map.html`: MapLibre restyled in CARTO blue 
 - visgl/tsc #20 — developer-process: apply the OpenJS AI coding assistants policy in vis.gl (the policy quoted + ten practices from Node.js, MapLibre, LLVM, kernel). Companion visgl/deck.gl #10680 (draft, depends on #20): CONTRIBUTING section, one PR-template checkbox, AGENTS.md pointer. Both revised after an independent review pass.
 Each commit carries an `Assisted-by:` trailer and the PR bodies disclose it; all three were revised after an independent review pass.
 
+- **But let's be real: everybody is assisted. The question is our posture.** — naming tools is free advertising; assume assistance, care about verification; the flood of PRs (social validation + autonomous agents, CARTO already runs them); automation is not optional for security; the design question: how do agent contributions plug in, verified/tested/budgeted/reviewed by whom.
+
 ## Close
-Four asks for Thursday (JSON v2; llms.txt + skills; improve docs and examples now with AI; AI contribution policy). "Agents are deck.gl's newest users. They already like it. Let's make it easy for them to be right."
+Five asks for Thursday (JSON v2; llms.txt + skills; improve docs and examples now with AI; AI contribution policy; whether we are OK with automatic development and who pays for it). Closing line: agents are deck.gl's newest users, and its newest developers. "Agents are deck.gl's newest users. They already like it. Let's make it easy for them to be right."
 
 ## Backup
 References · deck.gl-on-MapLibre per model (ten models) · GLM 5.3 detail · adjacent talks.
