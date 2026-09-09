@@ -12,7 +12,7 @@ Live deck.gl map behind (`talk/title-map.html`: MapLibre restyled in CARTO blue 
 
 ## Q1 · What do models recommend? (blue)
 - **"Given a prompt like 'Make me a map that…'"** — 5 asks × 7 frontier models (Opus 4.8, Fable 5.1, GPT-5.6 Sol, GPT-6 Astra, Gemini 3.1 Pro, Gemini 3.8 Flash, GLM 5.3), library chips. Footer: progression from Leaflet/Mapbox/deck.gl 8 (older models) to MapLibre + deck.gl (frontier).
-- **"Do they know today's deck.gl? No."** — per-model "latest" version (all 9.0/9.1) vs 9.4.0; card of mistakes a user inherits (old MapLibre module, GLM's invented class and Mapbox token, H3 answered in Python/Leaflet).
+- **"Do they know today's deck.gl? No. None gets past 9.1."** — per-model "latest" version (all 9.0/9.1) vs 9.4.0; card of mistakes a user inherits (old MapLibre module, GLM's invented class and Mapbox token, H3 answered in Python/Leaflet); closing point: we need one deck.gl + MapLibre story (our page offers three modes, two packages, two React roots; 75 generated maps took four routes, 12 carry the v8 mapboxgl shim; one path per environment, retire the rest in v10).
 
 ## Q2 · How well do frontier models write deck.gl? (teal)
 - **How we tested it** — five maps (four specified + open brief), one prompt, no tools; headless render, screenshots, model judge on a 17-point rubric, then human review.

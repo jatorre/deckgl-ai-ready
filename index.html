@@ -140,8 +140,8 @@
 
 <section data-q="1" data-background-color="#1f49fd">
   <span class="kicker">Q1 · What do models recommend?</span>
-  <h2>Do they know today's deck.gl? No. Every one stops at 9.0 or 9.1.</h2>
-  <div class="two">
+  <h2>Do they know today's deck.gl? No. None gets past 9.1.</h2>
+  <div class="two" style="font-size:.9em">
     <div>
       <table>
         <tr><th>Model</th><th>"Latest" deck.gl it targets</th></tr>
@@ -158,13 +158,14 @@
     <div class="card amber">
       <h3>Mistakes a user inherits, because nobody questions the model</h3>
       <ul class="small">
-        <li>Six of seven install the <b>old MapLibre integration</b>. It works, but deck.gl renamed that module three days ago. Only GPT-5.6 Sol knows.</li>
+        <li>Six of seven install the <b>old MapLibre integration</b>. It works, but deck.gl renamed the module three days ago. Only GPT-5.6 Sol knows.</li>
         <li>GLM 5.3 invents a class name and, in another answer, reaches for <b>Mapbox GL with an access token</b> instead of MapLibre.</li>
-        <li>Two of seven answered the H3 question in <b>Python</b> or with Leaflet, not a web map at all.</li>
+        <li>Two of seven answered the H3 question in <b>Python</b> or Leaflet, not a web map at all.</li>
       </ul>
     </div>
   </div>
-  <aside class="notes">Older models also invent packages and use the wrong attach call. The message: without documentation an agent can read at run time, it writes deck.gl one to two years old, and v8 to v9 was the break that mattered. At least the frontier has all moved to 9. Hands off to question four.</aside>
+  <p class="small" style="margin-top:.5em"><b class="muted">We need one deck.gl + MapLibre story.</b> Our MapLibre page offers three modes, two packages, two React roots. In 75 generated maps the models took <b>four routes</b>; 12 still carry a v8 shim. One path per environment, the rest retired in v10.</p>
+  <aside class="notes">The MapLibre confusion is not only the models' fault. Our MapLibre page documents interleaved, overlaid and reverse-controlled; MapboxOverlay and MapLibreOverlay; react-map-gl as root or DeckGL as root; plus the scripting bundle with mapLib. Across the 75 generated maps in this talk that put deck.gl on MapLibre: 39 used MapboxOverlay, 20 the scripting DeckGL with mapLib, 16 React DeckGL with react-map-gl, one MapLibreOverlay. Twelve still set window.mapboxgl = maplibregl, a v8 hack. Users copy whichever they find first, and agents copy all of them. A single recommended path per environment, stated in one place, is cheap, and v10 is the moment to retire the others. Older models also invent packages and use the wrong attach call. The message: without documentation an agent can read at run time, it writes deck.gl one to two years old, and v8 to v9 was the break that mattered. At least the frontier has all moved to 9. Hands off to question four.</aside>
 </section>
 
 <!-- ===== Q2 ===== -->
